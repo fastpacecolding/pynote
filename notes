@@ -31,7 +31,7 @@ def main():
     args = parse_args()
 
     if args.cmd == 'list':
-        TableReport()
+        TableReport().list()
     elif args.cmd == 'new':
         Note.create(args.title)
     elif args.cmd == 'show':

@@ -1,13 +1,12 @@
-import configparser
 import os
 import os.path
-from prettytable import PrettyTable
-from datetime import datetime
 import subprocess
-from tempfile import NamedTemporaryFile
-
 import json
 import uuid
+import configparser
+from prettytable import PrettyTable
+from datetime import datetime
+from tempfile import NamedTemporaryFile
 
 
 def read_config():
@@ -32,9 +31,10 @@ class NotesContainerMixin:
     # trash =
     # version =
 
-    def get_data(self):
-        with open(self.data_file, 'r') as f:
-            NotesContainerMixin.data = json.load(f)
+    @classmethod
+    def get_data(cls):
+        with open(cls.data_file, 'r') as f:
+            cls.data = json.load(f)
 
     def dump_data(self):
         with open(self.data_file, 'w') as f:
@@ -49,16 +49,19 @@ class TableReport(NotesContainerMixin):
 
     def __init__(self):
         self.get_data()
-        self.set_table()
 
-    def set_table(self):
+    def list(self):
         table = PrettyTable(['id', 'title', 'updated'])
-        table.align['title'] = 'l'
         table.sortby = 'updated'
         table.reversesort = True
 
         for note in self.data:
-            table.add_row([note['uuid'][0:8], note['title'], note['updated']])
+            uuid = note['uuid'][0:8]
+            title = note['title']
+            updated = datetime.fromtimestamp(note['updated'])
+            updated = updated.strftime('%Y-%m-%d %H:%I')
+
+            table.add_row([uuid, title, updated])
 
         print(table)
 
@@ -81,8 +84,8 @@ class Note(NotesContainerMixin):
         tmp_file.close()
 
         note = cls(title=title,
-                   created=now.isoformat(),
-                   updated=now.isoformat(),
+                   created=now.timestamp(),
+                   updated=now.timestamp(),
                    uuid=str(uuid.uuid4()),
                    tags='',
                    content='')
@@ -101,7 +104,8 @@ class Note(NotesContainerMixin):
 
     @classmethod
     def show(cls, uuid):
-        for note in self.data:
+        cls.get_data()
+        for note in cls.data:
             if uuid == note['uuid'][0:len(uuid)]:
                 print(cls.from_dict(note))
 
@@ -125,16 +129,20 @@ class Note(NotesContainerMixin):
         return _dict
 
     def __str__(self):
+        created = datetime.fromtimestamp(self.created)
+        created = created.strftime('%Y-%m-%d %H:%I')
+        updated = datetime.fromtimestamp(self.updated)
+        updated = updated.strftime('%Y-%m-%d %H:%I')
+
         string = ('title:   {0}\n'
                   'created: {1}\n'
                   'updated: {2}\n'
                   'uuid:    {3}\n'
                   '\n'
-                  'content\n'
-                  '------------\n'
+                  '---------------------------------------------\n'
                   '{4}\n').format(self.title,
-                                  self.created,
-                                  self.updated,
+                                  created,
+                                  updated,
                                   self.uuid,
                                   self.content)
         return string
