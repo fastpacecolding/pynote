@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import argparse
 
 from note import Note
@@ -6,7 +8,7 @@ from note import TableReport
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    subparser = parser.add_subparsers(dest='subparser',
+    subparser = parser.add_subparsers(dest='cmd',
                                       help='sub-command help')
 
     parser_add = subparser.add_parser('list')
@@ -28,11 +30,11 @@ def parse_args():
 def main():
     args = parse_args()
 
-    if args.subparser == 'list':
+    if args.cmd == 'list':
         TableReport()
-    elif args.subparser == 'new':
+    elif args.cmd == 'new':
         Note.create(args.title)
-    elif args.subparser == 'show':
+    elif args.cmd == 'show':
         Note.show(args.uuid)
 
 
