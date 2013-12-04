@@ -1,0 +1,7 @@
+[paths]
+data = ~/.notes/data.json
+trash = ~/.notes/thrash.json
+versions = ~/.notes/versions.json
+
+[misc]
+editor = nano
