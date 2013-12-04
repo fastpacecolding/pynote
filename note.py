@@ -49,10 +49,12 @@ class TableReport(NotesContainerMixin):
 
     def __init__(self):
         self.get_data()
+        self.list()
 
     def list(self):
         table = PrettyTable(['id', 'title', 'updated'])
         table.sortby = 'updated'
+        table.align = 'l'
         table.reversesort = True
 
         for note in self.data:
@@ -63,7 +65,10 @@ class TableReport(NotesContainerMixin):
 
             table.add_row([uuid, title, updated])
 
-        print(table)
+        self.table = table
+
+    def __str__(self):
+        return self.table.get_string()
 
 
 class Note(NotesContainerMixin):
