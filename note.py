@@ -94,7 +94,6 @@ class Note(NotesContainerMixin):
         # Append the created note to the datacontainer
         # and update JSON file.
         cls.data.append(note.to_dict())
-        print(cls.data)
         note.update_data()
         os.remove(tmp_file.name)  # cleanup temporary file
 
