@@ -26,15 +26,17 @@ def read_config():
 
 
 class Data:
-    data_file = read_config()['data']
-    # TODO: convert to dict, key is an integer number
-    data = []
 
     def __init__(self):
+        self.data_file = read_config()['data']
+        self.data = {}
         self.load()
 
     def add(self, note):
-        self.data.append(note)
+        keys = [int(key) for key in self.data.keys()]
+        key = max(keys) + 1 if keys else 1
+        key = str(key)
+        self.data[key] = note
         self.refresh()
 
     def update(self, key, note):
@@ -42,15 +44,15 @@ class Data:
         self.refresh()
 
     def delete(self, key):
-        self.data.pop(note)
+        del self.data[key]
         self.refresh()
 
-    @classmethod
-    def load(cls):
-        with open(cls.data_file, 'r') as f:
+    def load(self):
+        with open(self.data_file, 'r') as f:
             data = json.load(f)
-        # TODO: convert to dict, key is an integer number
-        cls.data = [Note.from_dict(note_dict) for note_dict in data]
+
+        for key, note in data.items():
+            self.data[key] = Note.from_dict(note)
 
     def dump(self):
         with open(self.data_file, 'w') as f:
@@ -62,11 +64,17 @@ class Data:
 
 
 class Trash(Data):
-    data_file = read_config()['trash']
+
+    def __init__(self):
+        super().__init__()
+        self.data_file = read_config()['trash']
 
 
 class Versions(Data):
-    data_file = read_config()['versions']
+
+    def __init__(self):
+        super().__init__()
+        self.data_file = read_config()['versions']
 
 
 class Note:
@@ -123,7 +131,7 @@ class Note:
 class TableReport(Data):
 
     def __init__(self):
-        self.load()
+        super().__init__()
         self.list()
 
     def list(self):
@@ -132,13 +140,13 @@ class TableReport(Data):
         table.align = 'l'
         table.reversesort = True
 
-        for note in self.data:
-            uuid = note.uuid[0:8]
-            title = note.title
-            updated = datetime.fromtimestamp(note.updated)
+        for k, v in self.data.items():
+            _id = k
+            title = v.title
+            updated = datetime.fromtimestamp(v.updated)
             updated = updated.strftime('%Y-%m-%d %H:%I')
 
-            table.add_row([uuid, title, updated])
+            table.add_row([_id, title, updated])
 
         self.table = table
 
@@ -175,3 +183,17 @@ def new_note(title):
     os.remove(tmp_file.name)  # cleanup temporary file
 
     return note
+
+
+def show_note(key):
+    container = Data()
+    # TODO: write accessor or something similar...
+    print(container.data[key])
+
+
+def delete_note(key):
+    data = Data()
+    trash = Trash()
+
+    trash.add(data.data[key])
+    data.delete(key)
