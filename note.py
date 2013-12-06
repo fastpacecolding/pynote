@@ -2,11 +2,13 @@ import os
 import os.path
 import subprocess
 import json
+from json import JSONEncoder
 import uuid
 import configparser
 from prettytable import PrettyTable
 from datetime import datetime
 from tempfile import NamedTemporaryFile
+from pprint import pprint
 
 
 def read_config():
@@ -23,114 +25,82 @@ def read_config():
     return {'data': data_file, 'trash': trash_file, 'versions': versions_file}
 
 
-class NotesContainerMixin:
+class Data:
     data_file = read_config()['data']
-    # trash_file = read_config()['trash']
-    # version_file = read_config()['versions']
+    # TODO: convert to dict, key is an integer number
     data = []
-    # trash =
-    # version =
-
-    @classmethod
-    def get_data(cls):
-        with open(cls.data_file, 'r') as f:
-            cls.data = json.load(f)
-
-    def dump_data(self):
-        with open(self.data_file, 'w') as f:
-            json.dump(self.data, f)
-
-    def update_data(self):
-        self.dump_data()
-        self.get_data()
-
-
-class TableReport(NotesContainerMixin):
 
     def __init__(self):
-        self.get_data()
-        self.list()
+        self.load()
 
-    def list(self):
-        table = PrettyTable(['id', 'title', 'updated'])
-        table.sortby = 'updated'
-        table.align = 'l'
-        table.reversesort = True
+    def add(self, note):
+        self.data.append(note)
+        self.refresh()
 
-        for note in self.data:
-            uuid = note['uuid'][0:8]
-            title = note['title']
-            updated = datetime.fromtimestamp(note['updated'])
-            updated = updated.strftime('%Y-%m-%d %H:%I')
+    def update(self, key, note):
+        self.data[key] = note
+        self.refresh()
 
-            table.add_row([uuid, title, updated])
+    def delete(self, key):
+        self.data.pop(note)
+        self.refresh()
 
-        self.table = table
+    @classmethod
+    def load(cls):
+        with open(cls.data_file, 'r') as f:
+            data = json.load(f)
+        # TODO: convert to dict, key is an integer number
+        cls.data = [Note.from_dict(note_dict) for note_dict in data]
 
-    def __str__(self):
-        return self.table.get_string()
+    def dump(self):
+        with open(self.data_file, 'w') as f:
+            json.dump(self.data, f, cls=NoteJSONEncoder)
+
+    def refresh(self):
+        self.dump()
+        self.load()
 
 
-class Note(NotesContainerMixin):
+class Trash(Data):
+    data_file = read_config()['trash']
+
+
+class Versions(Data):
+    data_file = read_config()['versions']
+
+
+class Note:
 
     def __init__(self, title, created, updated, uuid, tags, content):
         self.title = title
         self.created = created
         self.updated = updated
+        # self.deleted = deleted
         self.uuid = uuid
         self.tags = tags
         self.content = content
-        self.get_data()
 
     @classmethod
     def create(cls, title):
         now = datetime.now()
-        tmp_file = NamedTemporaryFile(delete=False)
-        tmp_file.close()
-
-        note = cls(title=title,
-                   created=now.timestamp(),
-                   updated=now.timestamp(),
-                   uuid=str(uuid.uuid4()),
-                   tags='',
-                   content='')
-
-        subprocess.call(['nano', tmp_file.name])
-        with open(tmp_file.name, 'r') as f:
-            note.content = f.read()
-
-        # Append the created note to the datacontainer
-        # and update JSON file.
-        cls.data.append(note.to_dict())
-        note.update_data()
-        os.remove(tmp_file.name)  # cleanup temporary file
+        note = cls(title=title, created=now.timestamp(), updated=now.timestamp(),
+                   uuid=str(uuid.uuid4()), tags='', content='')
 
         return note
-
-    @classmethod
-    def show(cls, uuid):
-        cls.get_data()
-        for note in cls.data:
-            if uuid == note['uuid'][0:len(uuid)]:
-                print(cls.from_dict(note))
 
     @classmethod
     def from_dict(cls, _dict):
-        note = cls(title=_dict['title'],
-                   created=_dict['created'],
-                   updated=_dict['updated'],
-                   uuid=_dict['uuid'],
-                   tags=_dict['tags'],
-                   content=_dict['content'])
+        note = cls(title=_dict['title'], created=_dict['created'],
+                   updated=_dict['updated'], uuid=_dict['uuid'],
+                   tags=_dict['tags'], content=_dict['content'])
+
         return note
 
     def to_dict(self):
-        _dict = {'title': self.title,
-                'created': self.created,
-                'updated': self.updated,
-                'uuid': self.uuid,
-                'tags': self.tags,
-                'content': self.content}
+        _dict = {'title': self.title, 'created': self.created,
+                 'updated': self.updated, 'uuid': self.uuid, 'tags': self.tags,
+                 'content': self.content}
+
         return _dict
 
     def __str__(self):
@@ -145,9 +115,63 @@ class Note(NotesContainerMixin):
                   'uuid:    {3}\n'
                   '\n'
                   '---------------------------------------------\n'
-                  '{4}\n').format(self.title,
-                                  created,
-                                  updated,
-                                  self.uuid,
+                  '{4}\n').format(self.title, created, updated, self.uuid,
                                   self.content)
         return string
+
+
+class TableReport(Data):
+
+    def __init__(self):
+        self.load()
+        self.list()
+
+    def list(self):
+        table = PrettyTable(['id', 'title', 'updated'])
+        table.sortby = 'updated'
+        table.align = 'l'
+        table.reversesort = True
+
+        for note in self.data:
+            uuid = note.uuid[0:8]
+            title = note.title
+            updated = datetime.fromtimestamp(note.updated)
+            updated = updated.strftime('%Y-%m-%d %H:%I')
+
+            table.add_row([uuid, title, updated])
+
+        self.table = table
+
+    def __str__(self):
+        return self.table.get_string()
+
+
+class NoteJSONEncoder(JSONEncoder):
+
+    def default(self, o):
+        try:
+            note = o.to_dict()
+        except TypeError:
+            pass
+        else:
+            return note
+        # Let the base class default method raise the TypeError
+        return JSONEncoder.default(self, o)
+
+
+def new_note(title):
+    now = datetime.now()
+    container = Data()
+    tmp_file = NamedTemporaryFile(delete=False)
+    tmp_file.close()
+
+    note = Note.create(title)
+
+    subprocess.call(['nano', tmp_file.name])
+    with open(tmp_file.name, 'r') as f:
+        note.content = f.read()
+
+    container.add(note)
+    os.remove(tmp_file.name)  # cleanup temporary file
+
+    return note

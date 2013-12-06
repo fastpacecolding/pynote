@@ -4,6 +4,7 @@ import argparse
 
 from note import Note
 from note import TableReport
+from note import new_note
 
 
 def parse_args():
@@ -21,7 +22,7 @@ def parse_args():
     parser_add.add_argument('uuid', type=str)
 
     parser_delete = subparser.add_parser('delete')
-    parser_delete.add_argument('note', type=str, help='bar help')
+    parser_delete.add_argument('uuid', type=str, help='bar help')
     args = parser.parse_args()
 
     return(args)
@@ -33,7 +34,9 @@ def main():
     if args.cmd == 'list':
         print(TableReport())
     elif args.cmd == 'new':
-        Note.create(args.title)
+        new_note(args.title)
+    elif args.cmd == 'delete':
+        Note.delete(args.uuid)
     elif args.cmd == 'show':
         Note.show(args.uuid)
 
