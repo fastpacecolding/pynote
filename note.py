@@ -124,13 +124,14 @@ class Note:
         updated = datetime.fromtimestamp(self.updated)
         updated = updated.strftime('%Y-%m-%d %H:%M')
 
-        string = ('title:    {0}\n'
-                  'created:  {1}\n'
-                  'updated:  {2}\n'
-                  'revision: {3}\n'
-                  'uuid:     {4}\n'
+        string = ('+-------------------------------------------------+\n'
+                  '| title:    {0}\n'
+                  '| created:  {1}\n'
+                  '| updated:  {2}\n'
+                  '| revision: {3}\n'
+                  '| uuid:     {4}\n'
+                  '+-------------------------------------------------+\n'
                   '\n'
-                  '----------------------------------------------\n'
                   '{5}\n').format(self.title, created, updated, self.revision,
                                   self.uuid, self.content)
         return string
