@@ -33,9 +33,8 @@ class Data:
         self.load()
 
     def add(self, note):
-        keys = [int(key) for key in self.data.keys()]
+        keys = [key for key in self.data.keys()]
         key = max(keys) + 1 if keys else 1
-        key = str(key)
         self.data[key] = note
         self.refresh()
 
@@ -51,12 +50,13 @@ class Data:
         with open(self.data_file, 'r') as f:
             data = json.load(f)
 
-        for key, note in data.items():
-            self.data[key] = Note.from_dict(note)
+        for key, note in enumerate(data):
+            self.data[key+1] = Note.from_dict(note)
 
     def dump(self):
+        data = list(self.data.values())
         with open(self.data_file, 'w') as f:
-            json.dump(self.data, f, cls=NoteJSONEncoder)
+            json.dump(data, f, cls=NoteJSONEncoder)
 
     def refresh(self):
         self.dump()
@@ -66,15 +66,17 @@ class Data:
 class Trash(Data):
 
     def __init__(self):
-        super().__init__()
         self.data_file = read_config()['trash']
+        self.data = {}
+        self.load()
 
 
 class Versions(Data):
 
     def __init__(self):
-        super().__init__()
         self.data_file = read_config()['versions']
+        self.data = {}
+        self.load()
 
 
 class Note:
@@ -113,9 +115,9 @@ class Note:
 
     def __str__(self):
         created = datetime.fromtimestamp(self.created)
-        created = created.strftime('%Y-%m-%d %H:%I')
+        created = created.strftime('%Y-%m-%d %H:%M')
         updated = datetime.fromtimestamp(self.updated)
-        updated = updated.strftime('%Y-%m-%d %H:%I')
+        updated = updated.strftime('%Y-%m-%d %H:%M')
 
         string = ('title:   {0}\n'
                   'created: {1}\n'
@@ -144,7 +146,7 @@ class TableReport(Data):
             _id = k
             title = v.title
             updated = datetime.fromtimestamp(v.updated)
-            updated = updated.strftime('%Y-%m-%d %H:%I')
+            updated = updated.strftime('%Y-%m-%d %H:%M')
 
             table.add_row([_id, title, updated])
 
@@ -167,7 +169,7 @@ class NoteJSONEncoder(JSONEncoder):
         return JSONEncoder.default(self, o)
 
 
-def new_note(title):
+def new(title):
     now = datetime.now()
     container = Data()
     tmp_file = NamedTemporaryFile(delete=False)
@@ -185,15 +187,39 @@ def new_note(title):
     return note
 
 
-def show_note(key):
+def show(key):
     container = Data()
     # TODO: write accessor or something similar...
     print(container.data[key])
 
 
-def delete_note(key):
+def delete(key):
     data = Data()
     trash = Trash()
 
     trash.add(data.data[key])
     data.delete(key)
+
+
+def edit(key):
+    now = datetime.now()
+    container = Data()
+    versions = Versions()
+    note = container.data[key]
+    versions.add(note)
+    note.updated = now.timestamp()
+    tmp_file = NamedTemporaryFile(delete=False)
+    tmp_file.close()
+
+    with open(tmp_file.name, 'w') as f:
+        f.write(note.content)
+
+    subprocess.call(['nano', tmp_file.name])
+
+    with open(tmp_file.name, 'r') as f:
+        note.content = f.read()
+
+    container.update(key, note)
+    os.remove(tmp_file.name)
+
+    return note

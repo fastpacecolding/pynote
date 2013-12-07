@@ -2,11 +2,9 @@
 
 import argparse
 
+import note
 from note import Note
 from note import TableReport
-from note import new_note
-from note import show_note
-from note import delete_note
 
 
 def parse_args():
@@ -21,10 +19,13 @@ def parse_args():
     parser_add.add_argument('title', type=str)
 
     parser_add = subparser.add_parser('show')
-    parser_add.add_argument('key', type=str)
+    parser_add.add_argument('key', type=int)
 
     parser_delete = subparser.add_parser('delete')
-    parser_delete.add_argument('key', type=str, help='bar help')
+    parser_delete.add_argument('key', type=int, help='bar help')
+
+    parser_delete = subparser.add_parser('edit')
+    parser_delete.add_argument('key', type=int, help='bar help')
     args = parser.parse_args()
 
     return(args)
@@ -36,11 +37,13 @@ def main():
     if args.cmd == 'list':
         print(TableReport())
     elif args.cmd == 'new':
-        new_note(args.title)
+        note.new(args.title)
     elif args.cmd == 'delete':
-        delete_note(args.key)
+        note.delete(args.key)
     elif args.cmd == 'show':
-        show_note(args.key)
+        note.show(args.key)
+    elif args.cmd == 'edit':
+        note.edit(args.key)
 
 
 if __name__ == '__main__':
