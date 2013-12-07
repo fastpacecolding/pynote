@@ -81,11 +81,13 @@ class Versions(Data):
 
 class Note:
 
-    def __init__(self, title, created, updated, uuid, tags, content):
+    def __init__(self, title, created, updated, deleted,
+                 revision, uuid, tags, content):
         self.title = title
         self.created = created
         self.updated = updated
-        # self.deleted = deleted
+        self.deleted = deleted
+        self.revision = revision
         self.uuid = uuid
         self.tags = tags
         self.content = content
@@ -94,22 +96,25 @@ class Note:
     def create(cls, title):
         now = datetime.now()
         note = cls(title=title, created=now.timestamp(), updated=now.timestamp(),
-                   uuid=str(uuid.uuid4()), tags='', content='')
+                   deleted=None, revision=1, uuid=str(uuid.uuid4()), tags='',
+                   content='')
 
         return note
 
     @classmethod
     def from_dict(cls, _dict):
         note = cls(title=_dict['title'], created=_dict['created'],
-                   updated=_dict['updated'], uuid=_dict['uuid'],
+                   updated=_dict['updated'], deleted=_dict['deleted'],
+                   revision=_dict['revision'], uuid=_dict['uuid'],
                    tags=_dict['tags'], content=_dict['content'])
 
         return note
 
     def to_dict(self):
         _dict = {'title': self.title, 'created': self.created,
-                 'updated': self.updated, 'uuid': self.uuid, 'tags': self.tags,
-                 'content': self.content}
+                 'updated': self.updated, 'deleted': self.deleted,
+                 'revision': self.revision, 'uuid': self.uuid,
+                 'tags': self.tags, 'content': self.content}
 
         return _dict
 
@@ -119,14 +124,15 @@ class Note:
         updated = datetime.fromtimestamp(self.updated)
         updated = updated.strftime('%Y-%m-%d %H:%M')
 
-        string = ('title:   {0}\n'
-                  'created: {1}\n'
-                  'updated: {2}\n'
-                  'uuid:    {3}\n'
+        string = ('title:    {0}\n'
+                  'created:  {1}\n'
+                  'updated:  {2}\n'
+                  'revision: {3}\n'
+                  'uuid:     {4}\n'
                   '\n'
-                  '---------------------------------------------\n'
-                  '{4}\n').format(self.title, created, updated, self.uuid,
-                                  self.content)
+                  '----------------------------------------------\n'
+                  '{5}\n').format(self.title, created, updated, self.revision,
+                                  self.uuid, self.content)
         return string
 
 
@@ -208,6 +214,7 @@ def edit(key):
     note = container.data[key]
     versions.add(note)
     note.updated = now.timestamp()
+    note.revision += 1
     tmp_file = NamedTemporaryFile(delete=False)
     tmp_file.close()
 
