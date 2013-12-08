@@ -1,0 +1,46 @@
+#!/usr/bin/env python
+
+import argparse
+import note
+from note import TableReport
+
+
+def parse_args():
+    parser = argparse.ArgumentParser()
+    subparser = parser.add_subparsers(dest='cmd')
+
+    parser_add = subparser.add_parser('list', help='Show a table with all notes.')
+
+    parser_add = subparser.add_parser('new', help='Create a new note.')
+    parser_add.add_argument('title', type=str)
+
+    parser_add = subparser.add_parser('show', help='Show a specific note.')
+    parser_add.add_argument('key', type=int, help='The integer ID which is shown in the table.')
+
+    parser_delete = subparser.add_parser('delete', help='Move a note to trash.')
+    parser_delete.add_argument('key', type=int, help='The integer ID which is shown in the table.')
+
+    parser_delete = subparser.add_parser('edit', help='Edit a note.')
+    parser_delete.add_argument('key', type=int, help='The integer ID which is shown in the table.')
+    args = parser.parse_args()
+
+    return(args)
+
+
+def main():
+    args = parse_args()
+
+    if args.cmd == 'list':
+        print(TableReport())
+    elif args.cmd == 'new':
+        note.new(args.title)
+    elif args.cmd == 'delete':
+        note.delete(args.key)
+    elif args.cmd == 'show':
+        note.show(args.key)
+    elif args.cmd == 'edit':
+        note.edit(args.key)
+
+
+if __name__ == '__main__':
+    main()

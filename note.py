@@ -9,26 +9,13 @@ from prettytable import PrettyTable
 from datetime import datetime
 from tempfile import NamedTemporaryFile
 from pprint import pprint
-
-
-def read_config():
-    config = configparser.ConfigParser()
-    config.read('notesrc')
-
-    data_file = config['paths']['data']
-    data_file = os.path.expanduser(data_file)
-    trash_file = config['paths']['trash']
-    trash_file = os.path.expanduser(trash_file)
-    versions_file = config['paths']['versions']
-    versions_file = os.path.expanduser(versions_file)
-
-    return {'data': data_file, 'trash': trash_file, 'versions': versions_file}
+from misc import config
 
 
 class Data:
 
     def __init__(self):
-        self.data_file = read_config()['data']
+        self.data_file = config.DATA_FILE
         self.data = {}
         self.load()
 
@@ -66,7 +53,7 @@ class Data:
 class Trash(Data):
 
     def __init__(self):
-        self.data_file = read_config()['trash']
+        self.data_file = config.TRASH_FILE
         self.data = {}
         self.load()
 
@@ -74,7 +61,7 @@ class Trash(Data):
 class Versions(Data):
 
     def __init__(self):
-        self.data_file = read_config()['versions']
+        self.data_file = config.VERSIONS_FILE
         self.data = {}
         self.load()
 
@@ -149,13 +136,12 @@ class TableReport(Data):
         table.align = 'l'
         table.reversesort = True
 
-        for k, v in self.data.items():
-            _id = k
-            title = v.title
-            updated = datetime.fromtimestamp(v.updated)
+        for key, note in self.data.items():
+            title = note.title
+            updated = datetime.fromtimestamp(note.updated)
             updated = updated.strftime('%Y-%m-%d %H:%M')
 
-            table.add_row([_id, title, updated])
+            table.add_row([key, title, updated])
 
         self.table = table
 
@@ -184,7 +170,7 @@ def new(title):
 
     note = Note.create(title)
 
-    subprocess.call(['nano', tmp_file.name])
+    subprocess.call([config.EDITOR, tmp_file.name])
     with open(tmp_file.name, 'r') as f:
         note.content = f.read()
 
@@ -201,11 +187,18 @@ def show(key):
 
 
 def delete(key):
-    data = Data()
+    now = datetime.now()
+    container = Data()
     trash = Trash()
+    versions = Versions()
+    note = container.data[key]
 
-    trash.add(data.data[key])
-    data.delete(key)
+    versions.add(note)
+    note.deleted = now.timestamp()
+    note.revision += 1
+
+    trash.add(note)
+    container.delete(key)
 
 
 def edit(key):
@@ -222,7 +215,7 @@ def edit(key):
     with open(tmp_file.name, 'w') as f:
         f.write(note.content)
 
-    subprocess.call(['nano', tmp_file.name])
+    subprocess.call([config.EDITOR, tmp_file.name])
 
     with open(tmp_file.name, 'r') as f:
         note.content = f.read()

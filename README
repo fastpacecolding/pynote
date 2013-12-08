@@ -1,10 +1,1 @@
-gempac -- Install Ruby Gems using the Arch Linux Package Manager (pacman)
-
-This project starts as a fork of pacgem. I use it as an education project
-for meto learn ruby and to find out how to deploy and manage an open
-source project.
-
-It is at very early state in development. DO NOT USE IT IN PRODUCTION!!
-However, feel free to test and send patches or feature requests to me. :-)
-
-You can also browse the source code in cgit: http://cgit.sevenbyte.org/gempac/
+You can also browse the source code in cgit: http://cgit.sevenbyte.org/pynote/
