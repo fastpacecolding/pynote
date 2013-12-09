@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 
 import argparse
-import note
-from note import TableReport
+
+import pynote.command as note
+from pynote.report import TableReport
 
 
 def parse_args():

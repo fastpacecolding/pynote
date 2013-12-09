@@ -1,23 +1,26 @@
-import os
 import os.path
-import subprocess
 import json
-from json import JSONEncoder
 import uuid
-import configparser
-from prettytable import PrettyTable
+from json import JSONEncoder
 from datetime import datetime
-from tempfile import NamedTemporaryFile
-from pprint import pprint
-from misc import config
+
+from pynote import config
 
 
+# REVIEW: Maybe implement most methods as python's __underscore__ methods?
 class Data:
 
     def __init__(self):
         self.data_file = config.DATA_FILE
+        # REVIEW: Maybe a list instead of a dict?
         self.data = {}
         self.load()
+
+    def __getitem__(self, key):
+        if key in self.data.keys():
+            return self.data[key]
+        else:
+            raise KeyError
 
     def add(self, note):
         keys = [key for key in self.data.keys()]
@@ -124,31 +127,6 @@ class Note:
         return string
 
 
-class TableReport(Data):
-
-    def __init__(self):
-        super().__init__()
-        self.list()
-
-    def list(self):
-        table = PrettyTable(['id', 'title', 'updated'])
-        table.sortby = 'updated'
-        table.align = 'l'
-        table.reversesort = True
-
-        for key, note in self.data.items():
-            title = note.title
-            updated = datetime.fromtimestamp(note.updated)
-            updated = updated.strftime('%Y-%m-%d %H:%M')
-
-            table.add_row([key, title, updated])
-
-        self.table = table
-
-    def __str__(self):
-        return self.table.get_string()
-
-
 class NoteJSONEncoder(JSONEncoder):
 
     def default(self, o):
@@ -160,67 +138,3 @@ class NoteJSONEncoder(JSONEncoder):
             return note
         # Let the base class default method raise the TypeError
         return JSONEncoder.default(self, o)
-
-
-def new(title):
-    now = datetime.now()
-    container = Data()
-    tmp_file = NamedTemporaryFile(delete=False)
-    tmp_file.close()
-
-    note = Note.create(title)
-
-    subprocess.call([config.EDITOR, tmp_file.name])
-    with open(tmp_file.name, 'r') as f:
-        note.content = f.read()
-
-    container.add(note)
-    os.remove(tmp_file.name)  # cleanup temporary file
-
-    return note
-
-
-def show(key):
-    container = Data()
-    # TODO: write accessor or something similar...
-    print(container.data[key])
-
-
-def delete(key):
-    now = datetime.now()
-    container = Data()
-    trash = Trash()
-    versions = Versions()
-    note = container.data[key]
-
-    versions.add(note)
-    note.deleted = now.timestamp()
-    note.revision += 1
-
-    trash.add(note)
-    container.delete(key)
-
-
-def edit(key):
-    now = datetime.now()
-    container = Data()
-    versions = Versions()
-    note = container.data[key]
-    versions.add(note)
-    note.updated = now.timestamp()
-    note.revision += 1
-    tmp_file = NamedTemporaryFile(delete=False)
-    tmp_file.close()
-
-    with open(tmp_file.name, 'w') as f:
-        f.write(note.content)
-
-    subprocess.call([config.EDITOR, tmp_file.name])
-
-    with open(tmp_file.name, 'r') as f:
-        note.content = f.read()
-
-    container.update(key, note)
-    os.remove(tmp_file.name)
-
-    return note
