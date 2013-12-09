@@ -37,6 +37,9 @@ class Data:
             print('This note does not exist!')
             exit()
 
+    def __len__(self):
+        return len(self.data)
+
     def __iter__(self):
         return iter(self.data)
 
