@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 from distutils.core import setup
-from pynote.version import version
+from pynote import version
 
 
 with open('README.rst') as f:
