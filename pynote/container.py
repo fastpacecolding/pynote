@@ -55,6 +55,9 @@ class Data:
         with open(self.data_file, 'w') as f:
             json.dump(self.data, f, cls=NoteJSONEncoder)
 
+    def dumps(self):
+        return json.dumps(self.data, cls=NoteJSONEncoder)
+
     def refresh(self):
         self.dump()
         self.load()
