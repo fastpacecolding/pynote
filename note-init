@@ -5,13 +5,18 @@ import os.path
 
 
 def main():
+    if os.getenv('EDITOR'):
+        editor = os.getenv('EDITOR')
+    else:
+        editor = 'nano'
+
     noterc_tpl = ('[paths]\n'
                   'data = ~/.note/data.json\n'
                   'trash = ~/.note/trash.json\n'
                   'versions = ~/.note/versions.json\n'
                   '\n'
                   '[misc]\n'
-                  'editor = nano\n')
+                  'editor = {0}\n').format(editor)
 
     noterc_path = os.path.expanduser('~/.noterc')
 
