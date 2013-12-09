@@ -16,7 +16,7 @@ class TableReport(Data):
         table.align = 'l'
         table.reversesort = True
 
-        for key, note in self.data.items():
+        for key, note in enumerate(self.data):
             title = note.title
             updated = datetime.fromtimestamp(note.updated)
             updated = updated.strftime('%Y-%m-%d %H:%M')

@@ -7,46 +7,53 @@ from datetime import datetime
 from pynote import config
 
 
-# REVIEW: Maybe implement most methods as python's __underscore__ methods?
 class Data:
 
     def __init__(self):
         self.data_file = config.DATA_FILE
-        # REVIEW: Maybe a list instead of a dict?
-        self.data = {}
+        self.data = []
         self.load()
 
+    def __setitem__(self, key, value):
+        try:
+            self.data[key] = value
+            self.refresh()
+        except IndexError:
+            print('This note does not exist!')
+            exit()
+
     def __getitem__(self, key):
-        if key in self.data.keys():
+        try:
             return self.data[key]
-        else:
-            raise KeyError
+        except IndexError:
+            print('This note does not exist!')
+            exit()
 
-    def add(self, note):
-        keys = [key for key in self.data.keys()]
-        key = max(keys) + 1 if keys else 1
-        self.data[key] = note
-        self.refresh()
+    def __delitem__(self, key):
+        try:
+            del self.data[key]
+            self.refresh()
+        except IndexError:
+            print('This note does not exist!')
+            exit()
 
-    def update(self, key, note):
-        self.data[key] = note
-        self.refresh()
+    def __iter__(self):
+        return iter(self.data)
 
-    def delete(self, key):
-        del self.data[key]
+    def append(self, note):
+        self.data.append(note)
         self.refresh()
 
     def load(self):
         with open(self.data_file, 'r') as f:
             data = json.load(f)
 
-        for key, note in enumerate(data):
-            self.data[key+1] = Note.from_dict(note)
+        for note in data:
+            self.data.append(Note.from_dict(note))
 
     def dump(self):
-        data = list(self.data.values())
         with open(self.data_file, 'w') as f:
-            json.dump(data, f, cls=NoteJSONEncoder)
+            json.dump(self.data, f, cls=NoteJSONEncoder)
 
     def refresh(self):
         self.dump()
@@ -57,7 +64,7 @@ class Trash(Data):
 
     def __init__(self):
         self.data_file = config.TRASH_FILE
-        self.data = {}
+        self.data = []
         self.load()
 
 
@@ -65,7 +72,7 @@ class Versions(Data):
 
     def __init__(self):
         self.data_file = config.VERSIONS_FILE
-        self.data = {}
+        self.data = []
         self.load()
 
 

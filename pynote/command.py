@@ -19,7 +19,7 @@ def new(title):
     with open(tmp_file.name, 'r') as f:
         note.content = f.read()
 
-    data.add(note)
+    data.append(note)
     os.remove(tmp_file.name)  # cleanup temporary file
 
     return note
@@ -38,12 +38,12 @@ def delete(key):
     versions = container.Versions()
     note = data[key]
 
-    versions.add(note)
+    versions.append(note)
     note.deleted = now.timestamp()
     note.revision += 1
 
-    trash.add(note)
-    data.delete(key)
+    trash.append(note)
+    del data[key]
 
 
 def edit(key):
@@ -51,7 +51,7 @@ def edit(key):
     data = container.Data()
     versions = container.Versions()
     note = data[key]
-    versions.add(note)
+    versions.append(note)
     note.updated = now.timestamp()
     note.revision += 1
     tmp_file = NamedTemporaryFile(delete=False)
@@ -65,7 +65,7 @@ def edit(key):
     with open(tmp_file.name, 'r') as f:
         note.content = f.read()
 
-    data.update(key, note)
+    data[key] = note
     os.remove(tmp_file.name)
 
     return note
