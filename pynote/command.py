@@ -27,7 +27,6 @@ def new(title):
 
 def show(key):
     data = container.Data()
-    # TODO: write accessor or something similar...
     print(data[key])
 
 
