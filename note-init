@@ -33,7 +33,7 @@ def set_note_dir():
             f.write(data_tpl)
         with open(os.path.join(notedir, 'trash.json'), 'w') as f:
             f.write(data_tpl)
-        with open(os.path.join(notedir, 'data.json'), 'w') as f:
+        with open(os.path.join(notedir, 'versions.json'), 'w') as f:
             f.write(data_tpl)
     else:
         print("Directory '~/.note' already exists.")
