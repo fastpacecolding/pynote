@@ -1,0 +1,17 @@
+2013-12-10 pynote 0.1b1
+=======================
+
+fixed
+-----
+
+Nothing to fix yet! :-)
+
+
+features
+--------
+
+* create, delete, update, list and read notes
+* list deleted notes in 'trash'
+* everything is stored in human readable JSON files
+* meta data for every note including creation time, updating time,
+  deletion time, revision number, uuid
