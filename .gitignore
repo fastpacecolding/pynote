@@ -2,3 +2,5 @@
 *.sublime-workspace
 __pycache__
 build
+dist
+MANIFEST
