@@ -1,4 +1,20 @@
-XXXX-XX-XX pynote 0.1
----------------------
+XXXX-XX-XX pynote 0.1b1
+=======================
 
-* first unstable release
+first unstable release
+
+
+fixed
+-----
+
+Nothing to fix yet! :-)
+
+
+features
+--------
+
+* create, delete, update, list and read notes
+* list deleted notes in 'trash'
+* everything is stored in human readable JSON files
+* meta data for every note including creation time, updating time,
+  deletion time, uuid, tags

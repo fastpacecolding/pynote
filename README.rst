@@ -7,7 +7,8 @@ entirely written in Python 3 and provides a very handy cmd-interface.
 features
 ========
 
-* create, delete, update and read notes
+* create, delete, update, list and read notes
+* list deleted notes in 'trash'
 * everything is stored in human readable JSON files
 * nice meta data for every note including creation time, updating time,
   deletion time, uuid, tags
@@ -25,6 +26,14 @@ planned
 
 basic usage
 ===========
+
+At first you have to create the configfile ``noterc`` and the data
+directory ``~/.note``. There is a script included to do this.
+
+::
+
+    $ note-init
+
 
 create a new note
 -----------------
@@ -56,6 +65,9 @@ edit note
 
     $ note edit 1
 
+Your editor opens with the content of the note. After saving your
+modifications she revision number is incremented.
+
 
 delete note
 -----------
@@ -81,6 +93,19 @@ read a note
 
     foo is bar
 
+
+show trash
+----------
+
+::
+
+    $ note trash
+    +----+--------+------------------+
+    | id | title  | deleted          |
+    +----+--------+------------------+
+    | 1  | test   | 2013-12-09 13:05 |
+    | 0  | test2  | 2013-12-09 13:04 |
+    +----+--------+------------------+
 
 
 install
