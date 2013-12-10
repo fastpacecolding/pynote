@@ -2,6 +2,7 @@
 
 import argparse
 
+import pynote
 import pynote.command as note
 from pynote.report import DataTable
 from pynote.report import TrashTable
@@ -9,6 +10,7 @@ from pynote.report import TrashTable
 
 def parse_args():
     parser = argparse.ArgumentParser()
+
     subparser = parser.add_subparsers(dest='cmd')
 
     parser_add = subparser.add_parser('list', help='Show a table with all notes.')
@@ -25,6 +27,10 @@ def parse_args():
 
     parser_delete = subparser.add_parser('edit', help='Edit a note.')
     parser_delete.add_argument('key', type=int, help='The integer ID which is shown in the table.')
+
+    parser.add_argument('--version', help='Show version.', action='version',
+                        version='pynote {0}'.format(pynote.__version__))
+
     args = parser.parse_args()
 
     return(args)
