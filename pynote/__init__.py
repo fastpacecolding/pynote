@@ -1,3 +1,3 @@
-version = '0.1'
-copyright = '(c) 2013 Stefan Tatschner'
-license = 'MIT'
+__version__ = '0.1b1'
+__copyright__ = '(c) 2013 Stefan Tatschner'
+__license__ = 'MIT'
