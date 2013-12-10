@@ -111,7 +111,7 @@ show trash
 install
 =======
 
-In Arch Linux you can use the attached PKGBUILD in ``dist``.
+In Arch Linux you can use the PKGBUILD in AUR.
 Otherwise use:
 
 ::
