@@ -3,7 +3,8 @@
 import argparse
 
 import pynote.command as note
-from pynote.report import TableReport
+from pynote.report import DataTable
+from pynote.report import TrashTable
 
 
 def parse_args():
@@ -11,6 +12,7 @@ def parse_args():
     subparser = parser.add_subparsers(dest='cmd')
 
     parser_add = subparser.add_parser('list', help='Show a table with all notes.')
+    parser_add = subparser.add_parser('trash', help='Show a table with all deleted notes.')
 
     parser_add = subparser.add_parser('new', help='Create a new note.')
     parser_add.add_argument('title', type=str)
@@ -32,7 +34,7 @@ def main():
     args = parse_args()
 
     if args.cmd == 'list':
-        print(TableReport())
+        print(DataTable())
     elif args.cmd == 'new':
         note.new(args.title)
     elif args.cmd == 'delete':
@@ -41,6 +43,8 @@ def main():
         note.show(args.key)
     elif args.cmd == 'edit':
         note.edit(args.key)
+    elif args.cmd == 'trash':
+        print(TrashTable())
 
 
 if __name__ == '__main__':
