@@ -1,15 +1,81 @@
-PLEASE DO NOT USE GITHUB PULL REQUESTS!!
+Contributing
+============
 
+Hacking
+-------
+
+Please refer to PEP8 [0] and PEP257 [1]. If you use Sublime Text (3) you
+can use the pynote.sublime-project file with the required settings. :)
+
+
+
+Pull Requests
+-------------
+
+**PLEASE DO NOT USE GITHUB PULL REQUESTS!**
+
+The reasons for that are clearly described by Linus Torvalds in [2].
 For submitting patches use git's pull-request generation module(s)
-and send the files via email [1] to me. Alternatively open an issue in
-redmine [2] and attach the patchfiles.
+and send the files to stefan@sevenbyte.org to me. Alternatively open
+an issue in redmine [3] and attach the patchfiles.
 
-Have a look in the contributing wiki page at [3]. :)
+Example:
+* Work on the develop or on a seperate feature (or what else) branch.
+  Do not mess up the master branch!
+* Commit your changes locally.
+* Let's say you have commited three times. Do the following:
+  $ git format-patch HEAD~3
+* Git creates 3 patchfiles with your commit metadata. Send this files to
+  stefan@sevenbyte.org or use the bugtracker and attach them. If I like
+  your work I will appy the patches with git am. This ensures a very clean
+  git history without any strange automatic github commits.
+* Furthermore you can commit to your own repo and create a pull request
+  with git request-pull.
+
+Hint: I use the git-flow branching model. So look at the develop branch. :)
+
+
+
+Commit Messages
+---------------
+
+Please use git commit -s to generate a "Signed-off-by: " line. The reasons
+are here [4]. Structure your commit message like the following. Write a
+short summary of your work and do not forget the blank line. This ensures
+that git shortlog (and others) works well.
+
+
+    Summarize clearly in one line what the commit is about.
+
+    Describe the problem the commit solves or the use case
+    for a new feature. Justify why you chose the particular
+    solution.
+
+    Signed-off-by: John Doe <john@doe.org>
+
+
+
+GPG Key
+-------
+
+My GPG public key is available at pgp.mit.edu server [5].
+
+
+    pub   2048R/A655F324 2013-05-02 [expires: 2015-05-02]
+          Key fingerprint = 4398 1A32 9497 6B9F 334B  ACBA 6D07 7CDE A655 F324
+    uid                  Stefan Tatschner <stefan@sevenbyte.org>
+    uid                  Stefan Tatschner <stefan.tatschner@gmail.com>
+    uid                  Stefan Tatschner <stefan.tatschner@stud.th-deg.de>
+    sub   2048R/2B359DD3 2013-05-02 [expires: 2015-05-02]
+
 
 
 Links
 -----
 
-[1] stefan@sevenbyte.org
-[2] http://redmine.sevenbyte.org/projects/pynote
-[3] http://redmine.sevenbyte.org/projects/pynote/wiki/Contributing
+[0] http://www.python.org/dev/peps/pep-0008/
+[1] http://www.python.org/dev/peps/pep-0257/
+[2] https://github.com/torvalds/linux/pull/17#issuecomment-5654674
+[3] http://redmine.sevenbyte.org/projects/pynote/
+[4] http://gerrit.googlecode.com/svn/documentation/2.0/user-signedoffby.html
+[5] http://pgp.mit.edu:11371/pks/lookup?op=vindex&search=0x6D077CDEA655F324
