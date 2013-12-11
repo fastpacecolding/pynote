@@ -1,3 +1,6 @@
+pynote
+======
+
 pynote is a project to manage your notes on the commandline. It is
 entirely written in Python 3 and provides a very handy cmd-interface.
 
@@ -10,7 +13,7 @@ up the git history (see CONTRIBUTING file)!
 
 
 features
-========
+--------
 
 * create, delete, update, list and read notes
 * list deleted notes in 'trash'
@@ -20,7 +23,7 @@ features
 
 
 planned
-=======
+-------
 
 * version control (diff revisions, revert revisions)
 * trash to ensure you do not loose any data
@@ -30,7 +33,7 @@ planned
 
 
 basic usage
-===========
+-----------
 
 At first you have to create the configfile ``noterc`` and the data
 directory ``~/.note``. There is a script included to do this.
@@ -41,7 +44,7 @@ directory ``~/.note``. There is a script included to do this.
 
 
 create a new note
------------------
+`````````````````
 
 ::
 
@@ -51,7 +54,7 @@ Your editor (e.g. nano) will open and you can type in your content.
 
 
 list notes
-----------
+``````````
 
 ::
 
@@ -64,7 +67,7 @@ list notes
 
 
 edit note
----------
+`````````
 
 ::
 
@@ -75,7 +78,7 @@ modifications she revision number is incremented.
 
 
 delete note
------------
+```````````
 
 ::
 
@@ -83,7 +86,7 @@ delete note
 
 
 read a note
------------
+```````````
 
 ::
 
@@ -106,7 +109,7 @@ read a note
 
 
 show trash
-----------
+``````````
 
 ::
 
@@ -120,7 +123,7 @@ show trash
 
 
 install
-=======
+-------
 
 In Arch Linux you can use the PKGBUILD in `AUR <https://aur.archlinux.org/packages/pynote/>`_.
 
