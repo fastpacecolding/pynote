@@ -3,6 +3,11 @@ entirely written in Python 3 and provides a very handy cmd-interface.
 
 **The project is not stable yet! So be careful!**
 
+You can browse the source code in `cgit <http://cgit.sevenbyte.org/pynote/>`_.
+A `github mirror <https://github.com/statschner/pynote>`_ is also available.
+Please do not use any of these cool github pull request because they will mess
+up the git history (see CONTRIBUTING file)!
+
 
 features
 ========
@@ -40,7 +45,7 @@ create a new note
 
 ::
 
-    $ note new "blub"
+    $ note new "spam"
 
 Your editor (e.g. nano) will open and you can type in your content.
 
@@ -54,7 +59,7 @@ list notes
     +----+-------+------------------+
     | id | title | updated          |
     +----+-------+------------------+
-    | 1  | blub  | 2013-12-09 10:59 |
+    | 1  | spam  | 2013-12-09 10:59 |
     +----+-------+------------------+
 
 
@@ -84,14 +89,20 @@ read a note
 
     $ note show 1
     +-------------------------------------------------+
-    | title:    blub
+    | title:    spam
     | created:  2013-12-09 10:59
     | updated:  2013-12-09 10:59
     | revision: 1
     | uuid:     188fcae5-86cf-4e5a-b955-35b38694bb43
     +-------------------------------------------------+
 
-    foo is bar
+    Spam, Spam, Spam, lovely Spam
+    Wonderful Spam, Lovely Spam.
+    Spam, Spam, Spam, magnificent Spam,
+    Superlative Spam.
+    Spam, Spam, Spam, wonderous Spam,
+    Surgical Spam, splendiferous Spam.
+    Spam, Spam, Spam, Spaaam!
 
 
 show trash
@@ -103,20 +114,18 @@ show trash
     +----+--------+------------------+
     | id | title  | deleted          |
     +----+--------+------------------+
-    | 1  | test   | 2013-12-09 13:05 |
-    | 0  | test2  | 2013-12-09 13:04 |
+    | 1  | spam   | 2013-12-09 13:05 |
+    | 0  | spam2  | 2013-12-09 13:04 |
     +----+--------+------------------+
 
 
 install
 =======
 
-In Arch Linux you can use the PKGBUILD in AUR.
-Otherwise use:
+In Arch Linux you can use the PKGBUILD in `AUR <https://aur.archlinux.org/packages/pynote/>`_.
+
+Otherwise use (add ``--pre`` for dev releases):
 
 ::
 
     $ pip install pynote
-
-
-You can also browse the source code in cgit: http://cgit.sevenbyte.org/pynote/
