@@ -6,10 +6,9 @@ entirely written in Python 3 and provides a very handy cmd-interface.
 
 **The project is not stable yet! So be careful!**
 
-You can browse the source code in `cgit <http://cgit.sevenbyte.org/pynote/>`_.
-A `github mirror <https://github.com/statschner/pynote>`_ is also available.
-Please do not use any of these cool github pull request because they will mess
-up the git history (see CONTRIBUTING file)!
+You can browse the source code in `cgit`_. A `github mirror`_ is also
+available. Please do not use any of these cool github pull requests because
+they will mess up the git history (see CONTRIBUTING file)!
 
 
 features
@@ -36,9 +35,7 @@ basic usage
 -----------
 
 At first you have to create the configfile ``noterc`` and the data
-directory ``~/.note``. There is a script included to do this.
-
-::
+directory ``~/.note``. There is a script included to do this.::
 
     $ note-init
 
@@ -125,10 +122,13 @@ show trash
 install
 -------
 
-In Arch Linux you can use the PKGBUILD in `AUR <https://aur.archlinux.org/packages/pynote/>`_.
-
-Otherwise use (add ``--pre`` for dev releases):
-
-::
+In Arch Linux you can use the PKGBUILD in AUR_. Otherwise use
+(add ``--pre`` for dev releases)::
 
     $ pip install pynote
+
+
+.. Links:
+.. _cgit: http://cgit.sevenbyte.org/pynote/
+.. _`github mirror`: https://github.com/statschner/pynote
+.. _AUR: https://aur.archlinux.org/packages/pynote/
