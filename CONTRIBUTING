@@ -9,15 +9,23 @@ can use the pynote.sublime-project file with the required settings. :)
 
 
 
+Issues
+------
+
+If something does not work as expected feel free to file a bug in my
+bugtracker [3].
+
+
+
 Pull Requests
 -------------
 
 **PLEASE DO NOT USE GITHUB PULL REQUESTS!**
 
-The reasons for that are clearly described by Linus Torvalds here [3].
+The reasons for that are clearly described by Linus Torvalds here [4].
 For submitting patches use git's pull-request generation module(s)
-and send the files to stefan@sevenbyte.org to me. Alternatively open
-an issue in redmine [4] and attach the patchfiles.
+and send the files to stefan@sevenbyte.org. Alternatively open an
+issue in redmine [3] and attach the patchfiles.
 
 
 
@@ -30,15 +38,15 @@ Example
 * Commit your changes locally.
 
 * Let's say you have commited three times. Do the following:
-  ``$ git format-patch HEAD~3``
+  `$ git format-patch HEAD~3`
 
 * Git creates 3 patchfiles with your commit metadata. Send this files to
   stefan@sevenbyte.org or use the bugtracker and attach them. If I like
-  your work I will appy the patches with ``git am``. This ensures a very
+  your work I will appy the patches with `git am`. This ensures a very
   clean git history without any strange automatic github commits.
 
 * Furthermore you can commit to your own repo and create a pull request
-  with ``git request-pull``.
+  with `git request-pull`.
 
 **Hint: I use the git-flow branching model. So look at the develop branch. :)**
 
@@ -47,10 +55,10 @@ Example
 Commit Messages
 ---------------
 
-Please use ``git commit -s`` to generate a "Signed-off-by: " line. The
+Please use `git commit -s` to generate a "Signed-off-by: " line. The
 reasons are in [5]. Structure your commit message like the following. Write
 a short summary of your work and do not forget the blank line. This ensures
-that git shortlog (and others) works well.::
+that git shortlog (and others) works well.
 
 
     Summarize clearly in one line what the commit is about.
@@ -66,7 +74,7 @@ that git shortlog (and others) works well.::
 GPG Key
 -------
 
-My GPG public key is available at pgp.mit.edu [6].::
+My GPG public key is available at pgp.mit.edu [6].
 
 
     pub   2048R/A655F324 2013-05-02 [expires: 2015-05-02]
@@ -83,7 +91,7 @@ Links
 
 [1] http://www.python.org/dev/peps/pep-0008/
 [2] http://www.python.org/dev/peps/pep-0257/
-[3] https://github.com/torvalds/linux/pull/17#issuecomment-5654674
-[4] http://redmine.sevenbyte.org/projects/pynote/
+[3] http://redmine.sevenbyte.org/projects/pynote/
+[4] https://github.com/torvalds/linux/pull/17#issuecomment-5654674
 [5] http://gerrit.googlecode.com/svn/documentation/2.0/user-signedoffby.html
 [6] http://pgp.mit.edu:11371/pks/lookup?op=vindex&search=0x6D077CDEA655F324
