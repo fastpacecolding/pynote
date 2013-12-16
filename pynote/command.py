@@ -88,9 +88,9 @@ def compare(key, to_rev, from_rev):
     from_content = from_note.content.splitlines()
     to_content = to_note.content.splitlines()
     from_date = datetime.fromtimestamp(from_note.updated)
-    from_date = from_date.strftime('%Y-%m-%d %H:%M')
+    from_date = from_date.strftime(config.DATEFORMAT)
     to_date = datetime.fromtimestamp(to_note.updated)
-    to_date = to_date.strftime('%Y-%m-%d %H:%M')
+    to_date = to_date.strftime(config.DATEFORMAT)
     from_title = from_note.title + ', revision: ' + str(from_note.revision)
     to_title = to_note.title + ', revision: ' + str(to_note.revision)
 

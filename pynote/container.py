@@ -122,9 +122,9 @@ class Note:
 
     def __str__(self):
         created = datetime.fromtimestamp(self.created)
-        created = created.strftime('%Y-%m-%d %H:%M')
+        created = created.strftime(config.DATEFORMAT)
         updated = datetime.fromtimestamp(self.updated)
-        updated = updated.strftime('%Y-%m-%d %H:%M')
+        updated = updated.strftime(config.DATEFORMAT)
 
         string = ('+-------------------------------------------------+\n'
                   '| title:    {0}\n'
