@@ -97,10 +97,9 @@ class Note:
 
     @classmethod
     def create(cls, title):
-        now = datetime.now()
-        note = cls(title=title, created=now.timestamp(), updated=now.timestamp(),
-                   deleted=None, revision=1, uuid=str(uuid.uuid4()), tags='',
-                   content='')
+        now = datetime.now().timestamp()
+        note = cls(title=title, created=now, updated=now, deleted=None,
+                   revision=1, uuid=str(uuid.uuid4()), tags='', content='')
 
         return note
 

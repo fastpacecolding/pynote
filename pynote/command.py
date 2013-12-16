@@ -9,7 +9,6 @@ from pynote import container
 
 
 def new(title):
-    now = datetime.now()
     data = container.Data()
     tmp_file = NamedTemporaryFile(delete=False)
     tmp_file.close()
@@ -32,14 +31,14 @@ def show(key):
 
 
 def delete(key):
-    now = datetime.now()
+    now = datetime.now().timestamp()
     data = container.Data()
     trash = container.Trash()
     versions = container.Versions()
     note = data[key]
 
     versions.append(note)
-    note.deleted = now.timestamp()
+    note.deleted = now
     note.revision += 1
 
     trash.append(note)
@@ -47,12 +46,12 @@ def delete(key):
 
 
 def edit(key):
-    now = datetime.now()
+    now = datetime.now().timestamp()
     data = container.Data()
     versions = container.Versions()
     note = data[key]
     versions.append(note)
-    note.updated = now.timestamp()
+    note.updated = now
     note.revision += 1
     tmp_file = NamedTemporaryFile(delete=False)
     tmp_file.close()
