@@ -58,14 +58,24 @@ Commit Messages
 Please use `git commit -s` to generate a "Signed-off-by: " line. The
 reasons are in [5]. Structure your commit message like the following. Write
 a short summary of your work and do not forget the blank line. This ensures
-that git shortlog (and others) works well.
+that git shortlog works well (see [6]).
 
 
-    Summarize clearly in one line what the commit is about.
+    Short (50 chars or less) summary of changes
 
-    Describe the problem the commit solves or the use case
-    for a new feature. Justify why you chose the particular
-    solution.
+    More detailed explanatory text, if necessary.  Wrap it to about 72
+    characters or so.  In some contexts, the first line is treated as the
+    subject of an email and the rest of the text as the body.  The blank
+    line separating the summary from the body is critical (unless you omit
+    the body entirely); tools like rebase can get confused if you run the
+    two together.
+
+    Further paragraphs come after blank lines.
+
+     - Bullet points are okay, too
+
+     - Typically a hyphen or asterisk is used for the bullet, preceded by a
+       single space, with blank lines in between, but conventions vary here
 
     Signed-off-by: John Doe <john@doe.org>
 
@@ -74,7 +84,7 @@ that git shortlog (and others) works well.
 GPG Key
 -------
 
-My GPG public key is available at pgp.mit.edu [6].
+My GPG public key is available at pgp.mit.edu [7].
 
 
     pub   2048R/A655F324 2013-05-02 [expires: 2015-05-02]
@@ -94,4 +104,5 @@ Links
 [3] http://redmine.sevenbyte.org/projects/pynote/
 [4] https://github.com/torvalds/linux/pull/17#issuecomment-5654674
 [5] http://gerrit.googlecode.com/svn/documentation/2.0/user-signedoffby.html
-[6] http://pgp.mit.edu:11371/pks/lookup?op=vindex&search=0x6D077CDEA655F324
+[6] http://git-scm.com/book/en/Distributed-Git-Contributing-to-a-Project#Commit-Guidelines
+[7] http://pgp.mit.edu:11371/pks/lookup?op=vindex&search=0x6D077CDEA655F324
