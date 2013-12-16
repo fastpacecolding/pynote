@@ -28,6 +28,11 @@ def parse_args():
     parser_delete = subparser.add_parser('edit', help='Edit a note.')
     parser_delete.add_argument('key', type=int, help='The integer ID which is shown in the table.')
 
+    parser_delete = subparser.add_parser('compare', help='Compare two notes')
+    parser_delete.add_argument('key', type=int, help='The integer ID which is shown in the table.')
+    parser_delete.add_argument('to_rev', type=int)
+    parser_delete.add_argument('from_rev', type=int)
+
     parser.add_argument('--version', help='Show version.', action='version',
                         version='pynote {0}'.format(pynote.__version__))
 
@@ -51,6 +56,11 @@ def main():
         note.edit(args.key)
     elif args.cmd == 'trash':
         print(TrashTable())
+    elif args.cmd == 'compare':
+        if args.to_rev > args.from_rev:
+            note.compare(args.key, args.to_rev, args.from_rev)
+        else:
+            print('Error: from_rev must not be smaller than to_rev!')
 
 
 if __name__ == '__main__':

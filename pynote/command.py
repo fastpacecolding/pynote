@@ -2,6 +2,7 @@ import os
 import subprocess
 from datetime import datetime
 from tempfile import NamedTemporaryFile
+import difflib
 
 from pynote import config
 from pynote import container
@@ -68,3 +69,37 @@ def edit(key):
     os.remove(tmp_file.name)
 
     return note
+
+
+def compare(key, to_rev, from_rev):
+    data = container.Data()
+    versions = container.Versions()
+
+    if data[key].revision == to_rev:
+        to_note = data[key]
+    else:
+        for n in versions:
+            if n.uuid == data[key].uuid and n.revision == to_rev:
+                to_note = n
+
+    for n in versions:
+        if n.uuid == to_note.uuid and n.revision == from_rev:
+            from_note = n
+
+    from_content = from_note.content.splitlines()
+    to_content = to_note.content.splitlines()
+    from_date = datetime.fromtimestamp(from_note.updated)
+    from_date = from_date.strftime('%Y-%m-%d %H:%M')
+    to_date = datetime.fromtimestamp(to_note.updated)
+    to_date = to_date.strftime('%Y-%m-%d %H:%M')
+    from_title = from_note.title + ', revision: ' + str(from_note.revision)
+    to_title = to_note.title + ', revision: ' + str(to_note.revision)
+
+    diff = difflib.unified_diff(from_content, to_content,
+                                fromfile=from_title,
+                                tofile=to_title,
+                                fromfiledate=from_date,
+                                tofiledate=to_date)
+
+    for line in diff:
+        print(line)
