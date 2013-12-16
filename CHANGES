@@ -8,6 +8,13 @@ new features
   http://docs.python.org/3.3/library/datetime.html#strftime-and-strptime-behavior
 
 
+changed
+-------
+
+* The root section in `~/.noterc` must be [DEFAULT]. The previous values
+  do not work any more!
+
+
 
 2013-12-10 pynote 0.1b2
 =======================
