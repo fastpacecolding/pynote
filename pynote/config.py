@@ -6,12 +6,12 @@ config = configparser.ConfigParser()
 config.read(os.path.expanduser('~/.noterc'))
 
 try:
-    DATA_FILE = os.path.expanduser(config['paths']['data'])
-    TRASH_FILE = os.path.expanduser(config['paths']['trash'])
-    VERSIONS_FILE = os.path.expanduser(config['paths']['versions'])
+    DATA_FILE = os.path.expanduser(config['DEFAULT']['data'])
+    TRASH_FILE = os.path.expanduser(config['DEFAULT']['trash'])
+    VERSIONS_FILE = os.path.expanduser(config['DEFAULT']['versions'])
 
-    if config['misc']['editor']:
-        EDITOR = config['misc']['editor']
+    if config['DEFAULT']['editor']:
+        EDITOR = config['DEFAULT']['editor']
     elif os.getenv('EDITOR'):
         EDITOR = os.getenv('EDITOR')
     else:

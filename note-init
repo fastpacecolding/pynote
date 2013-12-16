@@ -7,12 +7,10 @@ import os.path
 def set_noterc():
     noterc = os.path.expanduser('~/.noterc')
     editor = os.getenv('EDITOR', default='nano')
-    noterc_tpl = ('[paths]\n'
+    noterc_tpl = ('[DEFAULT]\n'
                   'data = ~/.note/data.json\n'
                   'trash = ~/.note/trash.json\n'
                   'versions = ~/.note/versions.json\n'
-                  '\n'
-                  '[misc]\n'
                   'editor = {0}\n').format(editor)
 
     if not os.path.exists(noterc):
