@@ -6,23 +6,20 @@ import difflib
 
 from pynote import config
 from pynote import container
+from pynote import helper
 
 
 def new(title):
     data = container.Data()
-    tmp_file = NamedTemporaryFile(delete=False)
-    tmp_file.close()
-
+    tmp_file = helper.create_tempfile()
     note = container.Note.create(title)
 
-    subprocess.call([config.EDITOR, tmp_file.name])
-    with open(tmp_file.name, 'r') as f:
+    subprocess.call([config.EDITOR, tmp_file])
+    with open(tmp_file, 'r') as f:
         note.content = f.read()
 
     data.append(note)
-    os.remove(tmp_file.name)  # cleanup temporary file
-
-    return note
+    os.remove(tmp_file)  # cleanup temporary file
 
 
 def show(key):
@@ -53,21 +50,18 @@ def edit(key):
     versions.append(note)
     note.updated = now
     note.revision += 1
-    tmp_file = NamedTemporaryFile(delete=False)
-    tmp_file.close()
+    tmp_file = helper.create_tempfile()
 
-    with open(tmp_file.name, 'w') as f:
+    with open(tmp_file, 'w') as f:
         f.write(note.content)
 
-    subprocess.call([config.EDITOR, tmp_file.name])
+    subprocess.call([config.EDITOR, tmp_file])
 
-    with open(tmp_file.name, 'r') as f:
+    with open(tmp_file, 'r') as f:
         note.content = f.read()
 
     data[key] = note
-    os.remove(tmp_file.name)
-
-    return note
+    os.remove(tmp_file)
 
 
 def compare(key, to_rev, from_rev):
