@@ -1,12 +1,6 @@
 2013-12-18 pynote 0.1b3
 =======================
 
-fixed
------
-
-* Do not display an empty table if there is no data, see #254.
-
-
 new features
 ------------
 
@@ -14,6 +8,12 @@ new features
   http://docs.python.org/3.3/library/datetime.html#strftime-and-strptime-behavior
 * Compare command. Compare two revisions of a note by creating a unified diff.
 * You only have to set your data dir in `~/.noterc`. Like data = ~/.note.
+
+
+fixed
+-----
+
+* Do not display an empty table if there is no data, see #254.
 
 
 changed
