@@ -8,7 +8,15 @@ from pynote import config
 
 
 class Data:
+    """
+    The main data container class for notes.
 
+    The content of this container class maps to
+    the data.json file.  Everything you append
+    to an instance of this class will be serialised
+    to json and written to data.json.
+
+    """
     def __init__(self):
         self.data_file = config.DATA_FILE
         self.data = []
@@ -67,7 +75,13 @@ class Data:
 
 
 class Trash(Data):
+    """
+    A subclass of Data.
 
+    This class maps to trash.json. The rest is
+    similar to Data.
+
+    """
     def __init__(self):
         self.data_file = config.TRASH_FILE
         self.data = []
@@ -75,7 +89,13 @@ class Trash(Data):
 
 
 class Versions(Data):
+    """
+    A subclass of Data.
 
+    This class maps to versions.json. The rest is
+    similar to Data.
+
+    """
     def __init__(self):
         self.data_file = config.VERSIONS_FILE
         self.data = []
@@ -83,7 +103,10 @@ class Versions(Data):
 
 
 class Note:
+    """
+    This class is used to represent a note.
 
+    """
     def __init__(self, title, created, updated, deleted,
                  revision, uuid, tags, content):
         self.title = title
@@ -140,7 +163,11 @@ class Note:
 
 
 class NoteJSONEncoder(JSONEncoder):
+    """
+    JSON Encoder class.  Used to serialise
+    Note objects.
 
+    """
     def default(self, o):
         try:
             note = o.to_dict()
