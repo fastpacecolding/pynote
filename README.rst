@@ -4,8 +4,8 @@ pynote
 pynote is a project to manage your notes on the commandline. It is
 entirely written in Python 3 and provides a very handy cmd-interface.
 You can browse the source code in `cgit`_. A `github mirror`_ is also
-available. Checkout the `news`_ section in redmine and the CHANGES file
-before updating!
+available. **Checkout the `news`_ section in redmine and the CHANGES file
+before updating!**
 
 Please do not use any of these cool github pull requests because
 they will mess up the git history (see CONTRIBUTING file)!
