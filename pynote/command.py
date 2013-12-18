@@ -7,6 +7,7 @@ import difflib
 from pynote import config
 from pynote import container
 from pynote import helper
+from pynote import report
 
 
 def new(title):
@@ -96,3 +97,12 @@ def compare(key, to_rev, from_rev):
 
     for line in diff:
         print(line)
+
+
+def list():
+    table = report.DataTable()
+
+    if table:
+        print(table)
+    else:
+        print('You have no data in pynote. :-)')

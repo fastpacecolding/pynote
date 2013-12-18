@@ -2,8 +2,6 @@ import argparse
 
 import pynote
 import pynote.command as note
-from pynote.report import DataTable
-from pynote.report import TrashTable
 
 
 def run():
@@ -38,7 +36,7 @@ def run():
 
 
     if args.cmd == 'list':
-        print(DataTable())
+        note.list()
     elif args.cmd == 'new':
         note.new(args.title)
     elif args.cmd == 'delete':
@@ -47,8 +45,6 @@ def run():
         note.show(args.key)
     elif args.cmd == 'edit':
         note.edit(args.key)
-    elif args.cmd == 'trash':
-        print(TrashTable())
     elif args.cmd == 'compare':
         if args.to_rev > args.from_rev:
             note.compare(args.key, args.to_rev, args.from_rev)
