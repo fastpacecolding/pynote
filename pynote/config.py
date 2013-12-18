@@ -20,7 +20,7 @@ try:
     else:
         EDITOR = 'nano'
 
-except KeyError as exception:
-    print("It's something wrong with your 'noterc' in {0}.".format(exception))
+except KeyError as e:
+    print("It's something wrong with your 'noterc' in {0}.".format(e))
     print("Try running 'note-init' to create a valid 'noterc'!")
-    exit()
+    exit(1)

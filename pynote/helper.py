@@ -2,14 +2,14 @@ from tempfile import NamedTemporaryFile
 
 
 def expand_dateformat(dateformat):
-    tmp = ''
+    format_str = ''
 
-    for s in dateformat:
-        if s.isalpha():
-            tmp += '%' + s
+    for v in dateformat:
+        if v.isalpha():
+            format_str += '%' + v
         else:
-            tmp += s
-    return tmp
+            format_str += v
+    return format_str
 
 
 def create_tempfile():
