@@ -20,14 +20,14 @@ class Data:
             self.refresh()
         except IndexError:
             print('This note does not exist!')
-            exit()
+            exit(1)
 
     def __getitem__(self, key):
         try:
             return self.data[key]
         except IndexError:
             print('This note does not exist!')
-            exit()
+            exit(1)
 
     def __delitem__(self, key):
         try:
@@ -35,7 +35,7 @@ class Data:
             self.refresh()
         except IndexError:
             print('This note does not exist!')
-            exit()
+            exit(1)
 
     def __len__(self):
         return len(self.data)
