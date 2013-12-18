@@ -8,9 +8,8 @@ def set_noterc():
     noterc = os.path.expanduser('~/.noterc')
     editor = os.getenv('EDITOR', default='nano')
     noterc_tpl = ('[DEFAULT]\n'
-                  'data = ~/.note/data.json\n'
-                  'trash = ~/.note/trash.json\n'
-                  'versions = ~/.note/versions.json\n'
+                  'data = ~/.note/\n'
+                  'dateformat = Y-m-d H:M\n'
                   'editor = {0}\n').format(editor)
 
     if not os.path.exists(noterc):

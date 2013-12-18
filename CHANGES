@@ -13,6 +13,8 @@ changed
 
 * The root section in `~/.noterc` must be [DEFAULT]. The previous values
   do not work any more!
+* You only have to set your data dir in `~/.noterc`.
+  data = ~/.note
 
 
 
