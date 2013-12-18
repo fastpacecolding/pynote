@@ -2,43 +2,59 @@ import os
 import subprocess
 from datetime import datetime
 from tempfile import NamedTemporaryFile
+import difflib
 
 from pynote import config
 from pynote import container
+from pynote import helper
+from pynote import report
 
 
 def new(title):
-    now = datetime.now()
+    """
+    Create a new note and save it in data.json and versions.json.
+
+    """
     data = container.Data()
-    tmp_file = NamedTemporaryFile(delete=False)
-    tmp_file.close()
-
+    versions = container.Versions()
     note = container.Note.create(title)
+    tmp_file = helper.create_tempfile()
 
-    subprocess.call([config.EDITOR, tmp_file.name])
-    with open(tmp_file.name, 'r') as f:
+    # Open the chosen editor to enter the content.
+    # Read the entered data from the tempfile.
+    subprocess.call([config.EDITOR, tmp_file])
+    with open(tmp_file, 'r') as f:
         note.content = f.read()
 
     data.append(note)
-    os.remove(tmp_file.name)  # cleanup temporary file
-
-    return note
+    versions.append(note)
+    os.remove(tmp_file)  # Clean tempfile.
 
 
 def show(key):
+    """
+    Show a specific note.  The Note.__str__() method is used.
+
+    """
     data = container.Data()
     print(data[key])
 
 
 def delete(key):
-    now = datetime.now()
+    """
+    Remove a note from data.json, increment the
+    revision number and append it to versions.json
+    and trash.json.
+
+    """
+    now = datetime.now().timestamp()
     data = container.Data()
     trash = container.Trash()
     versions = container.Versions()
     note = data[key]
 
     versions.append(note)
-    note.deleted = now.timestamp()
+    note.deleted = now
     note.revision += 1
 
     trash.append(note)
@@ -46,25 +62,86 @@ def delete(key):
 
 
 def edit(key):
-    now = datetime.now()
+    """
+    Edit a note's content and create new revisions.
+
+    """
+    now = datetime.now().timestamp()
     data = container.Data()
     versions = container.Versions()
     note = data[key]
-    versions.append(note)
-    note.updated = now.timestamp()
-    note.revision += 1
-    tmp_file = NamedTemporaryFile(delete=False)
-    tmp_file.close()
 
-    with open(tmp_file.name, 'w') as f:
+    # At first append the old revision
+    # to versions.json and increment
+    # the revision number.
+    versions.append(note)
+    note.updated = now
+    note.revision += 1
+    tmp_file = helper.create_tempfile()
+
+    with open(tmp_file, 'w') as f:
         f.write(note.content)
 
-    subprocess.call([config.EDITOR, tmp_file.name])
+    subprocess.call([config.EDITOR, tmp_file])
 
-    with open(tmp_file.name, 'r') as f:
+    with open(tmp_file, 'r') as f:
         note.content = f.read()
 
     data[key] = note
-    os.remove(tmp_file.name)
+    # Also append the updated note to
+    # versions.json, see #276.
+    versions.append(note)
+    os.remove(tmp_file)  # Clean tempfile.
 
-    return note
+
+def compare(key, to_rev, from_rev):
+    """
+    Compare the given revisions of a note and create a unified diff.
+
+    """
+    data = container.Data()
+    versions = container.Versions()
+    note = data[key]
+    to_note, from_note = None, None
+
+    for v in versions:
+        if v.uuid == note.uuid and v.revision == to_rev:
+            to_note = v
+        if v.uuid == note.uuid and v.revision == from_rev:
+            from_note = v
+
+    # Check if both versions have been found.  Otherwise
+    # let the user know there are no revisions.
+    if to_note and from_note:
+        from_content = from_note.content.splitlines()
+        to_content = to_note.content.splitlines()
+        from_date = datetime.fromtimestamp(from_note.updated)
+        from_date = from_date.strftime(config.DATEFORMAT)
+        to_date = datetime.fromtimestamp(to_note.updated)
+        to_date = to_date.strftime(config.DATEFORMAT)
+        from_title = from_note.title + ', revision: ' + str(from_note.revision)
+        to_title = to_note.title + ', revision: ' + str(to_note.revision)
+
+        diff = difflib.unified_diff(from_content, to_content,
+                                    fromfile=from_title,
+                                    tofile=to_title,
+                                    fromfiledate=from_date,
+                                    tofiledate=to_date)
+
+        for line in diff:
+            print(line)
+    else:
+        print('An error occured. Maybe the revisions do not exist.')
+
+
+def list():
+    """
+    Print out a table with all notes.
+
+    """
+    table = report.DataTable()
+
+    if table:
+        print(table)
+    else:
+        print('You have no data in pynote. :-)')

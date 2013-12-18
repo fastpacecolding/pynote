@@ -1,6 +1,7 @@
 from prettytable import PrettyTable
 from datetime import datetime
 
+from pynote import config
 from pynote.container import Data
 from pynote.container import Trash
 
@@ -20,7 +21,7 @@ class DataTable(Data):
         for key, note in enumerate(self.data):
             title = note.title
             updated = datetime.fromtimestamp(note.updated)
-            updated = updated.strftime('%Y-%m-%d %H:%M')
+            updated = updated.strftime(config.DATEFORMAT)
 
             table.add_row([key, title, updated])
 
@@ -45,7 +46,7 @@ class TrashTable(Trash):
         for key, note in enumerate(self.data):
             title = note.title
             deleted = datetime.fromtimestamp(note.deleted)
-            deleted = deleted.strftime('%Y-%m-%d %H:%M')
+            deleted = deleted.strftime(config.DATEFORMAT)
 
             table.add_row([key, title, deleted])
 

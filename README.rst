@@ -1,13 +1,23 @@
+pynote
+======
+
 pynote is a project to manage your notes on the commandline. It is
 entirely written in Python 3 and provides a very handy cmd-interface.
+You can browse the source code in `cgit`_. A `github mirror`_ is also
+available. Checkout the `news`_ section in redmine and the CHANGES file
+before updating!
 
-**The project is not stable yet! So be careful!**
+Please do not use any of these cool github pull requests because
+they will mess up the git history (see CONTRIBUTING file)!
+
+**The project is not stable yet! So be careful there might be large changes!**
 
 
 features
-========
+--------
 
 * create, delete, update, list and read notes
+* compare revisions of a note by creating a unified diff
 * list deleted notes in 'trash'
 * everything is stored in human readable JSON files
 * nice meta data for every note including creation time, updating time,
@@ -15,7 +25,7 @@ features
 
 
 planned
-=======
+-------
 
 * version control (diff revisions, revert revisions)
 * trash to ensure you do not loose any data
@@ -25,28 +35,26 @@ planned
 
 
 basic usage
-===========
+-----------
 
 At first you have to create the configfile ``noterc`` and the data
-directory ``~/.note``. There is a script included to do this.
-
-::
+directory ``~/.note``. There is a script included to do this.::
 
     $ note-init
 
 
 create a new note
------------------
+`````````````````
 
 ::
 
-    $ note new "blub"
+    $ note new "spam"
 
 Your editor (e.g. nano) will open and you can type in your content.
 
 
 list notes
-----------
+``````````
 
 ::
 
@@ -54,12 +62,12 @@ list notes
     +----+-------+------------------+
     | id | title | updated          |
     +----+-------+------------------+
-    | 1  | blub  | 2013-12-09 10:59 |
+    | 1  | spam  | 2013-12-09 10:59 |
     +----+-------+------------------+
 
 
 edit note
----------
+`````````
 
 ::
 
@@ -70,7 +78,7 @@ modifications she revision number is incremented.
 
 
 delete note
------------
+```````````
 
 ::
 
@@ -78,24 +86,52 @@ delete note
 
 
 read a note
------------
+```````````
 
 ::
 
     $ note show 1
     +-------------------------------------------------+
-    | title:    blub
+    | title:    spam
     | created:  2013-12-09 10:59
     | updated:  2013-12-09 10:59
     | revision: 1
     | uuid:     188fcae5-86cf-4e5a-b955-35b38694bb43
     +-------------------------------------------------+
 
-    foo is bar
+    Spam, Spam, Spam, lovely Spam
+    Wonderful Spam, Lovely Spam.
+    Spam, Spam, Spam, magnificent Spam,
+    Superlative Spam.
+    Spam, Spam, Spam, wonderous Spam,
+    Surgical Spam, splendiferous Spam.
+    Spam, Spam, Spam, Spaaam!
+
+
+compare the revisions of a note
+```````````````````````````````
+
+::
+
+    $ note compare 1 2 1
+    --- spam, revision: 1   2013-12-18 18:22
+
+    +++ spam, revision: 2   2013-12-18 18:23
+
+    @@ -1,7 +1,6 @@
+
+     Spam, Spam, Spam, lovely Spam
+     Wonderful Spam, Lovely Spam.
+    -Spam, Spam, Spam, magnificent Spam,
+     Superlative Spam.
+     Spam, Spam, Spam, wonderous Spam,
+    -Surgical Spam, splendiferous Spam.
+     Spam, Spam, Spam, Spaaam!
+    +This is a change!
 
 
 show trash
-----------
+``````````
 
 ::
 
@@ -103,20 +139,22 @@ show trash
     +----+--------+------------------+
     | id | title  | deleted          |
     +----+--------+------------------+
-    | 1  | test   | 2013-12-09 13:05 |
-    | 0  | test2  | 2013-12-09 13:04 |
+    | 1  | spam   | 2013-12-09 13:05 |
+    | 0  | spam2  | 2013-12-09 13:04 |
     +----+--------+------------------+
 
 
 install
-=======
+-------
 
-In Arch Linux you can use the attached PKGBUILD in ``dist``.
-Otherwise use:
-
-::
+In Arch Linux you can use the PKGBUILD in AUR_. Otherwise use
+(add ``--pre`` for dev releases)::
 
     $ pip install pynote
 
 
-You can also browse the source code in cgit: http://cgit.sevenbyte.org/pynote/
+.. Links:
+.. _cgit: http://cgit.sevenbyte.org/pynote/
+.. _`github mirror`: https://github.com/statschner/pynote
+.. _`news`: http://redmine.sevenbyte.org/projects/pynote/news
+.. _AUR: https://aur.archlinux.org/packages/pynote/

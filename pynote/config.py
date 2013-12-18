@@ -1,22 +1,27 @@
 import os.path
 import configparser
 
+from pynote import helper
+
 
 config = configparser.ConfigParser()
 config.read(os.path.expanduser('~/.noterc'))
 
 try:
-    DATA_FILE = os.path.expanduser(config['paths']['data'])
-    TRASH_FILE = os.path.expanduser(config['paths']['trash'])
-    VERSIONS_FILE = os.path.expanduser(config['paths']['versions'])
+    DATA = os.path.expanduser(config['DEFAULT']['data'])
+    DATA_FILE = os.path.join(DATA, 'data.json')
+    TRASH_FILE = os.path.join(DATA, 'trash.json')
+    VERSIONS_FILE = os.path.join(DATA, 'versions.json')
+    DATEFORMAT = helper.expand_dateformat(config['DEFAULT']['dateformat'])
 
-    if config['misc']['editor']:
-        EDITOR = config['misc']['editor']
+    if config['DEFAULT']['editor']:
+        EDITOR = config['DEFAULT']['editor']
     elif os.getenv('EDITOR'):
         EDITOR = os.getenv('EDITOR')
     else:
         EDITOR = 'nano'
-except KeyError as exception:
-    print("It's something wrong with your 'noterc' in the {0} section.".format(exception))
+
+except KeyError as e:
+    print("It's something wrong with your 'noterc' in {0}.".format(e))
     print("Try running 'note-init' to create a valid 'noterc'!")
-    exit()
+    exit(1)

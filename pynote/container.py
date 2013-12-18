@@ -8,7 +8,15 @@ from pynote import config
 
 
 class Data:
+    """
+    The main data container class for notes.
 
+    The content of this container class maps to
+    the data.json file.  Everything you append
+    to an instance of this class will be serialised
+    to json and written to data.json.
+
+    """
     def __init__(self):
         self.data_file = config.DATA_FILE
         self.data = []
@@ -20,14 +28,14 @@ class Data:
             self.refresh()
         except IndexError:
             print('This note does not exist!')
-            exit()
+            exit(1)
 
     def __getitem__(self, key):
         try:
             return self.data[key]
         except IndexError:
             print('This note does not exist!')
-            exit()
+            exit(1)
 
     def __delitem__(self, key):
         try:
@@ -35,7 +43,10 @@ class Data:
             self.refresh()
         except IndexError:
             print('This note does not exist!')
-            exit()
+            exit(1)
+
+    def __len__(self):
+        return len(self.data)
 
     def __iter__(self):
         return iter(self.data)
@@ -55,13 +66,22 @@ class Data:
         with open(self.data_file, 'w') as f:
             json.dump(self.data, f, cls=NoteJSONEncoder)
 
+    def dumps(self):
+        return json.dumps(self.data, cls=NoteJSONEncoder)
+
     def refresh(self):
         self.dump()
         self.load()
 
 
 class Trash(Data):
+    """
+    A subclass of Data.
 
+    This class maps to trash.json. The rest is
+    similar to Data.
+
+    """
     def __init__(self):
         self.data_file = config.TRASH_FILE
         self.data = []
@@ -69,7 +89,13 @@ class Trash(Data):
 
 
 class Versions(Data):
+    """
+    A subclass of Data.
 
+    This class maps to versions.json. The rest is
+    similar to Data.
+
+    """
     def __init__(self):
         self.data_file = config.VERSIONS_FILE
         self.data = []
@@ -77,7 +103,10 @@ class Versions(Data):
 
 
 class Note:
+    """
+    This class is used to represent a note.
 
+    """
     def __init__(self, title, created, updated, deleted,
                  revision, uuid, tags, content):
         self.title = title
@@ -91,10 +120,9 @@ class Note:
 
     @classmethod
     def create(cls, title):
-        now = datetime.now()
-        note = cls(title=title, created=now.timestamp(), updated=now.timestamp(),
-                   deleted=None, revision=1, uuid=str(uuid.uuid4()), tags='',
-                   content='')
+        now = datetime.now().timestamp()
+        note = cls(title=title, created=now, updated=now, deleted=None,
+                   revision=1, uuid=str(uuid.uuid4()), tags=[], content='')
 
         return note
 
@@ -117,9 +145,9 @@ class Note:
 
     def __str__(self):
         created = datetime.fromtimestamp(self.created)
-        created = created.strftime('%Y-%m-%d %H:%M')
+        created = created.strftime(config.DATEFORMAT)
         updated = datetime.fromtimestamp(self.updated)
-        updated = updated.strftime('%Y-%m-%d %H:%M')
+        updated = updated.strftime(config.DATEFORMAT)
 
         string = ('+-------------------------------------------------+\n'
                   '| title:    {0}\n'
@@ -135,7 +163,11 @@ class Note:
 
 
 class NoteJSONEncoder(JSONEncoder):
+    """
+    JSON Encoder class.  Used to serialise
+    Note objects.
 
+    """
     def default(self, o):
         try:
             note = o.to_dict()

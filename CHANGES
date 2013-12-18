@@ -1,3 +1,30 @@
+2013-12-18 pynote 0.1b3
+=======================
+
+fixed
+-----
+
+* Do not display an empty table if there is no data, see #254.
+
+
+new features
+------------
+
+* Dateformat can be set in `~/.noterc`. Please refer to `docs.python.org`.
+  http://docs.python.org/3.3/library/datetime.html#strftime-and-strptime-behavior
+* Compare command. Compare two revisions of a note by creating a unified diff.
+* You only have to set your data dir in `~/.noterc`. Like data = ~/.note.
+
+
+changed
+-------
+
+* The root section in `~/.noterc` must be [DEFAULT]. The previous values
+  do not work any more!
+* Add every revision to `versions.json`, see #276.
+
+
+
 2013-12-10 pynote 0.1b2
 =======================
 
@@ -11,17 +38,17 @@ fixed
 2013-12-10 pynote 0.1b1
 =======================
 
-fixed
------
-
-Nothing to fix yet! :-)
-
-
-features
---------
+new features
+------------
 
 * create, delete, update, list and read notes
 * list deleted notes in 'trash'
 * everything is stored in human readable JSON files
 * meta data for every note including creation time, updating time,
   deletion time, revision number, uuid
+
+
+fixed
+-----
+
+Nothing to fix yet! :-)
