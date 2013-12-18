@@ -4,8 +4,8 @@ pynote
 pynote is a project to manage your notes on the commandline. It is
 entirely written in Python 3 and provides a very handy cmd-interface.
 You can browse the source code in `cgit`_. A `github mirror`_ is also
-available. **Checkout the `news`_ section in redmine and the CHANGES file
-before updating!**
+available. Checkout the `news`_ section in redmine and the CHANGES file
+before updating!
 
 Please do not use any of these cool github pull requests because
 they will mess up the git history (see CONTRIBUTING file)!
@@ -17,6 +17,7 @@ features
 --------
 
 * create, delete, update, list and read notes
+* compare revisions of a note by creating a unified diff
 * list deleted notes in 'trash'
 * everything is stored in human readable JSON files
 * nice meta data for every note including creation time, updating time,
@@ -105,6 +106,28 @@ read a note
     Spam, Spam, Spam, wonderous Spam,
     Surgical Spam, splendiferous Spam.
     Spam, Spam, Spam, Spaaam!
+
+
+compare the revisions of a note
+```````````````````````````````
+
+::
+
+    $ note compare 1 2 1
+    --- spam, revision: 1   2013-12-18 18:22
+
+    +++ spam, revision: 2   2013-12-18 18:23
+
+    @@ -1,7 +1,6 @@
+
+     Spam, Spam, Spam, lovely Spam
+     Wonderful Spam, Lovely Spam.
+    -Spam, Spam, Spam, magnificent Spam,
+     Superlative Spam.
+     Spam, Spam, Spam, wonderous Spam,
+    -Surgical Spam, splendiferous Spam.
+     Spam, Spam, Spam, Spaaam!
+    +This is a change!
 
 
 show trash
