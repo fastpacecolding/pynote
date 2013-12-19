@@ -3,6 +3,7 @@ import subprocess
 from datetime import datetime
 from tempfile import NamedTemporaryFile
 import difflib
+import hashlib
 
 from pynote import config
 from pynote import container
@@ -70,6 +71,10 @@ def edit(key):
     data = container.Data()
     versions = container.Versions()
     note = data[key]
+    # Create the content's MD5sum to detect changes.
+    # String has to be converted to bytes before passing
+    # it to hashlib.md5().
+    md5_old = hashlib.md5(note.content.encode('UTF-8')).digest()
 
     # At first append the old revision
     # to versions.json and increment
@@ -87,10 +92,19 @@ def edit(key):
     with open(tmp_file, 'r') as f:
         note.content = f.read()
 
-    data[key] = note
-    # Also append the updated note to
-    # versions.json, see #276.
-    versions.append(note)
+    md5_new = hashlib.md5(note.content.encode('UTF-8')).digest()
+
+    # Check if there are changes. Otherwise
+    # do not create a new revision.
+    if md5_old != md5_new:
+        data[key] = note
+        # Also append the updated note to
+        # versions.json, see #276.
+        versions.append(note)
+    else:
+        print('You have not changed anything!')
+        print('No new revision has been created!')
+
     os.remove(tmp_file)  # Clean tempfile.
 
 
