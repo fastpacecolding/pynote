@@ -28,7 +28,7 @@ planned
 -------
 
 * version control (diff revisions, revert revisions)
-* trash to ensure you do not loose any data
+* trash to ensure you do not lose any data
 * export module
 * syntax highlighting using pygments for managing code snippets
 * tags and filters
