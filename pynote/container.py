@@ -143,7 +143,7 @@ class Note:
 
         return _dict
 
-    def __str__(self):
+    def header(self):
         created = datetime.fromtimestamp(self.created)
         created = created.strftime(config.DATEFORMAT)
         updated = datetime.fromtimestamp(self.updated)
@@ -156,10 +156,12 @@ class Note:
                   '| revision: {3}\n'
                   '| uuid:     {4}\n'
                   '+-------------------------------------------------+\n'
-                  '\n'
-                  '{5}\n').format(self.title, created, updated, self.revision,
-                                  self.uuid, self.content)
+                  '\n').format(self.title, created, updated, self.revision,
+                               self.uuid)
         return string
+
+    def __str__(self):
+        return self.content
 
 
 class NoteJSONEncoder(JSONEncoder):

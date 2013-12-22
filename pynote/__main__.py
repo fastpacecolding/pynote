@@ -5,6 +5,7 @@ import pynote.command as note
 
 
 def run():
+    # REFACTOR: This code is ugly...
     parser = argparse.ArgumentParser()
 
     subparser = parser.add_subparsers(dest='cmd')
@@ -17,6 +18,7 @@ def run():
 
     parser_add = subparser.add_parser('show', help='Show a specific note.')
     parser_add.add_argument('key', type=int, help='The integer ID which is shown in the table.')
+    parser_add.add_argument('-n', '--no-header', action='store_true', help='Do not show header data.')
 
     parser_delete = subparser.add_parser('delete', help='Move a note to trash.')
     parser_delete.add_argument('key', type=int, help='The integer ID which is shown in the table.')
@@ -42,7 +44,7 @@ def run():
     elif args.cmd == 'delete':
         note.delete(args.key)
     elif args.cmd == 'show':
-        note.show(args.key)
+        note.show(args.key, args.no_header)
     elif args.cmd == 'edit':
         note.edit(args.key)
     elif args.cmd == 'compare':

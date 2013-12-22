@@ -32,13 +32,20 @@ def new(title):
     os.remove(tmp_file)  # Clean tempfile.
 
 
-def show(key):
+def show(key, no_header):
     """
-    Show a specific note.  The Note.__str__() method is used.
+    Show a specific note.  If no_header is true only the
+    Note.__str__() method is used.
 
     """
     data = container.Data()
-    print(data[key])
+    note = data[key]
+
+    if no_header:
+        print(note)
+    else:
+        print(note.header())
+        print(note)
 
 
 def delete(key):
