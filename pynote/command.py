@@ -11,6 +11,35 @@ from pynote import helper
 from pynote import report
 
 
+def list():
+    """
+    Print out a table with all notes.
+
+    """
+    table = report.DataTable()
+
+    if table:
+        print(table)
+    else:
+        print('You have no data in pynote. :-)')
+
+
+def show(key, no_header):
+    """
+    Show a specific note.  If no_header is true only the
+    Note.__str__() method is used.
+
+    """
+    data = container.Data()
+    note = data[key]
+
+    if no_header:
+        print(note)
+    else:
+        print(note.header())
+        print(note)
+
+
 def new(title):
     """
     Create a new note and save it in data.json and versions.json.
@@ -30,43 +59,6 @@ def new(title):
     data.append(note)
     versions.append(note)
     os.remove(tmp_file)  # Clean tempfile.
-
-
-def show(key, no_header):
-    """
-    Show a specific note.  If no_header is true only the
-    Note.__str__() method is used.
-
-    """
-    data = container.Data()
-    note = data[key]
-
-    if no_header:
-        print(note)
-    else:
-        print(note.header())
-        print(note)
-
-
-def delete(key):
-    """
-    Remove a note from data.json, increment the
-    revision number and append it to versions.json
-    and trash.json.
-
-    """
-    now = datetime.now().timestamp()
-    data = container.Data()
-    trash = container.Trash()
-    versions = container.Versions()
-    note = data[key]
-
-    versions.append(note)
-    note.deleted = now
-    note.revision += 1
-
-    trash.append(note)
-    del data[key]
 
 
 def edit(key):
@@ -115,6 +107,40 @@ def edit(key):
     os.remove(tmp_file)  # Clean tempfile.
 
 
+def delete(key):
+    """
+    Remove a note from data.json, increment the
+    revision number and append it to versions.json
+    and trash.json.
+
+    """
+    now = datetime.now().timestamp()
+    data = container.Data()
+    trash = container.Trash()
+    versions = container.Versions()
+    note = data[key]
+
+    versions.append(note)
+    note.deleted = now
+    note.revision += 1
+
+    trash.append(note)
+    del data[key]
+
+
+def trash():
+    """
+    Print out a table with all notes in trash.
+
+    """
+    table = report.TrashTable()
+
+    if table:
+        print(table)
+    else:
+        print('You have no data in pynote trash. :-)')
+
+
 def compare(key, to_rev, from_rev):
     """
     Compare the given revisions of a note and create a unified diff.
@@ -153,16 +179,3 @@ def compare(key, to_rev, from_rev):
             print(line)
     else:
         print('An error occured. Maybe the revisions do not exist.')
-
-
-def list():
-    """
-    Print out a table with all notes.
-
-    """
-    table = report.DataTable()
-
-    if table:
-        print(table)
-    else:
-        print('You have no data in pynote. :-)')

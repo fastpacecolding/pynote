@@ -4,6 +4,7 @@ XXXX-XX-XX pynote 0.1b4
 * Do not create a new revision if there are no changes, see #277.
 * Improved pynote.__main__ code. If no command is entered just
   choose note list, see #288.
+* note trash works again, see #278.
 
 
 2013-12-18 pynote 0.1b3

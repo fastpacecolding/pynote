@@ -56,6 +56,8 @@ def run():
         note.edit(args.key)
     elif args.cmd == 'delete':
         note.delete(args.key)
+    elif args.cmd == 'trash':
+        note.trash()
     elif args.cmd == 'compare':
         if args.to_rev > args.from_rev:
             note.compare(args.key, args.to_rev, args.from_rev)
