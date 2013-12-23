@@ -31,6 +31,10 @@ def run():
     # note trash
     trash = subparsers.add_parser('trash', help='Show a table with all deleted notes.')
 
+    # note restore
+    restore = subparsers.add_parser('restore', help='Restore a deleted note.')
+    restore.add_argument('key', type=int, help='The integer ID which is shown in the trash table.')
+
     # note compare
     compare = subparsers.add_parser('compare', help='Compare two notes')
     compare.add_argument('key', type=int, help='The integer ID which is shown in the table.')
@@ -58,6 +62,8 @@ def run():
         note.delete(args.key)
     elif args.cmd == 'trash':
         note.trash()
+    elif args.cmd == 'restore':
+        note.restore(args.key)
     elif args.cmd == 'compare':
         if args.to_rev > args.from_rev:
             note.compare(args.key, args.to_rev, args.from_rev)

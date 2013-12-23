@@ -117,13 +117,12 @@ def delete(key):
     now = datetime.now().timestamp()
     data = container.Data()
     trash = container.Trash()
-    versions = container.Versions()
     note = data[key]
-
-    versions.append(note)
     note.deleted = now
-    note.revision += 1
 
+    # Just move the note from trash to data.
+    # Do not create a new revision because
+    # a deleted note has a deletion time.
     trash.append(note)
     del data[key]
 
@@ -139,6 +138,24 @@ def trash():
         print(table)
     else:
         print('You have no data in pynote trash. :-)')
+
+
+def restore(key):
+    """
+    Restore a note from trash.
+
+    """
+    now = datetime.now().timestamp()
+    data = container.Data()
+    trash = container.Trash()
+    note = trash[key]
+    note.deleted = None
+
+    # Just move the note from trash to data.
+    # Do not create a new revision because
+    # a deleted note has a deletion time.
+    data.append(note)
+    del trash[key]
 
 
 def compare(key, to_rev, from_rev):
