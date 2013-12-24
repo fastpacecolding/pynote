@@ -1,4 +1,4 @@
-XXXX-XX-XX pynote 0.1b4
+XXXX-XX-XX pynote 0.1
 -----------------------
 
 * Do not create a new revision if there are no changes, see #277.
@@ -9,6 +9,7 @@ XXXX-XX-XX pynote 0.1b4
   see #281.
 * Improved JSON serialization, see #285.
 * Renamed versions.json to revisions.json. Please rename that file in ~/.note!
+* Reverted the changes in #276.
 
 
 2013-12-18 pynote 0.1b3

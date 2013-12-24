@@ -45,7 +45,6 @@ def new(title):
 
     """
     data = container.Data()
-    revisions = container.Revisions()
     note = container.Note.create(title)
     tmp_file = helper.create_tempfile()
 
@@ -56,7 +55,6 @@ def new(title):
         note.content = f.read()
 
     data.append(note)
-    revisions.append(note)
     os.remove(tmp_file)  # Clean tempfile.
 
 
@@ -69,7 +67,7 @@ def edit(key):
     data = container.Data()
     revisions = container.Revisions()
     note = data[key]
-    # Create the content's MD5sum to detect changes.
+    # Create the content's MD5sum to detect any changes.
     # String has to be converted to bytes before passing
     # it to hashlib.md5().
     md5_old = hashlib.md5(note.content.encode('UTF-8')).digest()
@@ -92,13 +90,10 @@ def edit(key):
 
     md5_new = hashlib.md5(note.content.encode('UTF-8')).digest()
 
-    # Check if there are changes. Otherwise
-    # do not create a new revision.
+    # Check if there are any changes.
+    # Otherwise do not create a new revision.
     if md5_old != md5_new:
         data[key] = note
-        # Also append the updated note to
-        # revisions.json, see #276.
-        revisions.append(note)
     else:
         print('You have not changed anything!')
         print('No new revision has been created!')
@@ -165,12 +160,16 @@ def compare(key, to_rev, from_rev):
     data = container.Data()
     revisions = container.Revisions()
     note = data[key]
-    to_note, from_note = None, None
+    uuid = note.uuid
+    from_note = None
+    to_note = note if note.revision == to_rev else None
 
     for v in revisions:
-        if v.uuid == note.uuid and v.revision == to_rev:
+        # If to_rev is the most recent revision in data then it has
+        # already been set.
+        if to_note is None and (v.uuid == uuid and v.revision == to_rev):
             to_note = v
-        if v.uuid == note.uuid and v.revision == from_rev:
+        if v.uuid == uuid and v.revision == from_rev:
             from_note = v
 
     # Check if both revisions have been found.  Otherwise
@@ -178,10 +177,8 @@ def compare(key, to_rev, from_rev):
     if to_note and from_note:
         from_content = from_note.content.splitlines()
         to_content = to_note.content.splitlines()
-        from_date = datetime.fromtimestamp(from_note.updated)
-        from_date = from_date.strftime(config.DATEFORMAT)
-        to_date = datetime.fromtimestamp(to_note.updated)
-        to_date = to_date.strftime(config.DATEFORMAT)
+        from_date = from_note.updated.strftime(config.DATEFORMAT)
+        to_date = to_note.updated.strftime(config.DATEFORMAT)
         from_title = from_note.title + ', revision: ' + str(from_note.revision)
         to_title = to_note.title + ', revision: ' + str(to_note.revision)
 
