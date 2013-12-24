@@ -20,8 +20,7 @@ class DataTable(Data):
 
         for key, note in enumerate(self.data):
             title = note.title
-            updated = datetime.fromtimestamp(note.updated)
-            updated = updated.strftime(config.DATEFORMAT)
+            updated = note.updated.strftime(config.DATEFORMAT)
 
             table.add_row([key, title, updated])
 
@@ -45,8 +44,7 @@ class TrashTable(Trash):
 
         for key, note in enumerate(self.data):
             title = note.title
-            deleted = datetime.fromtimestamp(note.deleted)
-            deleted = deleted.strftime(config.DATEFORMAT)
+            deleted = note.deleted.strftime(config.DATEFORMAT)
 
             table.add_row([key, title, deleted])
 

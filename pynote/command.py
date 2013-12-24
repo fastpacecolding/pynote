@@ -1,9 +1,8 @@
 import os
-import subprocess
-from datetime import datetime
-from tempfile import NamedTemporaryFile
 import difflib
 import hashlib
+import subprocess
+from datetime import datetime
 
 from pynote import config
 from pynote import container
@@ -66,7 +65,7 @@ def edit(key):
     Edit a note's content and create new revisions.
 
     """
-    now = datetime.now().timestamp()
+    now = datetime.now()
     data = container.Data()
     versions = container.Versions()
     note = data[key]
@@ -114,7 +113,7 @@ def delete(key):
     and trash.json.
 
     """
-    now = datetime.now().timestamp()
+    now = datetime.now()
     data = container.Data()
     trash = container.Trash()
     note = data[key]
@@ -145,7 +144,7 @@ def restore(key):
     Restore a note from trash.
 
     """
-    now = datetime.now().timestamp()
+    now = datetime.now()
     data = container.Data()
     trash = container.Trash()
     note = trash[key]
