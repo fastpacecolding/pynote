@@ -4,13 +4,11 @@ pynote
 pynote is a project to manage your notes on the commandline. It is
 entirely written in Python 3 and provides a very handy cmd-interface.
 You can browse the source code in `cgit`_. A `github mirror`_ is also
-available. Checkout the `news`_ section in redmine and the CHANGES file
+available. Checkout the `news`_ section in redmine and the `CHANGES file`_
 before updating!
 
 Please do not use any of these cool github pull requests because
-they will mess up the git history (see CONTRIBUTING file)!
-
-**The project is not stable yet! So be careful there might be large changes!**
+they will mess up the git history (see `CONTRIBUTING file`_)!
 
 
 features
@@ -18,7 +16,7 @@ features
 
 * create, delete, update, list and read notes
 * compare revisions of a note by creating a unified diff
-* list deleted notes in 'trash'
+* list and restore deleted notes in trash
 * everything is stored in human readable JSON files
 * nice meta data for every note including creation time, updating time,
   deletion time, uuid, tags
@@ -28,7 +26,6 @@ planned
 -------
 
 * version control (diff revisions, revert revisions)
-* trash to ensure you do not lose any data
 * export module
 * syntax highlighting using pygments for managing code snippets
 * tags and filters
@@ -144,6 +141,25 @@ show trash
     +----+--------+------------------+
 
 
+restore a note from trash
+`````````````````````````
+
+::
+
+    $ note restore 1
+
+
+getting help
+````````````
+
+::
+
+    $ note --help
+    $ note show --help
+    $ note compare --help
+    and so on...
+
+
 install
 -------
 
@@ -157,4 +173,6 @@ In Arch Linux you can use the PKGBUILD in AUR_. Otherwise use
 .. _cgit: http://cgit.sevenbyte.org/pynote/
 .. _`github mirror`: https://github.com/statschner/pynote
 .. _`news`: http://redmine.sevenbyte.org/projects/pynote/news
+.. _`CHANGES file`: http://cgit.sevenbyte.org/pynote/tree/CHANGES
+.. _`CONTRIBUTING file`: http://cgit.sevenbyte.org/pynote/tree/CONTRIBUTING?h=develop
 .. _AUR: https://aur.archlinux.org/packages/pynote/
