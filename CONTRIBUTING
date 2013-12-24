@@ -8,13 +8,11 @@ Please refer to PEP8 [1] and PEP257 [2]. If you use Sublime Text (3) you
 can use the pynote.sublime-project file with the required settings. :)
 
 
-
 Issues
 ------
 
 If something does not work as expected feel free to file a bug in my
 bugtracker [3].
-
 
 
 Pull Requests
@@ -28,34 +26,31 @@ and send the files to stefan@sevenbyte.org. Alternatively open an
 issue in redmine [3] and attach the patchfiles.
 
 
-
-Example
-```````
+Example:
 
 * Work on the develop or on a seperate feature (or what else) branch.
   Do not mess up the master branch!
 
 * Commit your changes locally.
 
-* Let's say you have commited three times. Do the following:
-  `$ git format-patch HEAD~3`
+* Let's say you have created three commits. Do the following:
+  $ git format-patch HEAD~3
 
 * Git creates 3 patchfiles with your commit metadata. Send this files to
   stefan@sevenbyte.org or use the bugtracker and attach them. If I like
-  your work I will appy the patches with `git am`. This ensures a very
+  your work I will appy the patches with git am. This ensures a very
   clean git history without any strange automatic github commits.
 
 * Furthermore you can commit to your own repo and create a pull request
-  with `git request-pull`.
+  with git request-pull.
 
-**Hint: I use the git-flow branching model. So look at the develop branch. :)**
-
+Hint: I use the git-flow branching model. So look at the develop branch. :)
 
 
 Commit Messages
 ---------------
 
-Please use `git commit -s` to generate a "Signed-off-by: " line. The
+Please use git commit -s to generate a "Signed-off-by: " line. The
 reasons are in [5]. Structure your commit message like the following. Write
 a short summary of your work and do not forget the blank line. This ensures
 that git shortlog works well (see [6]).
@@ -80,7 +75,6 @@ that git shortlog works well (see [6]).
     Signed-off-by: John Doe <john@doe.org>
 
 
-
 GPG Key
 -------
 
@@ -93,7 +87,6 @@ My GPG public key is available at pgp.mit.edu [7].
     uid                  Stefan Tatschner <stefan.tatschner@gmail.com>
     uid                  Stefan Tatschner <stefan.tatschner@stud.th-deg.de>
     sub   2048R/2B359DD3 2013-05-02 [expires: 2015-05-02]
-
 
 
 Links

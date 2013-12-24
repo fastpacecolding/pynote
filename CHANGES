@@ -1,54 +1,39 @@
+2013-12-24 pynote 0.1
+-----------------------
+
+* Do not create a new revision if there are no changes, see #277.
+* Improved pynote.__main__ code. If no command is entered just
+  choose note list, see #288.
+* note trash works again, see #278.
+* Added a note restore command to restore deleted notes from trash,
+  see #281.
+* Improved JSON serialization, see #285.
+* Renamed versions.json to revisions.json. Please rename that file in ~/.note!
+* Reverted the changes in #276.
+* Added a --no-header option to note show, thanks to stewie.
+
+
 2013-12-18 pynote 0.1b3
-=======================
+-----------------------
 
-fixed
------
-
+* Dateformat can be set in ~/.noterc. Please refer to docs.python.org,
+  strftime and strptime behavior.
+* Compare command. Compare two revisions of a note by creating a
+  unified diff.
+* You only have to set your data dir in ~/.noterc. Like data = ~/.note.
 * Do not display an empty table if there is no data, see #254.
-
-
-new features
-------------
-
-* Dateformat can be set in `~/.noterc`. Please refer to `docs.python.org`.
-  http://docs.python.org/3.3/library/datetime.html#strftime-and-strptime-behavior
-* Compare command. Compare two revisions of a note by creating a unified diff.
-* You only have to set your data dir in `~/.noterc`. Like data = ~/.note.
-
-
-changed
--------
-
-* The root section in `~/.noterc` must be [DEFAULT]. The previous values
+* The root section in ~/.noterc must be [DEFAULT]. The previous values
   do not work any more!
-* Add every revision to `versions.json`, see #276.
-
+* Add every revision to versions.json, see #276.
 
 
 2013-12-10 pynote 0.1b2
-=======================
+-----------------------
 
-fixed
------
-
-* setup.py, see #255.
-
+* fixed setup.py, see #255.
 
 
 2013-12-10 pynote 0.1b1
-=======================
+-----------------------
 
-new features
-------------
-
-* create, delete, update, list and read notes
-* list deleted notes in 'trash'
-* everything is stored in human readable JSON files
-* meta data for every note including creation time, updating time,
-  deletion time, revision number, uuid
-
-
-fixed
------
-
-Nothing to fix yet! :-)
+* Initial release.

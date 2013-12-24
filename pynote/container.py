@@ -1,7 +1,6 @@
 import os.path
 import json
 import uuid
-from json import JSONEncoder
 from datetime import datetime
 
 from pynote import config
@@ -57,10 +56,7 @@ class Data:
 
     def load(self):
         with open(self.data_file, 'r') as f:
-            data = json.load(f)
-
-        for note in data:
-            self.data.append(Note.from_dict(note))
+            self.data = json.load(f, cls=NoteJSONDecoder)
 
     def dump(self):
         with open(self.data_file, 'w') as f:
@@ -88,7 +84,7 @@ class Trash(Data):
         self.load()
 
 
-class Versions(Data):
+class Revisions(Data):
     """
     A subclass of Data.
 
@@ -97,7 +93,7 @@ class Versions(Data):
 
     """
     def __init__(self):
-        self.data_file = config.VERSIONS_FILE
+        self.data_file = config.REVISIONS_FILE
         self.data = []
         self.load()
 
@@ -120,34 +116,40 @@ class Note:
 
     @classmethod
     def create(cls, title):
-        now = datetime.now().timestamp()
+        now = datetime.now()
         note = cls(title=title, created=now, updated=now, deleted=None,
                    revision=1, uuid=str(uuid.uuid4()), tags=[], content='')
 
         return note
 
     @classmethod
-    def from_dict(cls, _dict):
-        note = cls(title=_dict['title'], created=_dict['created'],
-                   updated=_dict['updated'], deleted=_dict['deleted'],
-                   revision=_dict['revision'], uuid=_dict['uuid'],
-                   tags=_dict['tags'], content=_dict['content'])
+    def from_dict(cls, d):
+        created = datetime.fromtimestamp(d['created'])
+        updated = datetime.fromtimestamp(d['updated'])
+        deleted = datetime.fromtimestamp(d['deleted']) if d['deleted'] else None
+
+        note = cls(title=d['title'], created=created,
+                   updated=updated, deleted=deleted,
+                   revision=d['revision'], uuid=d['uuid'],
+                   tags=d['tags'], content=d['content'])
 
         return note
 
     def to_dict(self):
-        _dict = {'title': self.title, 'created': self.created,
-                 'updated': self.updated, 'deleted': self.deleted,
-                 'revision': self.revision, 'uuid': self.uuid,
-                 'tags': self.tags, 'content': self.content}
+        created = self.created.timestamp()
+        updated = self.updated.timestamp()
+        deleted = self.deleted.timestamp() if self.deleted else None
 
-        return _dict
+        d = {'title': self.title, 'created': created,
+             'updated': updated, 'deleted': deleted,
+             'revision': self.revision, 'uuid': self.uuid,
+             'tags': self.tags, 'content': self.content}
 
-    def __str__(self):
-        created = datetime.fromtimestamp(self.created)
-        created = created.strftime(config.DATEFORMAT)
-        updated = datetime.fromtimestamp(self.updated)
-        updated = updated.strftime(config.DATEFORMAT)
+        return d
+
+    def header(self):
+        created = self.created.strftime(config.DATEFORMAT)
+        updated = self.updated.strftime(config.DATEFORMAT)
 
         string = ('+-------------------------------------------------+\n'
                   '| title:    {0}\n'
@@ -156,13 +158,15 @@ class Note:
                   '| revision: {3}\n'
                   '| uuid:     {4}\n'
                   '+-------------------------------------------------+\n'
-                  '\n'
-                  '{5}\n').format(self.title, created, updated, self.revision,
-                                  self.uuid, self.content)
+                  '\n').format(self.title, created, updated, self.revision,
+                               self.uuid)
         return string
 
+    def __str__(self):
+        return self.content
 
-class NoteJSONEncoder(JSONEncoder):
+
+class NoteJSONEncoder(json.JSONEncoder):
     """
     JSON Encoder class.  Used to serialise
     Note objects.
@@ -177,3 +181,16 @@ class NoteJSONEncoder(JSONEncoder):
             return note
         # Let the base class default method raise the TypeError
         return JSONEncoder.default(self, o)
+
+
+class NoteJSONDecoder(json.JSONDecoder):
+    """
+    JSON Decoder class.  Used to deserialise
+    Note objects.
+
+    """
+    def __init__(self):
+        json.JSONDecoder.__init__(self, object_hook=self.dict_to_object)
+
+    def dict_to_object(self, d):
+        return Note.from_dict(d)

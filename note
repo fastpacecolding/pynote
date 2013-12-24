@@ -7,7 +7,7 @@ import pynote.__main__
 if sys.version_info[0] < 3:
     print('ERROR: RUNNING PYTHON 2 INSTEAD OF PYTHON 3!')
     print()
-    print("If you replaced '/usr/bin/python' with python2, you are an idiot!")
+    print("If you have replaced '/usr/bin/python' with python2 you are an idiot!")
     print('Please revert that change!')
     exit(1)
 else:
