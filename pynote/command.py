@@ -41,11 +41,11 @@ def show(key, no_header):
 
 def new(title):
     """
-    Create a new note and save it in data.json and versions.json.
+    Create a new note and save it in data.json and revisions.json.
 
     """
     data = container.Data()
-    versions = container.Versions()
+    revisions = container.Revisions()
     note = container.Note.create(title)
     tmp_file = helper.create_tempfile()
 
@@ -56,7 +56,7 @@ def new(title):
         note.content = f.read()
 
     data.append(note)
-    versions.append(note)
+    revisions.append(note)
     os.remove(tmp_file)  # Clean tempfile.
 
 
@@ -67,7 +67,7 @@ def edit(key):
     """
     now = datetime.now()
     data = container.Data()
-    versions = container.Versions()
+    revisions = container.Revisions()
     note = data[key]
     # Create the content's MD5sum to detect changes.
     # String has to be converted to bytes before passing
@@ -75,9 +75,9 @@ def edit(key):
     md5_old = hashlib.md5(note.content.encode('UTF-8')).digest()
 
     # At first append the old revision
-    # to versions.json and increment
+    # to revisions.json and increment
     # the revision number.
-    versions.append(note)
+    revisions.append(note)
     note.updated = now
     note.revision += 1
     tmp_file = helper.create_tempfile()
@@ -97,8 +97,8 @@ def edit(key):
     if md5_old != md5_new:
         data[key] = note
         # Also append the updated note to
-        # versions.json, see #276.
-        versions.append(note)
+        # revisions.json, see #276.
+        revisions.append(note)
     else:
         print('You have not changed anything!')
         print('No new revision has been created!')
@@ -109,7 +109,7 @@ def edit(key):
 def delete(key):
     """
     Remove a note from data.json, increment the
-    revision number and append it to versions.json
+    revision number and append it to revisions.json
     and trash.json.
 
     """
@@ -163,17 +163,17 @@ def compare(key, to_rev, from_rev):
 
     """
     data = container.Data()
-    versions = container.Versions()
+    revisions = container.Revisions()
     note = data[key]
     to_note, from_note = None, None
 
-    for v in versions:
+    for v in revisions:
         if v.uuid == note.uuid and v.revision == to_rev:
             to_note = v
         if v.uuid == note.uuid and v.revision == from_rev:
             from_note = v
 
-    # Check if both versions have been found.  Otherwise
+    # Check if both revisions have been found.  Otherwise
     # let the user know there are no revisions.
     if to_note and from_note:
         from_content = from_note.content.splitlines()

@@ -8,6 +8,7 @@ XXXX-XX-XX pynote 0.1b4
 * Added a note restore command to restore deleted notes from trash,
   see #281.
 * Improved JSON serialization, see #285.
+* Renamed versions.json to revisions.json. Please rename that file in ~/.note!
 
 
 2013-12-18 pynote 0.1b3

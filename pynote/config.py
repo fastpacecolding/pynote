@@ -11,7 +11,7 @@ try:
     DATA = os.path.expanduser(config['DEFAULT']['data'])
     DATA_FILE = os.path.join(DATA, 'data.json')
     TRASH_FILE = os.path.join(DATA, 'trash.json')
-    VERSIONS_FILE = os.path.join(DATA, 'versions.json')
+    REVISIONS_FILE = os.path.join(DATA, 'revisions.json')
     DATEFORMAT = helper.expand_dateformat(config['DEFAULT']['dateformat'])
 
     if config['DEFAULT']['editor']:

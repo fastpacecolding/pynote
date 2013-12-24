@@ -84,7 +84,7 @@ class Trash(Data):
         self.load()
 
 
-class Versions(Data):
+class Revisions(Data):
     """
     A subclass of Data.
 
@@ -93,7 +93,7 @@ class Versions(Data):
 
     """
     def __init__(self):
-        self.data_file = config.VERSIONS_FILE
+        self.data_file = config.REVISIONS_FILE
         self.data = []
         self.load()
 
