@@ -16,3 +16,8 @@ def create_tempfile():
     tmp_file = NamedTemporaryFile(delete=False)
     tmp_file.close()
     return tmp_file.name
+
+
+def exit_not_exists():
+    print('This note does not exist!')
+    exit(1)

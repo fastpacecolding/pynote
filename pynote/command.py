@@ -30,7 +30,10 @@ def show(key, no_header):
 
     """
     data = container.Data()
-    note = data[key]
+    try:
+        note = data[key]
+    except IndexError:
+        helper.exit_not_exists()
 
     if no_header:
         print(note)
@@ -66,7 +69,10 @@ def edit(key):
     now = datetime.now()
     data = container.Data()
     revisions = container.Revisions()
-    note = data[key]
+    try:
+        note = data[key]
+    except IndexError:
+        helper.exit_not_exists()
     # Create the content's MD5sum to detect any changes.
     # String has to be converted to bytes before passing
     # it to hashlib.md5().
@@ -111,7 +117,10 @@ def delete(key):
     now = datetime.now()
     data = container.Data()
     trash = container.Trash()
-    note = data[key]
+    try:
+        note = data[key]
+    except IndexError:
+        helper.exit_not_exists()
     note.deleted = now
 
     # Just move the note from trash to data.
@@ -142,7 +151,10 @@ def restore(key):
     now = datetime.now()
     data = container.Data()
     trash = container.Trash()
-    note = trash[key]
+    try:
+        note = trash[key]
+    except IndexError:
+        helper.exit_not_exists()
     note.deleted = None
 
     # Just move the note from trash to data.
