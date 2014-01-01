@@ -16,8 +16,8 @@ class Data:
     to json and written to data.json.
 
     """
-    def __init__(self):
-        self.data_file = config.DATA_FILE
+    def __init__(self, data_file=config.DATA_FILE):
+        self.data_file = data_file
         self.data = []
         self.load()
 
@@ -26,23 +26,20 @@ class Data:
             self.data[key] = value
             self.refresh()
         except IndexError:
-            print('This note does not exist!')
-            exit(1)
+            raise
 
     def __getitem__(self, key):
         try:
             return self.data[key]
         except IndexError:
-            print('This note does not exist!')
-            exit(1)
+            raise
 
     def __delitem__(self, key):
         try:
             del self.data[key]
             self.refresh()
         except IndexError:
-            print('This note does not exist!')
-            exit(1)
+            raise
 
     def __len__(self):
         return len(self.data)
@@ -78,8 +75,8 @@ class Trash(Data):
     similar to Data.
 
     """
-    def __init__(self):
-        self.data_file = config.TRASH_FILE
+    def __init__(self, trash_file=config.TRASH_FILE):
+        self.data_file = trash_file
         self.data = []
         self.load()
 
@@ -92,8 +89,8 @@ class Revisions(Data):
     similar to Data.
 
     """
-    def __init__(self):
-        self.data_file = config.REVISIONS_FILE
+    def __init__(self, revisions_file=config.REVISIONS_FILE):
+        self.data_file = revisions_file
         self.data = []
         self.load()
 
@@ -161,6 +158,12 @@ class Note:
                   '\n').format(self.title, created, updated, self.revision,
                                self.uuid)
         return string
+
+    def __eq__(self, other):
+        if self.uuid == other.uuid and self.revision == other.revision:
+            return True
+        else:
+            return False
 
     def __str__(self):
         return self.content
