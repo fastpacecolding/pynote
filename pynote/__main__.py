@@ -70,3 +70,7 @@ def run():
         else:
             print('Error: from_rev must not be smaller than to_rev!')
             exit(1)
+
+
+if __name__ == '__main__':
+    run()
