@@ -63,6 +63,8 @@ class TestContainer(unittest.TestCase):
 
         self.assertTrue(self.data[0])
         self.assertEqual(self.data[0], note)
+        self.assertEqual(len(self.data), 1)
+        self.assertTrue(self.data.dumps())
         self.assertRaises(IndexError, self.data.__getitem__, 1)
         self.assertRaises(IndexError, self.data.__setitem__, 1, 1)
         self.assertRaises(IndexError, self.data.__delitem__, 1)
@@ -74,6 +76,8 @@ class TestContainer(unittest.TestCase):
 
         self.assertTrue(self.trash[0])
         self.assertEqual(self.trash[0], note)
+        self.assertEqual(len(self.trash), 1)
+        self.assertTrue(self.trash.dumps())
         self.assertRaises(IndexError, self.trash.__getitem__, 1)
         self.assertRaises(IndexError, self.trash.__setitem__, 1, 1)
         self.assertRaises(IndexError, self.trash.__delitem__, 1)
@@ -85,6 +89,8 @@ class TestContainer(unittest.TestCase):
 
         self.assertTrue(self.revisions[0])
         self.assertEqual(self.revisions[0], note)
+        self.assertEqual(len(self.revisions), 1)
+        self.assertTrue(self.revisions.dumps())
         self.assertRaises(IndexError, self.revisions.__getitem__, 1)
         self.assertRaises(IndexError, self.revisions.__setitem__, 1, 1)
         self.assertRaises(IndexError, self.revisions.__delitem__, 1)
