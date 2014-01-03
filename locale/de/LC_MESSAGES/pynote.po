@@ -19,11 +19,11 @@ msgstr ""
 
 #: pynote/__main__.py:12
 msgid "show a table with all active notes"
-msgstr "Eine Tabelle mit allen aktiven Notizen ausgeben"
+msgstr "Tabelle mit allen aktiven Notizen ausgeben"
 
 #: pynote/__main__.py:16
 msgid "show a specific note"
-msgstr "Eine Notiz anzeigen"
+msgstr "Notiz anzeigen"
 
 #: pynote/__main__.py:17 pynote/__main__.py:28 pynote/__main__.py:33
 #: pynote/__main__.py:47
@@ -40,19 +40,19 @@ msgstr "Neue Notiz erstellen"
 
 #: pynote/__main__.py:27
 msgid "edit a note"
-msgstr "Eine Notiz bearbeiten"
+msgstr "Notiz bearbeiten"
 
 #: pynote/__main__.py:32
 msgid "move a note to trash"
-msgstr "Eine Notiz in den Papierkorb verschieben"
+msgstr "Notiz in den Papierkorb verschieben"
 
 #: pynote/__main__.py:37
 msgid "show a table with all deleted notes"
-msgstr "Eine Tabelle mit gelöschten Notizen anzeigen"
+msgstr "Tabelle mit gelöschten Notizen anzeigen"
 
 #: pynote/__main__.py:41
 msgid "restore a deleted note"
-msgstr "Eine gelöschte Notiz wiederherstellen"
+msgstr "Gelöschte Notiz wiederherstellen"
 
 #: pynote/__main__.py:42
 msgid "integer key which is shown in the trash table"
@@ -60,7 +60,7 @@ msgstr "Key, der in der Papierkorb-Tabelle angezeigt wird"
 
 #: pynote/__main__.py:46
 msgid "compare two notes"
-msgstr "zwei Notizen vergleichen"
+msgstr "Zwei Notizen vergleichen"
 
 #: pynote/__main__.py:49
 msgid "new revision number"
