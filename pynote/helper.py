@@ -2,6 +2,13 @@ from tempfile import NamedTemporaryFile
 
 
 def expand_dateformat(dateformat):
+    """
+    Takes the dateformat string from ~/.noterc
+    and adds the '%'-signs.
+
+    Y.m.d. => %Y.%m.%d.
+
+    """
     format_str = ''
 
     for v in dateformat:
@@ -19,5 +26,5 @@ def create_tempfile():
 
 
 def exit_not_exists():
-    print(_('This note does not exist!'))
+    print(_('Error: This note does not exist!'))
     exit(1)

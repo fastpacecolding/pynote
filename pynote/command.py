@@ -20,7 +20,7 @@ def list():
     if table:
         print(table)
     else:
-        print('You have no data in pynote. :-)')
+        print(_('You have no data in pynote... :-)'))
 
 
 def show(key, no_header):
@@ -44,7 +44,7 @@ def show(key, no_header):
 
 def new(title):
     """
-    Create a new note and save it in data.json and revisions.json.
+    Create a new note and save it in data.json.
 
     """
     data = container.Data()
@@ -101,8 +101,8 @@ def edit(key):
     if md5_old != md5_new:
         data[key] = note
     else:
-        print('You have not changed anything!')
-        print('No new revision has been created!')
+        print(_('You have not changed anything!'))
+        print(_('No new revision has been created!'))
 
     os.remove(tmp_file)  # Clean tempfile.
 
@@ -110,8 +110,7 @@ def edit(key):
 def delete(key):
     """
     Remove a note from data.json, increment the
-    revision number and append it to revisions.json
-    and trash.json.
+    revision number and append it to trash.json.
 
     """
     now = datetime.now()
@@ -140,7 +139,7 @@ def trash():
     if table:
         print(table)
     else:
-        print('You have no data in pynote trash. :-)')
+        print(_('You have no data in pynote trash... :-)'))
 
 
 def restore(key):
@@ -203,4 +202,4 @@ def compare(key, to_rev, from_rev):
         for line in diff:
             print(line)
     else:
-        print('An error occured. Maybe the revisions do not exist.')
+        print(_('Error: Maybe the revisions do not exist?'))

@@ -4,6 +4,7 @@ import sys
 import pynote.__main__
 
 
+# idiot prevention ...
 if sys.version_info[0] < 3:
     print('ERROR: RUNNING PYTHON 2 INSTEAD OF PYTHON 3!')
     print()

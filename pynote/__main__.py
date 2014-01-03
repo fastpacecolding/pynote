@@ -9,47 +9,50 @@ def run():
     subparsers = parser.add_subparsers(dest='cmd')
 
     # note list
-    _list = subparsers.add_parser('list', help=_('Show a table with all notes.'))
+    _list = subparsers.add_parser('list', help=_('show a table with all '
+                                                 'active notes'))
 
     # note show
-    show = subparsers.add_parser('show', help=_('Show a specific note.'))
-    show.add_argument('key', type=int,
-                      help=_('The integer ID which is shown in the table.'))
+    show = subparsers.add_parser('show', help=_('show a specific note'))
+    show.add_argument('key', type=int, help=_('integer key which is '
+                                              'shown in the table'))
     show.add_argument('-n', '--no-header', action='store_true',
-                      help=_('Do not show header data.'))
+                      help=_('do not show header data'))
 
     # note new
-    new = subparsers.add_parser('new', help=_('Create a new note.'))
+    new = subparsers.add_parser('new', help=_('create a new note'))
     new.add_argument('title', type=str)
 
     # note edit
-    edit = subparsers.add_parser('edit', help='Edit a note.')
-    edit.add_argument('key', type=int,
-                      help=_('The integer ID which is shown in the table.'))
+    edit = subparsers.add_parser('edit', help=_('edit a note'))
+    edit.add_argument('key', type=int, help=_('integer key which is '
+                                              'shown in the table'))
 
     # note delete
-    delete = subparsers.add_parser('delete', help='Move a note to trash.')
-    delete.add_argument('key', type=int,
-                         help=_('The integer ID which is shown in the table.'))
+    delete = subparsers.add_parser('delete', help='move a note to trash')
+    delete.add_argument('key', type=int, help=_('integer key which is '
+                                                'shown in the table'))
 
     # note trash
-    trash = subparsers.add_parser('trash', help=_('Show a table with all deleted notes.'))
+    trash = subparsers.add_parser('trash', help=_('show a table with all '
+                                                  'deleted notes'))
 
     # note restore
-    restore = subparsers.add_parser('restore', help='Restore a deleted note.')
-    restore.add_argument('key', type=int,
-                         help=_('The integer ID which is shown in the trash table.'))
+    restore = subparsers.add_parser('restore', help=_('restore a deleted note'))
+    restore.add_argument('key', type=int, help=_('integer key which is shown '
+                                                 'in the trash table'))
 
     # note compare
-    compare = subparsers.add_parser('compare', help=_('Compare two notes'))
-    compare.add_argument('key', type=int,
-                          help=_('The integer ID which is shown in the table.'))
-    compare.add_argument('to_rev', type=int)
-    compare.add_argument('from_rev', type=int)
+    compare = subparsers.add_parser('compare', help=_('compare two notes'))
+    compare.add_argument('key', type=int, help=_('integer key which is '
+                                                 'shown in the table'))
+    compare.add_argument('to_rev', type=int, help=_('new revision number'))
+    compare.add_argument('from_rev', type=int, help=_('old revision number'))
 
     # note --version
-    parser.add_argument('--version', help=_('Show version.'), action='version',
-                        version='pynote {0}'.format(pynote.__version__))
+    # TODO: Add more information!
+    parser.add_argument('--version', help=_('show version'), action='version',
+                        version='pynote {}'.format(pynote.__version__))
 
     args = parser.parse_args()
 
