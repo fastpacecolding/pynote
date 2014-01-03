@@ -1,5 +1,12 @@
+2014-XX-XX pynote 0.2
+---------------------
+
+* Added localisation via pybabel (GNU gettext files).
+* Added German translation.
+
+
 2013-12-24 pynote 0.1
------------------------
+---------------------
 
 * Do not create a new revision if there are no changes, see #277.
 * Improved pynote.__main__ code. If no command is entered just
