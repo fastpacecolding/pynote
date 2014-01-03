@@ -22,6 +22,6 @@ try:
         EDITOR = 'nano'
 
 except KeyError as e:
-    print("It's something wrong with your 'noterc' in {0}.".format(e))
-    print("Try running 'note-init' to create a valid 'noterc'!")
+    print(_("It's something wrong with your 'noterc' in {}.").format(e))
+    print(_("Try running 'note-init' to create a valid 'noterc'!"))
     exit(1)

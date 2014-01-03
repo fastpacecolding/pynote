@@ -149,11 +149,11 @@ class Note:
         updated = self.updated.strftime(config.DATEFORMAT)
 
         string = ('+-------------------------------------------------+\n'
-                  '| title:    {0}\n'
-                  '| created:  {1}\n'
-                  '| updated:  {2}\n'
-                  '| revision: {3}\n'
-                  '| uuid:     {4}\n'
+                  '| title:    {}\n'
+                  '| created:  {}\n'
+                  '| updated:  {}\n'
+                  '| revision: {}\n'
+                  '| uuid:     {}\n'
                   '+-------------------------------------------------+\n'
                   '\n').format(self.title, created, updated, self.revision,
                                self.uuid)

@@ -10,9 +10,8 @@
 
 PYTHON ?= python
 
-.PHONY: all clean test
-
-all: clean test
+.PHONY: all clean test pybabel-extract pybabel-init-de pybabel-compile-de \
+		pybabel-update-de
 
 clean:
 	find . -name '__pycache__' -exec rm -rf {} +
@@ -22,3 +21,19 @@ clean:
 
 test:
 	@$(PYTHON) tests.py
+
+pybabel-extract:
+	pybabel extract pynote --project=pynote --copyright="Stefan Tatschner" \
+	  --version=0.2 --msgid-bugs-address="stefan@sevenbyte.org"  \
+	  --output=messages.pot
+
+pybabel-init-de:
+	pybabel init --domain=pynote --locale=de --input-file=messages.pot \
+	  --output-dir=locale
+
+pybabel-update-de:
+	pybabel update --domain=pynote --locale=de --input-file=messages.pot \
+	  --output-dir=locale
+
+pybabel-compile-de:
+	pybabel compile --directory=locale --locale=de --domain=pynote

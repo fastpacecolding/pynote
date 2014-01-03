@@ -19,5 +19,5 @@ def create_tempfile():
 
 
 def exit_not_exists():
-    print('This note does not exist!')
+    print(_('This note does not exist!'))
     exit(1)
