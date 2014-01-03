@@ -4,4 +4,4 @@ __version__ = '0.1'
 
 
 import gettext
-gettext.install('pynote', 'locale')
+gettext.install('pynote')
