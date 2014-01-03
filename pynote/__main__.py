@@ -29,7 +29,7 @@ def run():
                                               'shown in the table'))
 
     # note delete
-    delete = subparsers.add_parser('delete', help='move a note to trash')
+    delete = subparsers.add_parser('delete', help=_('move a note to trash'))
     delete.add_argument('key', type=int, help=_('integer key which is '
                                                 'shown in the table'))
 
