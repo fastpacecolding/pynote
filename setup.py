@@ -17,6 +17,8 @@ setup(name='pynote',
       license='MIT',
       packages=['pynote'],
       scripts=['note', 'note-init'],
+      data_files=[('share/locale/de/LC_MESSAGES', ['locale/de/LC_MESSAGES/'
+                                                    'pynote.mo'])],
       requires=['prettytable'],
       classifiers=['Development Status :: 5 - Production/Stable',
                    'Environment :: Console',
