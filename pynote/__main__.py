@@ -1,6 +1,7 @@
 import argparse
 
 import pynote
+import pynote.init
 import pynote.command as note
 
 
@@ -49,6 +50,15 @@ def run():
     compare.add_argument('to_rev', type=int, help=_('new revision number'))
     compare.add_argument('from_rev', type=int, help=_('old revision number'))
 
+    # note init
+    init = subparsers.add_parser('init', help=_('initialize pynote'))
+    init_opts = init.add_mutually_exclusive_group()
+    init_opts.add_argument('--config', action='store_true',
+                           help=_('only create a new config string '
+                                  'and print it out'))
+    init_opts.add_argument('--force', action='store_true',
+                           help=_('remove an existing rc-file and init pynote'))
+
     # note --version
     # TODO: Add more information!
     parser.add_argument('--version', help=_('show version'), action='version',
@@ -79,6 +89,11 @@ def run():
         else:
             print(_('Error: from_rev must not be smaller than to_rev!'))
             exit(1)
+    elif args.cmd == 'init':
+        try:
+            pynote.init.run(args.config, args.force)
+        except KeyboardInterrupt:
+            print('\nExited by user. Bye bye...')
 
 
 if __name__ == '__main__':
