@@ -19,7 +19,7 @@ setup(name='pynote',
       scripts=['note', 'note-init'],
       data_files=[('share/locale/de/LC_MESSAGES', ['locale/de/LC_MESSAGES/'
                                                     'pynote.mo'])],
-      requires=['prettytable'],
+      requires=['prettytable', 'pygments'],
       classifiers=['Development Status :: 5 - Production/Stable',
                    'Environment :: Console',
                    'License :: OSI Approved :: MIT License',

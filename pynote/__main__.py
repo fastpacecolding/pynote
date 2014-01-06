@@ -19,6 +19,7 @@ def run():
                                               'shown in the table'))
     show.add_argument('-n', '--no-header', action='store_true',
                       help=_('do not show header data'))
+    show.add_argument('-l', '--lang', help=_('specify synthax highlighting'))
 
     # note new
     new = subparsers.add_parser('new', help=_('create a new note'))
@@ -71,7 +72,7 @@ def run():
     if args.cmd == 'list' or args.cmd is None:
         note.list()
     elif args.cmd == 'show':
-        note.show(args.key, args.no_header)
+        note.show(args.key, args.no_header, args.lang)
     elif args.cmd == 'new':
         note.new(args.title)
     elif args.cmd == 'edit':

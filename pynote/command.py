@@ -23,10 +23,16 @@ def list():
         print(_('You have no data in pynote... :-)'))
 
 
-def show(key, no_header):
+def show(key, no_header=False, lang=None):
     """
-    Show a specific note.  If no_header is true only the
-    Note.__str__() method is used.
+    Show a specific note.
+
+    args:
+        - key:          numeric key of the note in the
+                        data container
+        - no_header:    supress the note header
+        - lang:         specify a programming language
+                        for pygments highlighting
 
     """
     data = container.Data()
@@ -35,11 +41,14 @@ def show(key, no_header):
     except IndexError:
         helper.exit_not_exists()
 
+    # Send note.content to pygments if lang is not None.
+    content = helper.highlight(note.content, lang) if lang else note.content
+
     if no_header:
-        print(note)
+        print(content)
     else:
         print(note.header())
-        print(note)
+        print(content)
 
 
 def new(title):

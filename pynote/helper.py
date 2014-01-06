@@ -1,3 +1,7 @@
+import pygments
+import pygments.lexers as lexers
+import pygments.formatters as formatters
+from pygments.util import ClassNotFound
 from tempfile import NamedTemporaryFile
 
 
@@ -28,3 +32,15 @@ def create_tempfile():
 def exit_not_exists():
     print(_('Error: This note does not exist!'))
     exit(1)
+
+
+def highlight(data, language):
+    try:
+        lexer = lexers.get_lexer_by_name(language)
+    except ClassNotFound:
+        print(_('Lexer not found!'))
+        exit(1)
+
+    formatter = formatters.Terminal256Formatter()
+    data = pygments.highlight(data, lexer, formatter)
+    return data
