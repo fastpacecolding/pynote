@@ -59,6 +59,10 @@ def run():
     init_opts.add_argument('--force', action='store_true',
                            help=_('remove an existing rc-file and init pynote'))
 
+    # note revisions
+    revisions = subparsers.add_parser('revisions')
+    revisions.add_argument('key', type=int)
+
     # note --version
     parser.add_argument('--version', help=_('show version'), action='version',
                         version='pynote {}'.format(pynote.__version__))
@@ -88,6 +92,8 @@ def run():
         else:
             print(_('Error: from_rev must not be smaller than to_rev!'))
             exit(1)
+    elif args.cmd == 'revisions':
+        note.revisions(args.key)
     elif args.cmd == 'init':
         try:
             pynote.init.run(args.config, args.force)

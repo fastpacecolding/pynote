@@ -3,6 +3,7 @@ import difflib
 import hashlib
 import subprocess
 from datetime import datetime
+from prettytable import PrettyTable
 
 from pynote import config
 from pynote import container
@@ -203,3 +204,36 @@ def compare(key, to_rev, from_rev):
             print(line)
     else:
         print(_('Error: Maybe the revisions do not exist?'))
+
+
+def revisions(key):
+    """
+    Display the available revisions of a note.
+
+    """
+    data = container.Data()
+    revisions = container.Revisions()
+    note = data[key]
+    uuid = note.uuid
+
+    # Create empty table.
+    table = PrettyTable(['revision', 'title', 'updated'])
+    table.align = 'l'
+    table.sortby = 'revision'
+    table.reversesort = True
+
+    # Search revisions and append
+    # them to notes.
+    notes = []
+    notes = [v for v in revisions if v.uuid == uuid]
+    notes.append(note)
+
+    # Fill table with data.
+    for v in notes:
+        updated = v.updated.strftime(config.DATEFORMAT)
+        table.add_row([v.revision, v.title, updated])
+
+    # Output.
+    print(_("There are {} revisions of '{}':").format(len(notes), note.title))
+    print()
+    print(table)
