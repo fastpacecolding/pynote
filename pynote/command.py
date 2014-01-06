@@ -174,7 +174,7 @@ def restore(key):
     del trash[key]
 
 
-def compare(key, to_rev, from_rev):
+def compare(key, to_rev, from_rev, no_color=False):
     """
     Compare the given revisions of a note and create a unified diff.
 
@@ -212,7 +212,8 @@ def compare(key, to_rev, from_rev):
                                     tofiledate=to_date)
 
         diff = ''.join(tuple(diff))
-        diff = helper.highlight(diff, lang='diff')
+        if no_color is False:
+            diff = helper.highlight(diff, lang='diff')
         print(diff, end='')
     else:
         print(_('Error: Maybe the revisions do not exist?'))
