@@ -35,9 +35,9 @@ basic usage
 -----------
 
 At first you have to create the configfile ``noterc`` and the data
-directory ``~/.note``. There is a script included to do this.::
+directory ``~/.note``. There is a command included to do this.::
 
-    $ note-init
+    $ note init
 
 
 create a new note
