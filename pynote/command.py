@@ -1,4 +1,5 @@
 import os
+import sys
 import difflib
 import hashlib
 import subprocess
@@ -10,6 +11,7 @@ from pynote import helper
 from pynote import report
 
 
+# FIXME: Conflict with python builtin list() function.
 def list():
     """
     Print out a table with all notes.
@@ -45,10 +47,10 @@ def show(key, no_header=False, lang=None):
     content = helper.highlight(note.content, lang) if lang else note.content
 
     if no_header:
-        print(content)
+        print(content, end='')
     else:
-        print(note.header())
-        print(content)
+        print(note.header(), end='')
+        print(content, end='')
 
 
 def new(title):
@@ -194,9 +196,10 @@ def compare(key, to_rev, from_rev):
 
     # Check if both revisions have been found.  Otherwise
     # let the user know there are no revisions.
+    # splitlines(keepends=True) ensures '\n' endings.
     if to_note and from_note:
-        from_content = from_note.content.splitlines()
-        to_content = to_note.content.splitlines()
+        from_content = from_note.content.splitlines(keepends=True)
+        to_content = to_note.content.splitlines(keepends=True)
         from_date = from_note.updated.strftime(config.DATEFORMAT)
         to_date = to_note.updated.strftime(config.DATEFORMAT)
         from_title = from_note.title + ', revision: ' + str(from_note.revision)
@@ -208,7 +211,8 @@ def compare(key, to_rev, from_rev):
                                     fromfiledate=from_date,
                                     tofiledate=to_date)
 
-        for line in diff:
-            print(line)
+        diff = ''.join(tuple(diff))
+        diff = helper.highlight(diff, lang='diff')
+        print(diff, end='')
     else:
         print(_('Error: Maybe the revisions do not exist?'))

@@ -34,9 +34,9 @@ def exit_not_exists():
     exit(1)
 
 
-def highlight(data, language):
+def highlight(data, lang):
     try:
-        lexer = lexers.get_lexer_by_name(language)
+        lexer = lexers.get_lexer_by_name(lang)
     except ClassNotFound:
         print(_('Lexer not found!'))
         exit(1)
