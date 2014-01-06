@@ -60,7 +60,6 @@ def run():
                            help=_('remove an existing rc-file and init pynote'))
 
     # note --version
-    # TODO: Add more information!
     parser.add_argument('--version', help=_('show version'), action='version',
                         version='pynote {}'.format(pynote.__version__))
 
