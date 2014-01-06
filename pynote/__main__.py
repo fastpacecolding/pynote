@@ -19,6 +19,7 @@ def run():
                                               'shown in the table'))
     show.add_argument('-n', '--no-header', action='store_true',
                       help=_('do not show header data'))
+    show.add_argument('-l', '--lang', help=_('specify synthax highlighting'))
 
     # note new
     new = subparsers.add_parser('new', help=_('create a new note'))
@@ -49,6 +50,8 @@ def run():
                                                  'shown in the table'))
     compare.add_argument('to_rev', type=int, help=_('new revision number'))
     compare.add_argument('from_rev', type=int, help=_('old revision number'))
+    compare.add_argument('-n', '--no-color', action='store_true',
+                         help=_('do not use colors'))
 
     # note init
     init = subparsers.add_parser('init', help=_('initialize pynote'))
@@ -75,7 +78,7 @@ def run():
     if args.cmd == 'list' or args.cmd is None:
         note.list()
     elif args.cmd == 'show':
-        note.show(args.key, args.no_header)
+        note.show(args.key, args.no_header, args.lang)
     elif args.cmd == 'new':
         note.new(args.title)
     elif args.cmd == 'edit':
@@ -88,7 +91,7 @@ def run():
         note.restore(args.key)
     elif args.cmd == 'compare':
         if args.to_rev > args.from_rev:
-            note.compare(args.key, args.to_rev, args.from_rev)
+            note.compare(args.key, args.to_rev, args.from_rev, args.no_color)
         else:
             print(_('Error: from_rev must not be smaller than to_rev!'))
             exit(1)

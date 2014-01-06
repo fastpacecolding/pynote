@@ -1,4 +1,5 @@
 import os
+import sys
 import difflib
 import hashlib
 import subprocess
@@ -11,6 +12,7 @@ from pynote import helper
 from pynote import report
 
 
+# FIXME: Conflict with python builtin list() function.
 def list():
     """
     Print out a table with all notes.
@@ -24,10 +26,16 @@ def list():
         print(_('You have no data in pynote... :-)'))
 
 
-def show(key, no_header):
+def show(key, no_header=False, lang=None):
     """
-    Show a specific note.  If no_header is true only the
-    Note.__str__() method is used.
+    Show a specific note.
+
+    args:
+        - key:          numeric key of the note in the
+                        data container
+        - no_header:    supress the note header
+        - lang:         specify a programming language
+                        for pygments highlighting
 
     """
     data = container.Data()
@@ -36,11 +44,14 @@ def show(key, no_header):
     except IndexError:
         helper.exit_not_exists()
 
+    # Send note.content to pygments if lang is not None.
+    content = helper.highlight(note.content, lang) if lang else note.content
+
     if no_header:
-        print(note)
+        print(content, end='')
     else:
-        print(note.header())
-        print(note)
+        print(note.header(), end='')
+        print(content, end='')
 
 
 def new(title):
@@ -164,7 +175,7 @@ def restore(key):
     del trash[key]
 
 
-def compare(key, to_rev, from_rev):
+def compare(key, to_rev, from_rev, no_color=False):
     """
     Compare the given revisions of a note and create a unified diff.
 
@@ -186,9 +197,10 @@ def compare(key, to_rev, from_rev):
 
     # Check if both revisions have been found.  Otherwise
     # let the user know there are no revisions.
+    # splitlines(keepends=True) ensures '\n' endings.
     if to_note and from_note:
-        from_content = from_note.content.splitlines()
-        to_content = to_note.content.splitlines()
+        from_content = from_note.content.splitlines(keepends=True)
+        to_content = to_note.content.splitlines(keepends=True)
         from_date = from_note.updated.strftime(config.DATEFORMAT)
         to_date = to_note.updated.strftime(config.DATEFORMAT)
         from_title = from_note.title + ', revision: ' + str(from_note.revision)
@@ -200,8 +212,10 @@ def compare(key, to_rev, from_rev):
                                     fromfiledate=from_date,
                                     tofiledate=to_date)
 
-        for line in diff:
-            print(line)
+        diff = ''.join(tuple(diff))
+        if no_color is False:
+            diff = helper.highlight(diff, lang='diff')
+        print(diff, end='')
     else:
         print(_('Error: Maybe the revisions do not exist?'))
 

@@ -1,9 +1,13 @@
 2014-XX-XX pynote 0.2
 ---------------------
 
-* Added localisation via pybabel (GNU gettext files).
-* Added German translation.
+* Added localisation via pybabel (GNU gettext files), see #284.
+  ** Added German translation.
 * note-init script has been merged to note init, see #295.
+* Added pygments support, see #301.
+  ** Read notes with highlighting using note show -l. Find a list of
+     supported lexers on the pygments project page!
+  ** Unified diffs are colored by default (suppress it with --no-color).
 
 
 2013-12-24 pynote 0.1

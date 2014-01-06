@@ -15,11 +15,12 @@ features
 --------
 
 * create, delete, update, list and read notes
-* compare revisions of a note by creating a unified diff
+* compare revisions of a note by creating a (colored) unified diff
 * list and restore deleted notes in trash
 * everything is stored in human readable JSON files
 * nice meta data for every note including creation time, updating time,
   deletion time, uuid, tags
+* syntax highlighting using pygments for managing code snippets
 
 
 planned
@@ -27,7 +28,6 @@ planned
 
 * version control (diff revisions, revert revisions)
 * export module
-* syntax highlighting using pygments for managing code snippets
 * tags and filters
 
 
@@ -112,11 +112,8 @@ compare the revisions of a note
 
     $ note compare 1 2 1
     --- spam, revision: 1   2013-12-18 18:22
-
     +++ spam, revision: 2   2013-12-18 18:23
-
     @@ -1,7 +1,6 @@
-
      Spam, Spam, Spam, lovely Spam
      Wonderful Spam, Lovely Spam.
     -Spam, Spam, Spam, magnificent Spam,
