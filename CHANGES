@@ -3,6 +3,7 @@
 
 * Added localisation via pybabel (GNU gettext files).
 * Added German translation.
+* note-init script has been merged to note init, see #295.
 
 
 2013-12-24 pynote 0.1
