@@ -16,7 +16,7 @@ setup(name='pynote',
       url='http://redmine.sevenbyte.org/projects/pynote',
       license='MIT',
       packages=['pynote'],
-      scripts=['note', 'note-init'],
+      scripts=['note'],
       data_files=[('share/locale/de/LC_MESSAGES', ['locale/de/LC_MESSAGES/'
                                                     'pynote.mo'])],
       requires=['prettytable', 'pygments'],
