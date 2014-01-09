@@ -89,13 +89,6 @@ def edit(key):
     # String has to be converted to bytes before passing
     # it to hashlib.md5().
     md5_old = hashlib.md5(note.content.encode('UTF-8')).digest()
-
-    # At first append the old revision
-    # to revisions.json and increment
-    # the revision number.
-    revisions.append(note)
-    note.updated = now
-    note.revision += 1
     tmp_file = helper.create_tempfile()
 
     with open(tmp_file, 'w') as f:
@@ -111,6 +104,12 @@ def edit(key):
     # Check if there are any changes.
     # Otherwise do not create a new revision.
     if md5_old != md5_new:
+        # At first append the old revision
+        # to revisions.json and increment
+        # the revision number.
+        revisions.append(note)
+        note.updated = now
+        note.revision += 1
         data[key] = note
     else:
         print(_('You have not changed anything!'))
