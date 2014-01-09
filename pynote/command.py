@@ -235,9 +235,7 @@ def revisions(key):
     table.sortby = 'revision'
     table.reversesort = True
 
-    # Search revisions and append
-    # them to notes.
-    notes = []
+    # Search revisions and append them to notes.
     notes = [v for v in revisions if v.uuid == uuid]
     notes.append(note)
 
