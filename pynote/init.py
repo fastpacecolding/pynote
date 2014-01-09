@@ -31,6 +31,8 @@ def run(config=False, force=False):
                    'editor': editor}
 
     if config:
+        print()
+        print(_("Write this to your '~/.noterc':"))
         print_config(config_dict)
     else:
         config = configparser.ConfigParser()
@@ -43,8 +45,7 @@ def run(config=False, force=False):
             # Show some information about the created config.
             print()
             print(_("The following config has been written to '~/.noterc':"))
-            print()
-            print
+            print_config(config_dict)
         else:
             print(_("A '~/.noterc' already exists, use '--force' to overwrite!"))
 
@@ -69,10 +70,8 @@ def init_data(data_dir):
 
 
 def print_config(config_dict):
-    print('\r')
-    print(_("Write this to your '~/.noterc':"))
-    for item in config_dict.items():
-        print(item[0], '=', item[1])
+    for key, value in config_dict.items():
+        print(key, '=', value)
 
 
 if __name__ == '__main__':
