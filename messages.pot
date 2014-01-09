@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pynote 0.2\n"
 "Report-Msgid-Bugs-To: stefan@sevenbyte.org\n"
-"POT-Creation-Date: 2014-01-03 10:48+0100\n"
+"POT-Creation-Date: 2014-01-09 21:50+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,85 +17,109 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 1.3\n"
 
-#: pynote/__main__.py:12
+#: pynote/__main__.py:13
 msgid "show a table with all active notes"
 msgstr ""
 
-#: pynote/__main__.py:16
+#: pynote/__main__.py:17
 msgid "show a specific note"
 msgstr ""
 
-#: pynote/__main__.py:17 pynote/__main__.py:28 pynote/__main__.py:33
-#: pynote/__main__.py:47
+#: pynote/__main__.py:18 pynote/__main__.py:30 pynote/__main__.py:35
+#: pynote/__main__.py:49
 msgid "integer key which is shown in the table"
 msgstr ""
 
-#: pynote/__main__.py:20
+#: pynote/__main__.py:21
 msgid "do not show header data"
 msgstr ""
 
-#: pynote/__main__.py:23
+#: pynote/__main__.py:22
+msgid "specify synthax highlighting"
+msgstr ""
+
+#: pynote/__main__.py:25
 msgid "create a new note"
 msgstr ""
 
-#: pynote/__main__.py:27
+#: pynote/__main__.py:29
 msgid "edit a note"
 msgstr ""
 
-#: pynote/__main__.py:32
+#: pynote/__main__.py:34
 msgid "move a note to trash"
 msgstr ""
 
-#: pynote/__main__.py:37
+#: pynote/__main__.py:39
 msgid "show a table with all deleted notes"
 msgstr ""
 
-#: pynote/__main__.py:41
+#: pynote/__main__.py:43
 msgid "restore a deleted note"
 msgstr ""
 
-#: pynote/__main__.py:42
+#: pynote/__main__.py:44
 msgid "integer key which is shown in the trash table"
 msgstr ""
 
-#: pynote/__main__.py:46
+#: pynote/__main__.py:48
 msgid "compare two notes"
 msgstr ""
 
-#: pynote/__main__.py:49
+#: pynote/__main__.py:51
 msgid "new revision number"
 msgstr ""
 
-#: pynote/__main__.py:50
+#: pynote/__main__.py:52
 msgid "old revision number"
 msgstr ""
 
 #: pynote/__main__.py:54
+msgid "do not use colors"
+msgstr ""
+
+#: pynote/__main__.py:57
+msgid "initialize pynote"
+msgstr ""
+
+#: pynote/__main__.py:60
+msgid "only create a new config string and print it out"
+msgstr ""
+
+#: pynote/__main__.py:63
+msgid "remove an existing rc-file and init pynote"
+msgstr ""
+
+#: pynote/__main__.py:70
 msgid "show version"
 msgstr ""
 
-#: pynote/__main__.py:80
+#: pynote/__main__.py:96
 msgid "Error: from_rev must not be smaller than to_rev!"
 msgstr ""
 
-#: pynote/command.py:23
+#: pynote/command.py:26
 msgid "You have no data in pynote... :-)"
 msgstr ""
 
-#: pynote/command.py:104
+#: pynote/command.py:115
 msgid "You have not changed anything!"
 msgstr ""
 
-#: pynote/command.py:105
+#: pynote/command.py:116
 msgid "No new revision has been created!"
 msgstr ""
 
-#: pynote/command.py:142
+#: pynote/command.py:153
 msgid "You have no data in pynote trash... :-)"
 msgstr ""
 
-#: pynote/command.py:205
+#: pynote/command.py:219
 msgid "Error: Maybe the revisions do not exist?"
+msgstr ""
+
+#: pynote/command.py:250
+msgid "There are {} revisions of '{}':"
 msgstr ""
 
 #: pynote/config.py:25
@@ -106,7 +130,39 @@ msgstr ""
 msgid "Try running 'note-init' to create a valid 'noterc'!"
 msgstr ""
 
-#: pynote/helper.py:29
+#: pynote/helper.py:33
 msgid "Error: This note does not exist!"
+msgstr ""
+
+#: pynote/helper.py:41
+msgid "Lexer not found!"
+msgstr ""
+
+#: pynote/init.py:13
+msgid "Where do you want to store your notes [default: ~/.note]?"
+msgstr ""
+
+#: pynote/init.py:19
+msgid "Enter your prefered dateformat [default: Y-m-d H:M]!"
+msgstr ""
+
+#: pynote/init.py:25
+msgid "What is your prefered editor [default: {}]?"
+msgstr ""
+
+#: pynote/init.py:35
+msgid "Write this to your '~/.noterc':"
+msgstr ""
+
+#: pynote/init.py:47
+msgid "The following config has been written to '~/.noterc':"
+msgstr ""
+
+#: pynote/init.py:50
+msgid "A '~/.noterc' already exists, use '--force' to overwrite!"
+msgstr ""
+
+#: pynote/init.py:56
+msgid "Directory '{}' already exists!"
 msgstr ""
 
