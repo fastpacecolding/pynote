@@ -10,7 +10,7 @@ def expand_dateformat(dateformat):
     Takes the dateformat string from ~/.noterc
     and adds the '%'-signs.
 
-    Y.m.d. => %Y.%m.%d.
+    Y.m.d => %Y.%m.%d
 
     """
     format_str = ''
