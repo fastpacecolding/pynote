@@ -54,6 +54,29 @@ def show(key, no_header=False, lang=None):
         print(content, end='')
 
 
+def show_all(no_header=False):
+    """
+    Print all notes in data container.
+
+    args:
+        - no_header:    supress the note header
+
+    """
+    data = container.Data()
+
+    for i, note in enumerate(data):
+        print()
+        print()
+        print('-- note {} --'.format(i))
+        print()
+
+        if no_header:
+            print(note.content, end='')
+        else:
+            print(note.header(), end='')
+            print(note.content, end='')
+
+
 def new(title):
     """
     Create a new note and save it in data.json.
