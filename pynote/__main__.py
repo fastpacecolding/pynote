@@ -31,6 +31,8 @@ def run():
     edit = subparsers.add_parser('edit', help=_('edit a note'))
     edit.add_argument('key', type=int, help=_('integer key which is '
                                               'shown in the table'))
+    edit.add_argument('-t', '--title', action='store_true',
+                      help=_('edit the title'))
 
     # note delete
     delete = subparsers.add_parser('delete', help=_('move a note to trash'))
@@ -87,7 +89,7 @@ def run():
     elif args.cmd == 'new':
         note.new(args.title)
     elif args.cmd == 'edit':
-        note.edit(args.key)
+        note.edit(args.key, args.title)
     elif args.cmd == 'delete':
         note.delete(args.key)
     elif args.cmd == 'trash':

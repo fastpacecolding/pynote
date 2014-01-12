@@ -89,15 +89,18 @@ def new(title):
     # Read the entered data from the tempfile.
     subprocess.call([config.EDITOR, tmp_file])
     with open(tmp_file, 'r') as f:
-        note.content = f.read()
+        note.content = f.read().rstrip()  # Strip trailing whitespace.
 
     data.append(note)
     os.remove(tmp_file)  # Clean tempfile.
 
 
-def edit(key):
+def edit(key, title=False):
     """
-    Edit a note's content and create new revisions.
+    Edit a note's content or title and create new revision.
+
+    args:
+        - title:        If True edit the title.
 
     """
     now = datetime.now()
@@ -107,25 +110,31 @@ def edit(key):
         note = data[key]
     except IndexError:
         helper.exit_not_exists()
+    content = note.content if title is False else note.title
+
     # Create the content's MD5sum to detect any changes.
     # String has to be converted to bytes before passing
     # it to hashlib.md5().
-    md5_old = hashlib.md5(note.content.encode('UTF-8')).digest()
+    md5_old = hashlib.md5(content.encode('UTF-8')).digest()
     tmp_file = helper.create_tempfile()
 
     with open(tmp_file, 'w') as f:
-        f.write(note.content)
+        f.write(content)
 
     subprocess.call([config.EDITOR, tmp_file])
 
     with open(tmp_file, 'r') as f:
-        note.content = f.read()
+        content = f.read().rstrip()  # Strip trailing whitespace.
 
-    md5_new = hashlib.md5(note.content.encode('UTF-8')).digest()
+    md5_new = hashlib.md5(content.encode('UTF-8')).digest()
 
     # Check if there are any changes.
     # Otherwise do not create a new revision.
     if md5_old != md5_new:
+        if title is False:
+            note.content = content
+        else:
+            note.title = content
         # At first append the old revision
         # to revisions.json and increment
         # the revision number.
