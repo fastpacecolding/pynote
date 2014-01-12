@@ -9,6 +9,7 @@
      Find a list of supported lexers on the pygments project page!
   -> Unified diffs are colored by default (suppress it with --no-color).
 * Added a note show --all option, see #293.
+* Added a note edit --title option, see #292.
 * New command: note revisions; You can print out the existing revisions
   of a note, see #290.
 * Fixed a bug with revisions. Do not create a new revision if there are
