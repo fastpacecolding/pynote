@@ -12,8 +12,7 @@ from pynote import helper
 from pynote import report
 
 
-# FIXME: Conflict with python builtin list() function.
-def list():
+def list_():
     """
     Print out a table with all notes.
 

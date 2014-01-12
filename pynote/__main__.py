@@ -78,7 +78,7 @@ def run():
     # depending on args.cmd.  Choose note list if no
     # command is entered.
     if args.cmd == 'list' or args.cmd is None:
-        note.list()
+        note.list_()
     elif args.cmd == 'show':
         if args.all:
             note.show_all(args.no_header)
