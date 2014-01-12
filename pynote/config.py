@@ -14,6 +14,11 @@ try:
     REVISIONS_FILE = os.path.join(DATA, 'revisions.json')
     DATEFORMAT = helper.expand_dateformat(config['DEFAULT']['dateformat'])
 
+    if 'pygments_theme' in config['DEFAULT']:
+        PYGMENTS_THEME = config['DEFAULT']['pygments_theme']
+    else:
+        PYGMENTS_THEME = 'default'
+
     if config['DEFAULT']['editor']:
         EDITOR = config['DEFAULT']['editor']
     elif os.getenv('EDITOR'):
@@ -23,5 +28,5 @@ try:
 
 except KeyError as e:
     print(_("It's something wrong with your 'noterc' in {}.").format(e))
-    print(_("Try running 'note-init' to create a valid 'noterc'!"))
+    print(_("Try running 'note init' to create a valid 'noterc'!"))
     exit(1)

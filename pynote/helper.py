@@ -1,10 +1,3 @@
-import pygments
-import pygments.lexers as lexers
-import pygments.formatters as formatters
-from pygments.util import ClassNotFound
-from tempfile import NamedTemporaryFile
-
-
 def expand_dateformat(dateformat):
     """
     Takes the dateformat string from ~/.noterc
@@ -24,6 +17,8 @@ def expand_dateformat(dateformat):
 
 
 def create_tempfile():
+    from tempfile import NamedTemporaryFile
+
     tmp_file = NamedTemporaryFile(delete=False)
     tmp_file.close()
     return tmp_file.name
@@ -35,12 +30,19 @@ def exit_not_exists():
 
 
 def highlight(data, lang):
+    import pygments
+    import pygments.lexers as lexers
+    import pygments.formatters as formatters
+    from pygments.util import ClassNotFound
+
+    from pynote import config
+
     try:
         lexer = lexers.get_lexer_by_name(lang)
     except ClassNotFound:
         print(_('Lexer not found!'))
         exit(1)
 
-    formatter = formatters.Terminal256Formatter()
+    formatter = formatters.Terminal256Formatter(style=config.PYGMENTS_THEME)
     data = pygments.highlight(data, lexer, formatter)
     return data
