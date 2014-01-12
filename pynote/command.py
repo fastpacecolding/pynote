@@ -131,14 +131,14 @@ def edit(key, title=False):
     # Check if there are any changes.
     # Otherwise do not create a new revision.
     if md5_old != md5_new:
+        # At first append the old revision to revisions.json,
+        # update the note and increment the revision number.
+        revisions.append(note)
+
         if title is False:
             note.content = content
         else:
             note.title = content
-        # At first append the old revision
-        # to revisions.json and increment
-        # the revision number.
-        revisions.append(note)
         note.updated = now
         note.revision += 1
         data[key] = note
