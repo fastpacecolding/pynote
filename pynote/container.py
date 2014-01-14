@@ -66,9 +66,6 @@ class Data:
         with open(self.data_file, 'w') as f:
             json.dump(self.data, f, cls=NoteJSONEncoder)
 
-    def dumps(self):
-        return json.dumps(self.data, cls=NoteJSONEncoder)
-
     def refresh(self):
         self.dump()
         self.load()
@@ -152,10 +149,12 @@ class Note:
 
         return d
 
+    def to_json(self):
+        return json.dumps(self.to_dict(), indent=4)
+
     def get_header(self):
         table = PrettyTable(header=False)
         table.add_row(['title', self.title])
-
         created = self.created.strftime(config.DATEFORMAT)
         table.add_row(['created', created])
 

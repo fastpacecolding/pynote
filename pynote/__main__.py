@@ -2,6 +2,7 @@ import argparse
 
 import pynote
 import pynote.init
+import pynote.sync
 import pynote.commands as note
 
 
@@ -78,6 +79,14 @@ def run():
     tags_opts.add_argument('-a', '--add', nargs='+')
     tags_opts.add_argument('-d', '--delete', nargs='+')
 
+    # note export
+    export = subparsers.add_parser('export', help='export notes')
+    export_opts = export.add_mutually_exclusive_group()
+    export_opts.add_argument('--txt', action='store_true',
+                             help=_('export all notes as plain text files'))
+    export_opts.add_argument('--json', action='store_true',
+                             help=_('export all notes as json files'))
+
     # note --version
     parser.add_argument('--version', help=_('show version'), action='version',
                         version='pynote {}'.format(pynote.__version__))
@@ -139,6 +148,15 @@ def run():
             note.note_tags(args.key)
         else:
             note.tags()
+
+    elif args.cmd == 'export':
+        exporter = pynote.sync.Exporter()
+        if args.txt:
+            exporter.to_txt()
+        elif args.json:
+            exporter.to_json()
+        else:
+            exporter.to_txt()
 
     elif args.cmd == 'init':
         if args.config:
