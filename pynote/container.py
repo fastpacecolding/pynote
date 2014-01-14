@@ -144,7 +144,7 @@ class Note:
 
         return d
 
-    def header(self):
+    def get_header(self):
         created = self.created.strftime(config.DATEFORMAT)
         updated = self.updated.strftime(config.DATEFORMAT)
 

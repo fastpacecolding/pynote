@@ -49,7 +49,7 @@ def show(key, no_header=False, lang=None):
     if no_header:
         print(content, end='')
     else:
-        print(note.header(), end='')
+        print(note.get_header(), end='')
         print(content, end='')
 
 
@@ -72,7 +72,7 @@ def show_all(no_header=False):
         if no_header:
             print(note.content, end='')
         else:
-            print(note.header(), end='')
+            print(note.get_header(), end='')
             print(note.content, end='')
 
 
