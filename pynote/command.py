@@ -12,17 +12,17 @@ from pynote import helper
 from pynote import report
 
 
-def list_():
+def list_(tags=None):
     """
     Print out a table with all notes.
 
     """
-    table = report.DataTable()
+    table = report.DataTable(tags)
 
     if table:
         print(table)
     else:
-        print(_('You have no data in pynote... :-)'))
+        print(_('No data!'))
 
 
 def show(key, no_header=False, lang=None):

@@ -10,8 +10,9 @@ def run():
     subparsers = parser.add_subparsers(dest='cmd')
 
     # note list
-    _list = subparsers.add_parser('list', help=_('show a table with all '
+    list_ = subparsers.add_parser('list', help=_('show a table with all '
                                                  'active notes'))
+    list_.add_argument('-t', '--tags', nargs='+', help=_('filter tags'))
 
     # note show
     show = subparsers.add_parser('show', help=_('show a specific note'))
@@ -80,7 +81,7 @@ def run():
     # depending on args.cmd.  Choose note list if no
     # command is entered.
     if args.cmd == 'list' or args.cmd is None:
-        note.list_()
+        note.list_(args.tags)
     elif args.cmd == 'show':
         if args.all:
             note.show_all(args.no_header)
