@@ -159,6 +159,12 @@ class Note:
                                self.uuid)
         return string
 
+    def has_tag(self, tag):
+        if tag in self.tags:
+            return True
+        else:
+            return False
+
     def __eq__(self, other):
         if self.uuid == other.uuid and self.revision == other.revision:
             return True
