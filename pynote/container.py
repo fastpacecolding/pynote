@@ -147,16 +147,18 @@ class Note:
     def get_header(self):
         created = self.created.strftime(config.DATEFORMAT)
         updated = self.updated.strftime(config.DATEFORMAT)
+        tags = self.tags.__str__().strip('[]') if self.tags else _('None')
 
         string = ('+-------------------------------------------------+\n'
                   '| title:    {}\n'
                   '| created:  {}\n'
                   '| updated:  {}\n'
                   '| revision: {}\n'
+                  '| tags:     {}\n'
                   '| uuid:     {}\n'
                   '+-------------------------------------------------+\n'
                   '\n').format(self.title, created, updated, self.revision,
-                               self.uuid)
+                               tags, self.uuid)
         return string
 
     def has_tag(self, tag):
