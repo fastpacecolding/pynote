@@ -13,21 +13,22 @@ class DataTable(Data):
         self.list()
 
     def list(self):
-        table = PrettyTable(['id', 'title', 'updated'])
-        table.sortby = 'updated'
+        table = PrettyTable(['id', 'title', 'updated', 'timestamp'])
+        table.sortby = 'timestamp'  # fixes a sorting issue, see #302
         table.align = 'l'
         table.reversesort = True
 
         for key, note in enumerate(self.data):
             title = note.title
             updated = note.updated.strftime(config.DATEFORMAT)
+            timestamp = note.updated.timestamp()
 
-            table.add_row([key, title, updated])
+            table.add_row([key, title, updated, timestamp])
 
         self.table = table
 
     def __str__(self):
-        return self.table.get_string()
+        return self.table.get_string(fields=['id', 'title', 'updated'])
 
 
 class TrashTable(Trash):
@@ -37,19 +38,20 @@ class TrashTable(Trash):
         self.list()
 
     def list(self):
-        table = PrettyTable(['id', 'title', 'deleted'])
-        table.sortby = 'deleted'
+        table = PrettyTable(['id', 'title', 'deleted', 'timestamp'])
+        table.sortby = 'timestamp'  # fixes a sorting issue, see #302
         table.align = 'l'
         table.reversesort = True
 
         for key, note in enumerate(self.data):
             title = note.title
             deleted = note.deleted.strftime(config.DATEFORMAT)
+            timestamp = note.deleted.timestamp()
 
-            table.add_row([key, title, deleted])
+            table.add_row([key, title, deleted, timestamp])
 
         self.table = table
 
     def __str__(self):
-        return self.table.get_string()
+        return self.table.get_string(fields=['id', 'title', 'deleted'])
 
