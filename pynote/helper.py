@@ -34,6 +34,7 @@ def highlight(data, lang):
     import pygments.lexers as lexers
     import pygments.formatters as formatters
     from pygments.util import ClassNotFound
+    from pygments.styles import get_all_styles
 
     from pynote import config
 
@@ -43,6 +44,17 @@ def highlight(data, lang):
         print(_('Lexer not found!'))
         exit(1)
 
-    formatter = formatters.Terminal256Formatter(style=config.PYGMENTS_THEME)
+    try:
+        formatter = formatters.Terminal256Formatter(style=config.PYGMENTS_THEME)
+    except ClassNotFound:
+        styles = list(get_all_styles())
+        print(_('Theme {} not found!').format(config.PYGMENTS_THEME))
+        print(_("Please correct pygments_theme in your '~/.noterc'!"))
+        print(_('Supported themes are:'))
+        print()
+        for style in styles:
+            print(style)
+        exit(1)
+
     data = pygments.highlight(data, lexer, formatter)
     return data
