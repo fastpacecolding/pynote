@@ -15,7 +15,7 @@ def run():
 
     # note show
     show = subparsers.add_parser('show', help=_('show a specific note'))
-    show.add_argument('key', type=int, nargs='?',
+    show.add_argument('key', type=int, nargs='?', default=0,
                       help=_('integer key which is shown in the table'))
     show.add_argument('-a', '--all', action='store_true',
                       help=_('show all notes'))
