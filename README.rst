@@ -160,8 +160,7 @@ getting help
 install
 -------
 
-In Arch Linux you can use the PKGBUILD in AUR_. Otherwise use
-(add ``--pre`` for dev releases)::
+In Arch Linux you can use the PKGBUILD in AUR_. Otherwise use::
 
     $ pip install pynote
 
