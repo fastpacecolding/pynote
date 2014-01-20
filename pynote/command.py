@@ -243,6 +243,7 @@ def compare(key, to_rev, from_rev, no_color=False):
                                     tofiledate=to_date)
 
         diff = ''.join(tuple(diff))
+        # REVIEW
         if no_color is False:
             diff = helper.highlight(diff, lang='diff')
         print(diff, end='')
