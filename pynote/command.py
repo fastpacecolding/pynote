@@ -280,3 +280,20 @@ def revisions(key):
     print(_("There are {} revisions of '{}':").format(len(notes), note.title))
     print()
     print(table)
+
+
+def tags():
+    """
+    Display all available tags.
+
+    """
+    data = container.Data()
+    tags = set()
+
+    for note in data:
+        for tag in note.tags:
+            tags.add(tag)
+
+    print(_('The following tags exist:'))
+    for tag in tags:
+        print(tag)
