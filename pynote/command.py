@@ -12,7 +12,7 @@ from pynote import helper
 from pynote import report
 
 
-def list_(tags=None):
+def list_(tags=[]):
     """
     Print out a table with all notes.
 
@@ -115,7 +115,7 @@ def edit(key, title=False):
     # Create the content's MD5sum to detect any changes.
     # String has to be converted to bytes before passing
     # it to hashlib.md5().
-    md5_old = hashlib.md5(content.encode('UTF-8')).digest()
+    md5_old = helper.get_md5(content)
     tmp_file = helper.create_tempfile()
 
     with open(tmp_file, 'w') as f:
@@ -126,7 +126,7 @@ def edit(key, title=False):
     with open(tmp_file, 'r') as f:
         content = f.read().rstrip()  # Strip trailing whitespace.
 
-    md5_new = hashlib.md5(content.encode('UTF-8')).digest()
+    md5_new = helper.get_md5(content)
 
     # Check if there are any changes.
     # Otherwise do not create a new revision.
@@ -262,6 +262,7 @@ def revisions(key):
     uuid = note.uuid
 
     # Create empty table.
+    # TODO: Move to report.py
     table = PrettyTable(['revision', 'title', 'updated'])
     table.align = 'l'
     table.sortby = 'revision'

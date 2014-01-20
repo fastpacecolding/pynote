@@ -7,7 +7,7 @@ from pynote import container
 
 class DataTable(container.Data):
 
-    def __init__(self, tags=None):
+    def __init__(self, tags=[]):
         super().__init__()
         self.tags = tags
         self.table = self._create_table()
@@ -22,13 +22,13 @@ class DataTable(container.Data):
             title = note.title
             updated = note.updated.strftime(config.DATEFORMAT)
 
-            if self.tags is None:
-                table.add_row([key, title, updated])
-            else:
+            if self.tags:
                 for tag in self.tags:
                     if note.has_tag(tag):
                         table.add_row([key, title, updated])
                         break
+            else:
+                table.add_row([key, title, updated])
         return table
 
     def __bool__(self):

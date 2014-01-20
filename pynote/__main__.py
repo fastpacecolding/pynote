@@ -80,7 +80,9 @@ def run():
     # Choose the correct function from pynote.command
     # depending on args.cmd.  Choose note list if no
     # command is entered.
-    if args.cmd == 'list' or args.cmd is None:
+    if args.cmd is None:
+        note.list_()
+    elif args.cmd == 'list':
         note.list_(args.tags)
     elif args.cmd == 'show':
         if args.all:
