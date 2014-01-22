@@ -154,6 +154,7 @@ getting help
     $ note --help
     $ note show --help
     $ note compare --help
+    $ man noterc
     and so on...
 
 

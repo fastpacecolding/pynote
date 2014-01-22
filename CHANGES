@@ -16,6 +16,7 @@
 * Fixed a bug with revisions. Do not create a new revision if there are
   no changes, see #304.
 * Fixed a sorting issue especially with german dateformats, see #302.
+* Added noterc manpage, see commit b6c4ebd.
 
 
 2013-12-24 pynote 0.1
