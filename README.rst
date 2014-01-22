@@ -73,7 +73,7 @@ edit note
     $ note edit 1
 
 Your editor opens with the content of the note. After saving your
-modifications she revision number is incremented.
+modifications the revision number is incremented.
 
 
 delete note
