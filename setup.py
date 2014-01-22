@@ -9,7 +9,7 @@ with open('README.rst') as f:
 
 setup(name='pynote',
       version=pynote.__version__,
-      description='Manage notes on the commandline.',
+      description='Manage notes on the commandline',
       long_description=long_description,
       author='Stefan Tatschner',
       author_email='stefan@sevenbyte.org',
@@ -25,4 +25,5 @@ setup(name='pynote',
                    'Environment :: Console',
                    'License :: OSI Approved :: MIT License',
                    'Natural Language :: English',
+                   'Natural Language :: German',
                    'Programming Language :: Python :: 3.3'])
