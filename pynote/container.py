@@ -1,6 +1,7 @@
-import os.path
+import re
 import json
 import uuid
+import os.path
 from datetime import datetime
 
 from pynote import config
@@ -147,7 +148,8 @@ class Note:
     def get_header(self):
         created = self.created.strftime(config.DATEFORMAT)
         updated = self.updated.strftime(config.DATEFORMAT)
-        tags = self.tags.__str__().strip('[]') if self.tags else _('None')
+        tags = self.tags.__str__() if self.tags else _('None')
+        tags = re.sub('[\'\[\]]', '', tags)  # Strip [] and ' chars.
 
         string = ('+-------------------------------------------------+\n'
                   '| title:    {}\n'
