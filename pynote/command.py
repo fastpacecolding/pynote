@@ -257,44 +257,10 @@ def revisions(key):
 
     """
     data = container.Data()
-    revisions = container.Revisions()
     note = data[key]
-    uuid = note.uuid
-
-    # Create empty table.
-    # TODO: Move to report.py
-    table = PrettyTable(['revision', 'title', 'updated'])
-    table.align = 'l'
-    table.sortby = 'revision'
-    table.reversesort = True
-
-    # Search revisions and append them to notes.
-    notes = [v for v in revisions if v.uuid == uuid]
-    notes.append(note)
-
-    # Fill table with data.
-    for v in notes:
-        updated = v.updated.strftime(config.DATEFORMAT)
-        table.add_row([v.revision, v.title, updated])
+    table = report.RevisionsTable(note)
 
     # Output.
-    print(_("There are {} revisions of '{}':").format(len(notes), note.title))
+    print(_("There are {} revisions of '{}':").format(len(table), note.title))
     print()
     print(table)
-
-
-def tags():
-    """
-    Display all available tags.
-
-    """
-    data = container.Data()
-    tags = set()
-
-    for note in data:
-        for tag in note.tags:
-            tags.add(tag)
-
-    print(_('The following tags exist:'))
-    for tag in tags:
-        print(tag)
