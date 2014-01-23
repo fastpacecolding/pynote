@@ -71,6 +71,9 @@ def run():
     revisions = subparsers.add_parser('revisions')
     revisions.add_argument('key', type=int)
 
+    # note tags
+    tags = subparsers.add_parser('tags')
+
     # note --version
     parser.add_argument('--version', help=_('show version'), action='version',
                         version='pynote {}'.format(pynote.__version__))
@@ -107,6 +110,8 @@ def run():
             exit(1)
     elif args.cmd == 'revisions':
         note.revisions(args.key)
+    elif args.cmd == 'tags':
+        note.tags()
     elif args.cmd == 'init':
         try:
             pynote.init.run(args.config, args.force)
