@@ -281,3 +281,25 @@ def tags():
     print(_('The following tags exist:'))
     for tag in tags:
         print(tag)
+
+
+def add_tags(key, tags=()):
+    """
+    Add tags to a note.
+
+    """
+    data = container.Data()
+    note = data[key]
+    for tag in tags:
+        note.tags.add(tag)
+
+    data[key] = note
+
+
+def del_tags(key, tags=()):
+    data = container.Data()
+    note = data[key]
+    for tag in tags:
+        note.tags.discard(tag)
+
+    data[key] = note

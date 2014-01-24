@@ -116,7 +116,8 @@ class Note:
     def create(cls, title):
         now = datetime.now()
         note = cls(title=title, created=now, updated=now, deleted=None,
-                   revision=1, uuid=str(uuid.uuid4()), tags=[], content='')
+                   revision=1, uuid=str(uuid.uuid4()), tags=set(),
+                   content='')
 
         return note
 
@@ -129,7 +130,7 @@ class Note:
         note = cls(title=d['title'], created=created,
                    updated=updated, deleted=deleted,
                    revision=d['revision'], uuid=d['uuid'],
-                   tags=d['tags'], content=d['content'])
+                   tags=set(d['tags']), content=d['content'])
 
         return note
 
@@ -141,14 +142,15 @@ class Note:
         d = {'title': self.title, 'created': created,
              'updated': updated, 'deleted': deleted,
              'revision': self.revision, 'uuid': self.uuid,
-             'tags': self.tags, 'content': self.content}
+             'tags': list(self.tags), 'content': self.content}
 
         return d
 
     def get_header(self):
         created = self.created.strftime(config.DATEFORMAT)
         updated = self.updated.strftime(config.DATEFORMAT)
-        tags = self.tags.__str__() if self.tags else _('None')
+        tags = sorted(self.tags)
+        tags = tags.__str__() if tags else _('None')
         tags = re.sub('[\'\[\]]', '', tags)  # Strip '[]' and "'" chars.
 
         string = ('+-------------------------------------------------+\n'
