@@ -1,10 +1,9 @@
 import hashlib
-from tempfile import NamedTemporaryFile
-
 import pygments
 import pygments.lexers as lexers
 import pygments.formatters as formatters
 from pygments.util import ClassNotFound
+from tempfile import NamedTemporaryFile
 
 
 def expand_dateformat(dateformat):

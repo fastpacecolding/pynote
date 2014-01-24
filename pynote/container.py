@@ -149,7 +149,7 @@ class Note:
         created = self.created.strftime(config.DATEFORMAT)
         updated = self.updated.strftime(config.DATEFORMAT)
         tags = self.tags.__str__() if self.tags else _('None')
-        tags = re.sub('[\'\[\]]', '', tags)  # Strip [] and ' chars.
+        tags = re.sub('[\'\[\]]', '', tags)  # Strip '[]' and "'" chars.
 
         string = ('+-------------------------------------------------+\n'
                   '| title:    {}\n'

@@ -51,6 +51,7 @@ class DataTable(Table):
                         break
             else:
                 table.add_row([key, title, updated])
+
         return table
 
 
@@ -70,6 +71,7 @@ class TrashTable(container.Trash):
             title = note.title
             deleted = note.deleted.strftime(config.DATEFORMAT)
             table.add_row([key, title, deleted])
+
         return table
 
 
@@ -81,13 +83,12 @@ class RevisionsTable(Table):
         self.table = self._create_table()
 
     def _create_table(self):
-        # Create empty table.
         table = PrettyTable(['revision', 'title', 'updated'])
         table.align = 'l'
         table.sortby = 'revision'
         table.reversesort = True
 
-        # Search revisions and append them to notes.
+        # Search revisions and append them to self.notes.
         self.notes = [v for v in self.revisions if v.uuid == self.note.uuid]
         self.notes.append(self.note)
 
@@ -95,6 +96,7 @@ class RevisionsTable(Table):
         for v in self.notes:
             updated = v.updated.strftime(config.DATEFORMAT)
             table.add_row([v.revision, v.title, updated])
+
         return table
 
     def __len__(self):
