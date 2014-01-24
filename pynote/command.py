@@ -50,7 +50,7 @@ def show(key, no_header=False, lang=None):
         print(content, end='')
     else:
         print(note.get_header(), end='')
-        print(content, end='')
+        print(content)
 
 
 def show_all(no_header=False):
@@ -92,7 +92,7 @@ def new(title):
         note.content = f.read().rstrip()  # Strip trailing whitespace.
 
     data.append(note)
-    os.remove(tmp_file)  # Clean tempfile.
+    os.remove(tmp_file)
 
 
 def edit(key, title=False):
@@ -146,7 +146,7 @@ def edit(key, title=False):
         print(_('You have not changed anything!'))
         print(_('No new revision has been created!'))
 
-    os.remove(tmp_file)  # Clean tempfile.
+    os.remove(tmp_file)
 
 
 def delete(key):
@@ -260,7 +260,6 @@ def revisions(key):
     note = data[key]
     table = report.RevisionsTable(note)
 
-    # Output.
     print(_("There are {} revisions of '{}':").format(len(table), note.title))
     print()
     print(table)
