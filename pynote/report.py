@@ -46,7 +46,7 @@ class DataTable(Table):
 
             if self.tags:
                 for tag in self.tags:
-                    if note.has_tag(tag):
+                    if tag in note:
                         table.add_row([key, title, updated])
                         break
             else:

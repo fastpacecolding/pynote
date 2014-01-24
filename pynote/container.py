@@ -163,7 +163,7 @@ class Note:
                                tags, self.uuid)
         return string
 
-    def has_tag(self, tag):
+    def __contains__(self, tag):
         if tag in self.tags:
             return True
         else:
