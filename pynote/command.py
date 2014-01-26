@@ -12,7 +12,7 @@ from pynote import helper
 from pynote import report
 
 
-def list_(tags=[]):
+def list_(tags=()):
     """
     Print out a table with all notes.
 
@@ -296,6 +296,10 @@ def add_tags(key, tags=()):
 
 
 def del_tags(key, tags=()):
+    """
+    Delete tags from a note.
+
+    """
     data = container.Data()
     note = data[key]
     for tag in tags:
