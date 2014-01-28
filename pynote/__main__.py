@@ -73,6 +73,10 @@ def run():
 
     # note tags
     tags = subparsers.add_parser('tags')
+    tags.add_argument('key', type=int, nargs='?')
+    tags_opts = tags.add_mutually_exclusive_group()
+    tags_opts.add_argument('-a', '--add', nargs='+')
+    tags_opts.add_argument('-d', '--delete', nargs='+')
 
     # note --version
     parser.add_argument('--version', help=_('show version'), action='version',
@@ -111,12 +115,26 @@ def run():
     elif args.cmd == 'revisions':
         note.revisions(args.key)
     elif args.cmd == 'tags':
-        note.tags()
+        if args.add and args.key:
+            note.add_tags(args.key, args.add)
+        elif args.delete and args.key:
+            note.del_tags(args.key, args.delete)
+        elif args.add and not args.key:
+            print(_('Error: missing key!'))
+            exit(1)
+        elif args.delete and not args.key:
+            print(_('Error: missing key!'))
+            exit(1)
+        elif args.key:
+            note.tags(args.key)
+        else:
+            note.tags()
     elif args.cmd == 'init':
         try:
             pynote.init.run(args.config, args.force)
         except KeyboardInterrupt:
             print('\nExited by user. Bye bye...')
+            exit(1)
 
 
 if __name__ == '__main__':

@@ -12,9 +12,17 @@ from pynote import helper
 from pynote import report
 
 
+# ---------------------------------------------
+# - Commands for reading and displaying notes -
+# ---------------------------------------------
+
 def list_(tags=()):
     """
     Print out a table with all notes.
+
+    args:
+        - tags:         a tuple with tags which should be
+                        filtered , e.g.: ('tag1', 'tag2')
 
     """
     table = report.DataTable(tags)
@@ -75,6 +83,23 @@ def show_all(no_header=False):
             print(note.get_header(), end='')
             print(note.content, end='')
 
+
+def trash():
+    """
+    Print out a table with all notes in trash.
+
+    """
+    table = report.TrashTable()
+
+    if table:
+        print(table)
+    else:
+        print(_('You have no data in pynote trash... :-)'))
+
+
+# ----------------------------------------
+# - Stuff for deleting and editing notes -
+# ----------------------------------------
 
 def new(title):
     """
@@ -171,19 +196,6 @@ def delete(key):
     del data[key]
 
 
-def trash():
-    """
-    Print out a table with all notes in trash.
-
-    """
-    table = report.TrashTable()
-
-    if table:
-        print(table)
-    else:
-        print(_('You have no data in pynote trash... :-)'))
-
-
 def restore(key):
     """
     Restore a note from trash.
@@ -203,6 +215,24 @@ def restore(key):
     # a deleted note has a deletion time.
     data.append(note)
     del trash[key]
+
+
+# --------------------
+# - Revision section -
+# --------------------
+
+def revisions(key):
+    """
+    Display the available revisions of a note.
+
+    """
+    data = container.Data()
+    note = data[key]
+    table = report.RevisionsTable(note)
+
+    print(_("There are {} revisions of '{}':").format(len(table), note.title))
+    print()
+    print(table)
 
 
 def compare(key, to_rev, from_rev, no_color=False):
@@ -251,33 +281,35 @@ def compare(key, to_rev, from_rev, no_color=False):
         print(_('Error: Maybe the revisions do not exist?'))
 
 
-def revisions(key):
-    """
-    Display the available revisions of a note.
+# ---------------------
+# - Commands for tags -
+# ---------------------
 
-    """
-    data = container.Data()
-    note = data[key]
-    table = report.RevisionsTable(note)
-
-    print(_("There are {} revisions of '{}':").format(len(table), note.title))
-    print()
-    print(table)
-
-
-def tags():
+# TODO: Maybe split up into two methods.
+def tags(key=None):
     """
     Display all available tags.
 
     """
     data = container.Data()
-    tags = set()
 
-    for note in data:
-        for tag in note.tags:
-            tags.add(tag)
+    if key:
+        note = data[key]
+        tags = note.tags
+        if tags:
+            print(_('Note {}, {}, is tagged with:').format(key, note.title))
+        else:
+            print(_('Note {}, {}, is not tagged!').format(key, note.title))
+    else:
+        tags = set()
+        for note in data:
+            for tag in note.tags:
+                tags.add(tag)
+        if tags:
+            print(_('The following tags exist:'))
+        else:
+            print(_('No tags exist!'))
 
-    print(_('The following tags exist:'))
     for tag in tags:
         print(tag)
 

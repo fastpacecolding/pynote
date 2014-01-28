@@ -62,7 +62,7 @@ class TrashTable(container.Trash):
         self.table = self._create_table()
 
     def _create_table(self):
-        table = PrettyTable(['id', 'title', 'deleted'])
+        table = PrettyTable(['id', 'title', 'deleted'], print_empty=False)
         table.sortby = 'deleted'
         table.align = 'l'
         table.reversesort = True
@@ -83,7 +83,7 @@ class RevisionsTable(Table):
         self.table = self._create_table()
 
     def _create_table(self):
-        table = PrettyTable(['revision', 'title', 'updated'])
+        table = PrettyTable(['revision', 'title', 'updated'], print_empty=False)
         table.align = 'l'
         table.sortby = 'revision'
         table.reversesort = True
