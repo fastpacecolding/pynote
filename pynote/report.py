@@ -1,18 +1,40 @@
-from prettytable import PrettyTable
+from abc import ABCMeta
+from abc import abstractmethod
 from datetime import datetime
+from prettytable import PrettyTable
 
 from pynote import config
-from pynote.container import Data
-from pynote.container import Trash
+from pynote import container
 
 
-class DataTable(Data):
+class Table(metaclass=ABCMeta):
 
+    @abstractmethod
     def __init__(self):
-        super().__init__()
-        self.list()
+        pass
 
-    def list(self):
+    @abstractmethod
+    def _create_table(self):
+        pass
+
+    def __bool__(self):
+        if self.table.get_string():
+            return True
+        else:
+            return False
+
+    def __str__(self):
+        return self.table.get_string()
+
+
+class DataTable(Table):
+
+    def __init__(self, tags=[]):
+        self.data = container.Data()
+        self.tags = tags
+        self.table = self._create_table()
+
+    def _create_table(self):
         table = PrettyTable(['id', 'title', 'updated', 'timestamp'])
         table.sortby = 'timestamp'  # fixes a sorting issue, see #302
         table.align = 'l'
@@ -23,21 +45,27 @@ class DataTable(Data):
             updated = note.updated.strftime(config.DATEFORMAT)
             timestamp = note.updated.timestamp()
 
-            table.add_row([key, title, updated, timestamp])
+            if self.tags:
+                for tag in self.tags:
+                    if tag in note:
+                        table.add_row([key, title, updated, timestamp])
+                        break
+            else:
+                table.add_row([key, title, updated, timestamp])
 
-        self.table = table
+        return table
 
     def __str__(self):
         return self.table.get_string(fields=['id', 'title', 'updated'])
 
 
-class TrashTable(Trash):
+class TrashTable(container.Trash):
 
     def __init__(self):
-        super().__init__()
-        self.list()
+        self.data = container.Trash()
+        self.table = self._create_table()
 
-    def list(self):
+    def _create_table(self):
         table = PrettyTable(['id', 'title', 'deleted', 'timestamp'])
         table.sortby = 'timestamp'  # fixes a sorting issue, see #302
         table.align = 'l'
@@ -47,11 +75,37 @@ class TrashTable(Trash):
             title = note.title
             deleted = note.deleted.strftime(config.DATEFORMAT)
             timestamp = note.deleted.timestamp()
-
             table.add_row([key, title, deleted, timestamp])
 
-        self.table = table
+        return table
 
     def __str__(self):
         return self.table.get_string(fields=['id', 'title', 'deleted'])
 
+
+class RevisionsTable(Table):
+
+    def __init__(self, note):
+        self.revisions = container.Revisions()
+        self.note = note
+        self.table = self._create_table()
+
+    def _create_table(self):
+        table = PrettyTable(['revision', 'title', 'updated'], print_empty=False)
+        table.align = 'l'
+        table.sortby = 'revision'
+        table.reversesort = True
+
+        # Search revisions and append them to self.notes.
+        self.notes = [v for v in self.revisions if v.uuid == self.note.uuid]
+        self.notes.append(self.note)
+
+        # Fill table with data.
+        for v in self.notes:
+            updated = v.updated.strftime(config.DATEFORMAT)
+            table.add_row([v.revision, v.title, updated])
+
+        return table
+
+    def __len__(self):
+        return len(self.notes)

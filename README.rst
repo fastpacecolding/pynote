@@ -23,6 +23,7 @@ features
 * nice meta data for every note including creation time, updating time,
   deletion time, uuid, tags
 * syntax highlighting using pygments for managing code snippets
+* tags
 
 
 planned
@@ -30,7 +31,6 @@ planned
 
 * version control (diff revisions, revert revisions)
 * export module
-* tags and filters
 
 
 install

@@ -10,8 +10,9 @@ def run():
     subparsers = parser.add_subparsers(dest='cmd')
 
     # note list
-    _list = subparsers.add_parser('list', help=_('show a table with all '
+    list_ = subparsers.add_parser('list', help=_('show a table with all '
                                                  'active notes'))
+    list_.add_argument('-t', '--tags', nargs='+', help=_('filter tags'))
 
     # note show
     show = subparsers.add_parser('show', help=_('show a specific note'))
@@ -70,6 +71,13 @@ def run():
     revisions = subparsers.add_parser('revisions')
     revisions.add_argument('key', type=int)
 
+    # note tags
+    tags = subparsers.add_parser('tags')
+    tags.add_argument('key', type=int, nargs='?')
+    tags_opts = tags.add_mutually_exclusive_group()
+    tags_opts.add_argument('-a', '--add', nargs='+')
+    tags_opts.add_argument('-d', '--delete', nargs='+')
+
     # note --version
     parser.add_argument('--version', help=_('show version'), action='version',
                         version='pynote {}'.format(pynote.__version__))
@@ -79,8 +87,10 @@ def run():
     # Choose the correct function from pynote.command
     # depending on args.cmd.  Choose note list if no
     # command is entered.
-    if args.cmd == 'list' or args.cmd is None:
+    if args.cmd is None:
         note.list_()
+    elif args.cmd == 'list':
+        note.list_(args.tags)
     elif args.cmd == 'show':
         if args.all:
             note.show_all(args.no_header)
@@ -104,11 +114,27 @@ def run():
             exit(1)
     elif args.cmd == 'revisions':
         note.revisions(args.key)
+    elif args.cmd == 'tags':
+        if args.add and args.key:
+            note.add_tags(args.key, args.add)
+        elif args.delete and args.key:
+            note.del_tags(args.key, args.delete)
+        elif args.add and not args.key:
+            print(_('Error: missing key!'))
+            exit(1)
+        elif args.delete and not args.key:
+            print(_('Error: missing key!'))
+            exit(1)
+        elif args.key:
+            note.tags(args.key)
+        else:
+            note.tags()
     elif args.cmd == 'init':
         try:
             pynote.init.run(args.config, args.force)
         except KeyboardInterrupt:
             print('\nExited by user. Bye bye...')
+            exit(1)
 
 
 if __name__ == '__main__':

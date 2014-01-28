@@ -12,17 +12,25 @@ from pynote import helper
 from pynote import report
 
 
-def list_():
+# ---------------------------------------------
+# - Commands for reading and displaying notes -
+# ---------------------------------------------
+
+def list_(tags=()):
     """
     Print out a table with all notes.
 
+    args:
+        - tags:         a tuple with tags which should be
+                        filtered , e.g.: ('tag1', 'tag2')
+
     """
-    table = report.DataTable()
+    table = report.DataTable(tags)
 
     if table:
         print(table)
     else:
-        print(_('You have no data in pynote... :-)'))
+        print(_('No data!'))
 
 
 def show(key, no_header=False, lang=None):
@@ -50,7 +58,7 @@ def show(key, no_header=False, lang=None):
         print(content, end='')
     else:
         print(note.get_header(), end='')
-        print(content, end='')
+        print(content)
 
 
 def show_all(no_header=False):
@@ -76,6 +84,23 @@ def show_all(no_header=False):
             print(note.content, end='')
 
 
+def trash():
+    """
+    Print out a table with all notes in trash.
+
+    """
+    table = report.TrashTable()
+
+    if table:
+        print(table)
+    else:
+        print(_('You have no data in pynote trash... :-)'))
+
+
+# ----------------------------------------
+# - Stuff for deleting and editing notes -
+# ----------------------------------------
+
 def new(title):
     """
     Create a new note and save it in data.json.
@@ -92,7 +117,7 @@ def new(title):
         note.content = f.read().rstrip()  # Strip trailing whitespace.
 
     data.append(note)
-    os.remove(tmp_file)  # Clean tempfile.
+    os.remove(tmp_file)
 
 
 def edit(key, title=False):
@@ -115,7 +140,7 @@ def edit(key, title=False):
     # Create the content's MD5sum to detect any changes.
     # String has to be converted to bytes before passing
     # it to hashlib.md5().
-    md5_old = hashlib.md5(content.encode('UTF-8')).digest()
+    md5_old = helper.get_md5(content)
     tmp_file = helper.create_tempfile()
 
     with open(tmp_file, 'w') as f:
@@ -126,7 +151,7 @@ def edit(key, title=False):
     with open(tmp_file, 'r') as f:
         content = f.read().rstrip()  # Strip trailing whitespace.
 
-    md5_new = hashlib.md5(content.encode('UTF-8')).digest()
+    md5_new = helper.get_md5(content)
 
     # Check if there are any changes.
     # Otherwise do not create a new revision.
@@ -146,7 +171,7 @@ def edit(key, title=False):
         print(_('You have not changed anything!'))
         print(_('No new revision has been created!'))
 
-    os.remove(tmp_file)  # Clean tempfile.
+    os.remove(tmp_file)
 
 
 def delete(key):
@@ -171,19 +196,6 @@ def delete(key):
     del data[key]
 
 
-def trash():
-    """
-    Print out a table with all notes in trash.
-
-    """
-    table = report.TrashTable()
-
-    if table:
-        print(table)
-    else:
-        print(_('You have no data in pynote trash... :-)'))
-
-
 def restore(key):
     """
     Restore a note from trash.
@@ -203,6 +215,24 @@ def restore(key):
     # a deleted note has a deletion time.
     data.append(note)
     del trash[key]
+
+
+# --------------------
+# - Revision section -
+# --------------------
+
+def revisions(key):
+    """
+    Display the available revisions of a note.
+
+    """
+    data = container.Data()
+    note = data[key]
+    table = report.RevisionsTable(note)
+
+    print(_("There are {} revisions of '{}':").format(len(table), note.title))
+    print()
+    print(table)
 
 
 def compare(key, to_rev, from_rev, no_color=False):
@@ -243,6 +273,7 @@ def compare(key, to_rev, from_rev, no_color=False):
                                     tofiledate=to_date)
 
         diff = ''.join(tuple(diff))
+        # REVIEW
         if no_color is False:
             diff = helper.highlight(diff, lang='diff')
         print(diff, end='')
@@ -250,32 +281,60 @@ def compare(key, to_rev, from_rev, no_color=False):
         print(_('Error: Maybe the revisions do not exist?'))
 
 
-def revisions(key):
+# ---------------------
+# - Commands for tags -
+# ---------------------
+
+# TODO: Maybe split up into two methods.
+def tags(key=None):
     """
-    Display the available revisions of a note.
+    Display all available tags.
 
     """
     data = container.Data()
-    revisions = container.Revisions()
+
+    if key:
+        note = data[key]
+        tags = note.tags
+        if tags:
+            print(_('Note {}, {}, is tagged with:').format(key, note.title))
+        else:
+            print(_('Note {}, {}, is not tagged!').format(key, note.title))
+    else:
+        tags = set()
+        for note in data:
+            for tag in note.tags:
+                tags.add(tag)
+        if tags:
+            print(_('The following tags exist:'))
+        else:
+            print(_('No tags exist!'))
+
+    for tag in tags:
+        print(tag)
+
+
+def add_tags(key, tags=()):
+    """
+    Add tags to a note.
+
+    """
+    data = container.Data()
     note = data[key]
-    uuid = note.uuid
+    for tag in tags:
+        note.tags.add(tag)
 
-    # Create empty table.
-    table = PrettyTable(['revision', 'title', 'updated'])
-    table.align = 'l'
-    table.sortby = 'revision'
-    table.reversesort = True
+    data[key] = note
 
-    # Search revisions and append them to notes.
-    notes = [v for v in revisions if v.uuid == uuid]
-    notes.append(note)
 
-    # Fill table with data.
-    for v in notes:
-        updated = v.updated.strftime(config.DATEFORMAT)
-        table.add_row([v.revision, v.title, updated])
+def del_tags(key, tags=()):
+    """
+    Delete tags from a note.
 
-    # Output.
-    print(_("There are {} revisions of '{}':").format(len(notes), note.title))
-    print()
-    print(table)
+    """
+    data = container.Data()
+    note = data[key]
+    for tag in tags:
+        note.tags.discard(tag)
+
+    data[key] = note
