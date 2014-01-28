@@ -1,0 +1,7 @@
+Manpages
+********
+
+.. toctree::
+   :glob:
+
+   manpages/*

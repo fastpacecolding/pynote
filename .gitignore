@@ -5,3 +5,7 @@ build
 dist
 MANIFEST
 *.pyc
+html
+doctrees
+_static
+_build

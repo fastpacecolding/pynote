@@ -1,0 +1,57 @@
+*********
+noterc(5)
+*********
+
+SYNOPSIS
+========
+
+Noterc contains all runtime settings for pynote. It is formatted as a
+line-separated list of KEY=VALUE pairs. Blank lines, and lines starting
+with ``#``, are ignored.
+
+
+LOCATION
+========
+
+The default location of noterc, is ``~/.noterc``.
+
+
+SETTINGS
+========
+
+Attention: You have to put ``[DEFAULT]`` on top of your file!
+
+data
+    Specifies the place where your stored notes live. ``~`` is to be
+    expanded to your homedir.
+
+dateformat
+    Set the default dateformat for all dates shown in pynote.
+    It must be a string like e.g. ``d.m.Y H:M``.
+
+editor
+    The command line editor which is used to create and edit notes.
+    If it is not present pynote takes the environment variable ``$EDITOR``.
+
+pygments_theme
+    Choose the pygments theme for synthax highlighting things.
+
+
+EXAMPLE NOTERC FILE
+===================
+
+::
+
+    [DEFAULT]
+    data = ~/Dropbox/.note/
+    dateformat = d.m.Y H:M
+    editor = vim
+    pygments_theme = monokai
+
+
+BUGS
+====
+
+Bugs? You must be kidding; there are no bugs in this software. But if
+this crazy thing happens write an email to stefan@sevenbyte.org or checkout
+the official bugtracker http://redmine.sevenbyte.org/projects/pynote/issues

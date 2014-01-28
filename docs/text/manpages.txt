@@ -1,0 +1,15 @@
+
+Manpages
+********
+
+* noterc(5)
+
+  * SYNOPSIS
+
+  * LOCATION
+
+  * SETTINGS
+
+  * EXAMPLE NOTERC FILE
+
+  * BUGS
