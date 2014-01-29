@@ -1,6 +1,6 @@
 .\" Man page generated from reStructuredText.
 .
-.TH "NOTERC" "5" "January 28, 2014" "0.2" "pynote"
+.TH "NOTERC" "5" "January 29, 2014" "0.2" "pynote"
 .SH NAME
 noterc \- runtime configuration for pynote
 .
@@ -40,23 +40,67 @@ with \fB#\fP, are ignored.
 The default location of noterc, is \fB~/.noterc\fP\&.
 .SH SETTINGS
 .sp
-Attention: You have to put \fB[DEFAULT]\fP on top of your file!
+Please ensure you have a \fB[DEFAULT]\fP section on top of your file.
+Support for additional sections may come in future releases...
 .INDENT 0.0
 .TP
-.B data
+.B \fIdata\fP
 Specifies the place where your stored notes live. \fB~\fP is to be
-expanded to your homedir.
+expanded to your homedir. You can set this location e.g. to your
+Dropbox directory to ensure automatic syncing of your notes.
 .TP
-.B dateformat
+.B \fIdateformat\fP
 Set the default dateformat for all dates shown in pynote.
 It must be a string like e.g. \fBd.m.Y H:M\fP\&.
 .TP
-.B editor
+.B \fIeditor\fP
 The command line editor which is used to create and edit notes.
 If it is not present pynote takes the environment variable \fB$EDITOR\fP\&.
 .TP
-.B pygments_theme
-Choose the pygments theme for synthax highlighting things.
+.B \fIpygments_theme\fP
+Choose the pygments theme for synthax highlighting things. If it is
+not present it takes the value \fBdefault\fP\&. The following values are
+supported:
+.INDENT 7.0
+.IP \(bu 2
+vs
+.IP \(bu 2
+trac
+.IP \(bu 2
+fruity
+.IP \(bu 2
+borland
+.IP \(bu 2
+pastie
+.IP \(bu 2
+bw
+.IP \(bu 2
+native
+.IP \(bu 2
+emacs
+.IP \(bu 2
+murphy
+.IP \(bu 2
+manni
+.IP \(bu 2
+monokai
+.IP \(bu 2
+perldoc
+.IP \(bu 2
+vim
+.IP \(bu 2
+tango
+.IP \(bu 2
+friendly
+.IP \(bu 2
+autumn
+.IP \(bu 2
+rrt
+.IP \(bu 2
+colorful
+.IP \(bu 2
+default
+.UNINDENT
 .UNINDENT
 .SH EXAMPLE NOTERC FILE
 .INDENT 0.0

@@ -1,26 +1,22 @@
-noterc(5)
-=========
+Configuration
+=============
 
-SYNOPSIS
---------
+Pynote is configured with a ressource file in your home directory.
+The location of this file is ``~/.noterc``. The synthax of this file
+is quite easy. It is formatted as a line-separated list of KEY=VALUE
+pairs, blank lines, and lines starting with ``#``, are ignored.
+The whole documatation of this file is located in the official python
+`documentation`_.
 
-Noterc contains all runtime settings for pynote. It is formatted as a
-line-separated list of KEY=VALUE pairs. Blank lines, and lines starting
-with ``#``, are ignored.
+.. _`documentation`: http://docs.python.org/3.3/library/configparser.html#quick-start
 
+The default ``~/.noterc`` can be created with the ``init`` command of
+pynote. If you just want to create you can use the `--config` option,
+see :doc:`commands`. Please ensure you have a ``[DEFAULT]`` section on top
+of your file. Support for additional sections may come in future releases...
 
-LOCATION
---------
-
-The default location of noterc, is ``~/.noterc``.
-
-
-SETTINGS
---------
-
-Please ensure you have a ``[DEFAULT]`` section on top of your file.
-Support for additional sections may come in future releases...
-
+The folowing keywords are supported. You also find this list in the
+shipped manpage with ``$ man noterc``.
 
 `data`
     Specifies the place where your stored notes live. ``~`` is to be
@@ -59,24 +55,3 @@ Support for additional sections may come in future releases...
     * rrt
     * colorful
     * default
-
-
-
-EXAMPLE NOTERC FILE
--------------------
-
-::
-
-    [DEFAULT]
-    data = ~/Dropbox/.note/
-    dateformat = d.m.Y H:M
-    editor = vim
-    pygments_theme = monokai
-
-
-BUGS
-----
-
-Bugs? You must be kidding; there are no bugs in this software. But if
-this crazy thing happens write an email to stefan@sevenbyte.org or checkout
-the official bugtracker http://redmine.sevenbyte.org/projects/pynote/issues

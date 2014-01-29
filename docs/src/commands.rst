@@ -41,6 +41,7 @@ to pass the numeric id of the note to show, e.g. ``$ note show 0``.
     | created:  2013-12-09 10:59
     | updated:  2013-12-09 10:59
     | revision: 1
+    | tags:     foo, bar
     | uuid:     188fcae5-86cf-4e5a-b955-35b38694bb43
     +-------------------------------------------------+
 
@@ -55,14 +56,14 @@ to pass the numeric id of the note to show, e.g. ``$ note show 0``.
 
 **Accepted options**
 
-`-n, --no-header`
+``-n, --no-header``
     Supresses the header.
 
-`-a, --all`
+``-a, --all``
     Print out every active note. Supressing the header is supported
     as well. Passing a numeric id is not mandatory.
 
-`-l LANG, --lang LANG`
+``-l LANG, --lang LANG``
     Use pygments for synthax-highlighting. It is nice for storing
     code snippets into pynote. You have to pass the programming
     language, e.g. ``$ note show 5 -l python``.
@@ -87,7 +88,7 @@ modifications the revision number is incremented.
 
 **Accepted options**
 
-`-t, --title`
+``-t, --title``
     Edit the title instead of the content.
 
 
@@ -177,7 +178,7 @@ uses colors by default.
 
 **Accepted options**
 
-`-n, --no-color`
+``-n, --no-color``
     Supress colors!
 
 
@@ -192,11 +193,45 @@ is interactive and asks you what it should do.
 
 **Accepted options**
 
-`--config`
+``--config``
     Only create a new ``~/.noterc``. Useful when you have messed up
     your previous ``~/.noterc`` or when you want to check out the
     defaults.
 
-`--force`
+``--force``
     Overwrite an existing ``~/.noterc``.
 
+
+tags
+----
+
+``usage: note tags [-h] [-a ADD [ADD ...] | -d DELETE [DELETE ...]] [key]``
+
+View, delete or add tags. This command is quite new and maybe some features
+are missing. A tag is just an arbitrary string. A note can contain multiple
+tags. If no arguments are passed to this commands it prints out all tags
+which are used in the database::
+
+    $ note tags
+    The following tags exist:
+    foo
+    bar
+
+If a numeric id of a note is passed to this command it prints out the tags
+of this note::
+
+    $ note tags 1
+    Note 1, spam, is tagged with:
+    foo
+    bar
+
+For deleting and adding tags checkout out the accepted options!
+
+
+**Accepted options**
+
+``-a ADD, --add ADD``
+    Add one or more tags to a note. ``$ note tags 1 --add "foo"``
+
+``-d DELETE, --delete DELETE``
+    Remove one or more tags from a note, ``$ note tags 1 --delete "foo"``

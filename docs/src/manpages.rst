@@ -1,5 +1,5 @@
 Manpages
-********
+========
 
 .. toctree::
    :glob:

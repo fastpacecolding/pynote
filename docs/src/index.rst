@@ -13,4 +13,5 @@ Contents:
 
    quickstart
    commands
+   configuration
    manpages
