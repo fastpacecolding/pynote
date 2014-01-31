@@ -7,7 +7,7 @@ You can browse the source code in `cgit`_ or in `github`_. Checkout
 the `release notes`_ in redmine and the `changelog`_ before updating!
 If something does not behave as expected please file a bug in the
 official `bugtracker`_, write an `email`_ or look at the `support thread`_
-in the arch linux forums. Official documentation is hosted `via pypi`_!
+in the arch linux forums.
 
 **Please do not use any of these cool github pull requests** because
 they will mess up the git history (see `contributing`_)!

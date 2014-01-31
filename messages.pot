@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pynote 0.2\n"
 "Report-Msgid-Bugs-To: stefan@sevenbyte.org\n"
-"POT-Creation-Date: 2014-01-31 13:34+0100\n"
+"POT-Creation-Date: 2014-01-31 21:09+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -152,14 +152,6 @@ msgstr ""
 
 #: pynote/command.py:311
 msgid "No tags exist!"
-msgstr ""
-
-#: pynote/config.py:30
-msgid "It's something wrong with your 'noterc' in {}."
-msgstr ""
-
-#: pynote/config.py:31
-msgid "Try running 'note init' to create a valid 'noterc'!"
 msgstr ""
 
 #: pynote/container.py:153
