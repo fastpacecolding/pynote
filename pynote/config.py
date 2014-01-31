@@ -12,9 +12,6 @@ noterc = os.path.expanduser('~/.noterc')
 
 # Set default values, see #365.
 DATA = os.path.expanduser('~/.note')
-DATA_FILE = os.path.join(DATA, 'data.json')
-TRASH_FILE = os.path.join(DATA, 'trash.json')
-REVISIONS_FILE = os.path.join(DATA, 'revisions.json')
 DATEFORMAT = '%Y-%m-%d %H:%M'
 PYGMENTS_THEME = 'default'
 
@@ -36,3 +33,7 @@ if os.path.exists(noterc):
         EDITOR = config['DEFAULT']['editor']
     elif os.getenv('EDITOR'):
         EDITOR = os.getenv('EDITOR')
+
+DATA_FILE = os.path.join(DATA, 'data.json')
+TRASH_FILE = os.path.join(DATA, 'trash.json')
+REVISIONS_FILE = os.path.join(DATA, 'revisions.json')
