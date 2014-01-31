@@ -10,7 +10,7 @@
 
 PYTHON ?= python
 
-.PHONY: all clean test pybabel-extract pybabel-init-de pybabel-compile-de \
+.PHONY: all clean test man pybabel-extract pybabel-init-de pybabel-compile-de \
 		pybabel-update-de
 
 clean:
@@ -21,6 +21,9 @@ clean:
 
 test:
 	@$(PYTHON) tests.py
+
+man:
+	a2x --doctype manpage --format manpage man/noterc.txt
 
 pybabel-extract:
 	pybabel extract pynote --project=pynote --copyright="Stefan Tatschner" \

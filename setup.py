@@ -19,7 +19,7 @@ setup(name='pynote',
       scripts=['note'],
       data_files=[('share/locale/de/LC_MESSAGES', ['locale/de/LC_MESSAGES/'
                                                     'pynote.mo']),
-                  ('share/man/man5', ['docs/man/noterc.5'])],
+                  ('share/man/man5', ['man/noterc(5).5'])],
       requires=['prettytable', 'pygments'],
       classifiers=['Development Status :: 5 - Production/Stable',
                    'Environment :: Console',

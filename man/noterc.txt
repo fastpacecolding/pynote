@@ -1,43 +1,47 @@
 noterc(5)
 =========
+:doctype: manpage
+
+
+NAME
+----
+noterc(5) - runtime configuration for pynote
+
 
 SYNOPSIS
 --------
-
 Noterc contains all runtime settings for pynote. It is formatted as a
-line-separated list of KEY=VALUE pairs. Blank lines, and lines starting
-with ``#``, are ignored.
+line-separated list of 'KEY=VALUE' pairs. Blank lines, and lines starting
+with '#', are ignored.
 
 
 LOCATION
 --------
-
-The default location of noterc, is ``~/.noterc``.
+The default location of noterc, is '~/.noterc'.
 
 
 SETTINGS
 --------
-
-Please ensure you have a ``[DEFAULT]`` section on top of your file.
+Please ensure you have a '[DEFAULT]' section on top of your file.
 Support for additional sections may come in future releases...
 
 
-`data`
-    Specifies the place where your stored notes live. ``~`` is to be
+data::
+    Specifies the place where your stored notes live. '~' is to be
     expanded to your homedir. You can set this location e.g. to your
     Dropbox directory to ensure automatic syncing of your notes.
 
-`dateformat`
+dateformat::
     Set the default dateformat for all dates shown in pynote.
-    It must be a string like e.g. ``d.m.Y H:M``.
+    It must be a string like e.g. 'd.m.Y H:M'.
 
-`editor`
+editor::
     The command line editor which is used to create and edit notes.
-    If it is not present pynote takes the environment variable ``$EDITOR``.
+    If it is not present pynote takes the environment variable '$EDITOR'.
 
-`pygments_theme`
+pygments_theme::
     Choose the pygments theme for synthax highlighting things. If it is
-    not present it takes the value ``default``. The following values are
+    not present it takes the value 'default'. The following values are
     supported:
 
     * vs
@@ -61,22 +65,24 @@ Support for additional sections may come in future releases...
     * default
 
 
-
 EXAMPLE NOTERC FILE
 -------------------
-
-::
-
-    [DEFAULT]
-    data = ~/Dropbox/.note/
-    dateformat = d.m.Y H:M
-    editor = vim
-    pygments_theme = monokai
+....
+[DEFAULT]
+data = ~/Dropbox/.note/
+dateformat = d.m.Y H:M
+editor = vim
+pygments_theme = monokai
+....
 
 
 BUGS
 ----
-
-Bugs? You must be kidding; there are no bugs in this software. But if
-this crazy thing happens write an email to stefan@sevenbyte.org or checkout
+Bugs? You must be kidding; there are no bugs in this software. But if this 
+crazy thing happens write an email to mailto:stefan@sevenbyte.org or checkout
 the official bugtracker http://redmine.sevenbyte.org/projects/pynote/issues
+
+
+AUTHOR
+------
+Stefan Tatschner <stefan@sevenbyte.org>
