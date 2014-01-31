@@ -1,4 +1,4 @@
-2014-XX-XX pynote 0.2
+2014-01-31 pynote 0.2
 ---------------------
 
 New features
@@ -16,9 +16,14 @@ New features
   - Choose your pygments theme in noterc with 'pygments_theme', see #307.
 
 * tag support
-  - note show shows tags in header
-  - New option: note list --tags
+  - 'note show' shows tags in header
+  - note list --tags
     -> Filter all notes depending on the given tag(s).
+  - note tags
+    -> add tags to a note: note tags 1 --add "foo"
+    -> delete tags from a note: note tags 1 --delete "foo"
+    -> show tags: note tags 1
+    -> show all used tags in active notes: note tags
 
 * note revisions
   - Print out existing revisions of a note, see #290.
@@ -26,7 +31,9 @@ New features
 * note show --all, see #293, thanks to nsmathew.
 * note edit --title, see #292, thanks to nsmathew.
 * note-init script has been merged to note init, see #295.
-* Added noterc manpage, see commit b6c4ebd.
+* The official documentation is now in redmine,
+  http://redmine.sevenbyte.org/projects/pynote/wiki
+* Added noterc manpage.
 
 Fixes
 
