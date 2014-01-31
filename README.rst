@@ -4,7 +4,7 @@ pynote
 pynote is a project to manage your notes on the commandline. It is
 entirely written in Python 3 and provides a very handy cmd-interface.
 You can browse the source code in `cgit`_ or in `github`_. Checkout
-the `news`_ section in redmine and the `changelog`_ before updating!
+the `release notes`_ in redmine and the `changelog`_ before updating!
 If something does not behave as expected please file a bug in the
 official `bugtracker`_, write an `email`_ or look at the `support thread`_
 in the arch linux forums. Official documentation is hosted `via pypi`_!
@@ -44,7 +44,7 @@ In Arch Linux you can use the PKGBUILD in AUR_. Otherwise use::
 .. Links:
 .. _cgit: http://cgit.sevenbyte.org/pynote/
 .. _`github`: https://github.com/statschner/pynote
-.. _`news`: http://redmine.sevenbyte.org/projects/pynote/news
+.. _`release notes`: http://redmine.sevenbyte.org/projects/pynote/wiki/Releases
 .. _`changelog`: http://cgit.sevenbyte.org/pynote/plain/CHANGES
 .. _`bugtracker`: http://redmine.sevenbyte.org/projects/pynote
 .. _`email`: stefan@sevenbyte.org
