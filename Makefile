@@ -23,7 +23,8 @@ test:
 	@$(PYTHON) tests.py
 
 man:
-	a2x --doctype manpage --format manpage man/noterc.txt
+	a2x --doctype manpage --format manpage "man/noterc.txt"
+	mv "man/noterc(5).5" "man/noterc.5"
 
 pybabel-extract:
 	pybabel extract pynote --project=pynote --copyright="Stefan Tatschner" \
