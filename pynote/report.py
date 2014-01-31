@@ -35,7 +35,8 @@ class DataTable(Table):
         self.table = self._create_table()
 
     def _create_table(self):
-        table = PrettyTable(['id', 'title', 'updated', 'timestamp'])
+        fields = ['id', 'title', 'updated', 'timestamp']
+        table = PrettyTable(fields, print_empty=False)  # print_empty, see #366
         table.sortby = 'timestamp'  # fixes a sorting issue, see #302
         table.align = 'l'
         table.reversesort = True
@@ -66,7 +67,8 @@ class TrashTable(container.Trash):
         self.table = self._create_table()
 
     def _create_table(self):
-        table = PrettyTable(['id', 'title', 'deleted', 'timestamp'])
+        fields = ['id', 'title', 'deleted', 'timestamp']
+        table = PrettyTable(fields, print_empty=False)  # print_empty, see #366
         table.sortby = 'timestamp'  # fixes a sorting issue, see #302
         table.align = 'l'
         table.reversesort = True
@@ -91,7 +93,8 @@ class RevisionsTable(Table):
         self.table = self._create_table()
 
     def _create_table(self):
-        table = PrettyTable(['revision', 'title', 'updated'], print_empty=False)
+        fields = ['revision', 'title', 'updated']
+        table = PrettyTable(fields, print_empty=False)  # print_empty, see #366
         table.align = 'l'
         table.sortby = 'revision'
         table.reversesort = True
