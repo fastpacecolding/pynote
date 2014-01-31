@@ -2,3 +2,4 @@ include README.rst
 include CHANGES
 include COPYING
 include CONTRIBUTING
+include tests.py

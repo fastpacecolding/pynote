@@ -1,7 +1,19 @@
+import hashlib
+import pygments
+import pygments.lexers as lexers
+import pygments.formatters as formatters
+from pygments.util import ClassNotFound
 from tempfile import NamedTemporaryFile
 
 
 def expand_dateformat(dateformat):
+    """
+    Takes the dateformat string from ~/.noterc
+    and adds the '%'-signs.
+
+    Y.m.d => %Y.%m.%d
+
+    """
     format_str = ''
 
     for v in dateformat:
@@ -16,3 +28,37 @@ def create_tempfile():
     tmp_file = NamedTemporaryFile(delete=False)
     tmp_file.close()
     return tmp_file.name
+
+
+def exit_not_exists():
+    print(_('Error: This note does not exist!'))
+    exit(1)
+
+
+def highlight(data, lang):
+    from pynote import config  # avoid circular importing
+
+    try:
+        lexer = lexers.get_lexer_by_name(lang)
+    except ClassNotFound:
+        print(_('Lexer not found!'))
+        exit(1)
+
+    try:
+        formatter = formatters.Terminal256Formatter(style=config.PYGMENTS_THEME)
+    except ClassNotFound:
+        styles = list(get_all_styles())
+        print(_('Theme {} not found!').format(config.PYGMENTS_THEME))
+        print(_("Please correct pygments_theme in your '~/.noterc'!"))
+        print(_('Supported themes are:'))
+        print()
+        for style in styles:
+            print(style)
+        exit(1)
+
+    data = pygments.highlight(data, lexer, formatter)
+    return data
+
+
+def get_md5(item):
+    return hashlib.md5(item.encode('UTF-8')).digest()

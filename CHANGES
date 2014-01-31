@@ -1,5 +1,48 @@
+2014-01-31 pynote 0.2
+---------------------
+
+New features
+
+* localisation via pybabel (GNU gettext files), see #284.
+  - Added German translation.
+
+* pygments support, see #301.
+  - note show --lang
+    -> Read notes with synthax highlighting.
+    -> Find a list of supported lexers on the pygments project page!
+  - note compare --no-color
+    -> Unified diffs are colored by default.
+    -> Suppress colors with --no-color.
+  - Choose your pygments theme in noterc with 'pygments_theme', see #307.
+
+* tag support
+  - 'note show' shows tags in header
+  - note list --tags
+    -> Filter all notes depending on the given tag(s).
+  - note tags
+    -> add tags to a note: note tags 1 --add "foo"
+    -> delete tags from a note: note tags 1 --delete "foo"
+    -> show tags: note tags 1
+    -> show all used tags in active notes: note tags
+
+* note revisions
+  - Print out existing revisions of a note, see #290.
+
+* note show --all, see #293, thanks to nsmathew.
+* note edit --title, see #292, thanks to nsmathew.
+* note-init script has been merged to note init, see #295.
+* The official documentation is now in redmine,
+  http://redmine.sevenbyte.org/projects/pynote/wiki
+* Added noterc manpage.
+
+Fixes
+
+* Do not create a new revision if nothing has been changed, see #304.
+* Fixed a sorting issue especially with german dateformats, see #302.
+
+
 2013-12-24 pynote 0.1
------------------------
+---------------------
 
 * Do not create a new revision if there are no changes, see #277.
 * Improved pynote.__main__ code. If no command is entered just

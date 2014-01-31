@@ -1,6 +1,7 @@
-import os.path
+import re
 import json
 import uuid
+import os.path
 from datetime import datetime
 
 from pynote import config
@@ -16,8 +17,8 @@ class Data:
     to json and written to data.json.
 
     """
-    def __init__(self):
-        self.data_file = config.DATA_FILE
+    def __init__(self, data_file=config.DATA_FILE):
+        self.data_file = data_file
         self.data = []
         self.load()
 
@@ -26,23 +27,20 @@ class Data:
             self.data[key] = value
             self.refresh()
         except IndexError:
-            print('This note does not exist!')
-            exit(1)
+            raise
 
     def __getitem__(self, key):
         try:
             return self.data[key]
         except IndexError:
-            print('This note does not exist!')
-            exit(1)
+            raise
 
     def __delitem__(self, key):
         try:
             del self.data[key]
             self.refresh()
         except IndexError:
-            print('This note does not exist!')
-            exit(1)
+            raise
 
     def __len__(self):
         return len(self.data)
@@ -78,8 +76,8 @@ class Trash(Data):
     similar to Data.
 
     """
-    def __init__(self):
-        self.data_file = config.TRASH_FILE
+    def __init__(self, trash_file=config.TRASH_FILE):
+        self.data_file = trash_file
         self.data = []
         self.load()
 
@@ -92,8 +90,8 @@ class Revisions(Data):
     similar to Data.
 
     """
-    def __init__(self):
-        self.data_file = config.REVISIONS_FILE
+    def __init__(self, revisions_file=config.REVISIONS_FILE):
+        self.data_file = revisions_file
         self.data = []
         self.load()
 
@@ -118,7 +116,8 @@ class Note:
     def create(cls, title):
         now = datetime.now()
         note = cls(title=title, created=now, updated=now, deleted=None,
-                   revision=1, uuid=str(uuid.uuid4()), tags=[], content='')
+                   revision=1, uuid=str(uuid.uuid4()), tags=set(),
+                   content='')
 
         return note
 
@@ -131,7 +130,7 @@ class Note:
         note = cls(title=d['title'], created=created,
                    updated=updated, deleted=deleted,
                    revision=d['revision'], uuid=d['uuid'],
-                   tags=d['tags'], content=d['content'])
+                   tags=set(d['tags']), content=d['content'])
 
         return note
 
@@ -143,24 +142,40 @@ class Note:
         d = {'title': self.title, 'created': created,
              'updated': updated, 'deleted': deleted,
              'revision': self.revision, 'uuid': self.uuid,
-             'tags': self.tags, 'content': self.content}
+             'tags': list(self.tags), 'content': self.content}
 
         return d
 
-    def header(self):
+    def get_header(self):
         created = self.created.strftime(config.DATEFORMAT)
         updated = self.updated.strftime(config.DATEFORMAT)
+        tags = sorted(self.tags)
+        tags = tags.__str__() if tags else _('None')
+        tags = re.sub('[\'\[\]]', '', tags)  # Strip '[]' and "'" chars.
 
         string = ('+-------------------------------------------------+\n'
-                  '| title:    {0}\n'
-                  '| created:  {1}\n'
-                  '| updated:  {2}\n'
-                  '| revision: {3}\n'
-                  '| uuid:     {4}\n'
+                  '| title:    {}\n'
+                  '| created:  {}\n'
+                  '| updated:  {}\n'
+                  '| revision: {}\n'
+                  '| tags:     {}\n'
+                  '| uuid:     {}\n'
                   '+-------------------------------------------------+\n'
                   '\n').format(self.title, created, updated, self.revision,
-                               self.uuid)
+                               tags, self.uuid)
         return string
+
+    def __contains__(self, tag):
+        if tag in self.tags:
+            return True
+        else:
+            return False
+
+    def __eq__(self, other):
+        if self.uuid == other.uuid and self.revision == other.revision:
+            return True
+        else:
+            return False
 
     def __str__(self):
         return self.content
