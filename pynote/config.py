@@ -21,7 +21,7 @@ PYGMENTS_THEME = 'default'
 # Check if noterc exists, see #365.
 if os.path.exists(noterc):
     config = configparser.ConfigParser()
-    config.read()
+    config.read(noterc)
 
     if 'data' in config['DEFAULT']:
         DATA = os.path.expanduser(config['DEFAULT']['data'])
