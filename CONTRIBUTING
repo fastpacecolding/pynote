@@ -44,8 +44,6 @@ Example:
 * Furthermore you can commit to your own repo and create a pull request
   with git request-pull.
 
-Hint: I use the git-flow branching model. So look at the develop branch. :)
-
 
 Commit Messages
 ---------------
