@@ -130,11 +130,10 @@ def run():
         else:
             note.tags()
     elif args.cmd == 'init':
-        try:
-            pynote.init.run(args.config, args.force)
-        except KeyboardInterrupt:
-            print('\nExited by user. Bye bye...')
-            exit(1)
+        if args.config:
+            pynote.init.create_config_string()
+        else:
+            pynote.init.create_noterc(args.force)
 
 
 if __name__ == '__main__':

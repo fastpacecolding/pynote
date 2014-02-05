@@ -12,4 +12,8 @@ if sys.version_info[0] < 3:
     print('Please revert that change!')
     exit(1)
 else:
-    pynote.__main__.run()
+    try:
+        pynote.__main__.run()
+    except KeyboardInterrupt:
+        print('\nExited by user. Bye bye...')
+        exit(1)

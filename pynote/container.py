@@ -53,8 +53,13 @@ class Data:
         self.refresh()
 
     def load(self):
-        with open(self.data_file, 'r') as f:
-            self.data = json.load(f, cls=NoteJSONDecoder)
+        try:
+            with open(self.data_file, 'r') as f:
+                self.data = json.load(f, cls=NoteJSONDecoder)
+        except FileNotFoundError as e:
+            print(_('Error: {} does not exist').format(self.data_file))
+            print(_('Maybe you have to init pynote first.'))
+            exit(1)
 
     def dump(self):
         with open(self.data_file, 'w') as f:
