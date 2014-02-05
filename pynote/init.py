@@ -50,7 +50,7 @@ def run(config=False, force=False):
             print(_("A '~/.noterc' already exists, use '--force' to overwrite!"))
 
         if not os.path.exists(data_dir):
-            os.mkdirs(notedir)
+            os.makedirs(notedir)
             init_data(data_dir)
         else:
             print(_("Directory '{}' already exists!").format(data_dir))
