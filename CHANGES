@@ -9,7 +9,7 @@ Fixed some problems which especially occured since the last release.
 * Improved pynote.container. If no data files exist exit and print
   an error message.
 * Got rid of git flow, see #369. The errors occured because I forgot
-  to bump the version number. Git flow restricted me to fix this trivial
+  to bump the version number. Git flow restricted me fixing this trivial
   error with a little rebase.
 
 
