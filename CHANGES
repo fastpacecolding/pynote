@@ -1,3 +1,18 @@
+2014-02-05 pynote 0.2.2
+-----------------------
+
+Fixed some problems which especially occured since the last release.
+
+* Fixed a wrong method call, see #370. Thanks to Klaus Seistrup.
+* Fixed a problems with pynote.init and pynote.config, see 368 and
+  forum posts. Thanks to tonk and null.
+* Improved pynote.container. If no data files exist exit and print
+  an error message.
+* Got rid of git flow, see #369. The errors occured because I forgot
+  to bump the version number. Git flow restricted me to fix this trivial
+  error with a little rebase.
+
+
 2014-01-31 pynote 0.2.1
 -----------------------
 
