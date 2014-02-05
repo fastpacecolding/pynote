@@ -50,5 +50,5 @@ In Arch Linux you can use the PKGBUILD in AUR_. Otherwise use::
 .. _`email`: stefan@sevenbyte.org
 .. _`support thread`: https://bbs.archlinux.org/viewtopic.php?pid=1362268
 .. _`via pypi`: http://pythonhosted.org//pynote/
-.. _`contributing`: http://cgit.sevenbyte.org/pynote/plain/CONTRIBUTING?h=develop
+.. _`contributing`: http://cgit.sevenbyte.org/pynote/plain/CONTRIBUTING
 .. _AUR: https://aur.archlinux.org/packages/pynote/
