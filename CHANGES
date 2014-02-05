@@ -1,5 +1,5 @@
-2014-02-05 pynote 0.2.2
------------------------
+pynote 0.2.2 (2014-02-05)
+-------------------------
 
 Fixed some problems which especially occured since the last release.
 
@@ -13,8 +13,8 @@ Fixed some problems which especially occured since the last release.
   error with a little rebase.
 
 
-2014-01-31 pynote 0.2.1
------------------------
+pynote 0.2.1 (2014-01-31)
+-------------------------
 
 Quick and dirty bugfix release
 
@@ -25,8 +25,8 @@ Quick and dirty bugfix release
 * Removed an obsolete link from README.rst, see #362.
 
 
-2014-01-31 pynote 0.2
----------------------
+pynote 0.2 (2014-01-31)
+-----------------------
 
 New features
 
@@ -68,8 +68,8 @@ Fixes
 * Fixed a sorting issue especially with german dateformats, see #302.
 
 
-2013-12-24 pynote 0.1
----------------------
+pynote 0.1 (2013-12-24)
+-----------------------
 
 * Do not create a new revision if there are no changes, see #277.
 * Improved pynote.__main__ code. If no command is entered just
@@ -83,8 +83,8 @@ Fixes
 * Added a --no-header option to note show, thanks to stewie.
 
 
-2013-12-18 pynote 0.1b3
------------------------
+pynote 0.1b3 (2013-12-18)
+-------------------------
 
 * Dateformat can be set in ~/.noterc. Please refer to docs.python.org,
   strftime and strptime behavior.
@@ -97,13 +97,13 @@ Fixes
 * Add every revision to versions.json, see #276.
 
 
-2013-12-10 pynote 0.1b2
------------------------
+pynote 0.1b2 (2013-12-10)
+-------------------------
 
 * fixed setup.py, see #255.
 
 
-2013-12-10 pynote 0.1b1
------------------------
+pynote 0.1b1 (2013-12-10)
+-------------------------
 
 * Initial release.
