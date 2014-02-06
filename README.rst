@@ -17,13 +17,13 @@ features
 --------
 
 * create, delete, update, list and read notes
-* compare revisions of a note by creating a (colored) unified diff
+* compare revisions of a note by creating a unified diff
 * list and restore deleted notes in trash
 * everything is stored in human readable JSON files
-* nice meta data for every note including creation time, updating time,
+* meta data for every note including creation time, updating time,
   deletion time, uuid, tags
+* filter notes depending on its tags
 * syntax highlighting using pygments for managing code snippets
-* tags
 
 
 planned
