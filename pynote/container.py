@@ -155,7 +155,7 @@ class Note:
         created = self.created.strftime(config.DATEFORMAT)
         updated = self.updated.strftime(config.DATEFORMAT)
         tags = sorted(self.tags)
-        tags = tags.__str__() if tags else _('None')
+        tags = format(tags) if tags else _('None')
         tags = re.sub('[\'\[\]]', '', tags)  # Strip '[]' and "'" chars.
 
         string = ('+-------------------------------------------------+\n'
