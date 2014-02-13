@@ -3,6 +3,7 @@ import pygments
 import pygments.lexers as lexers
 import pygments.formatters as formatters
 from pygments.util import ClassNotFound
+from pygments.styles import get_all_styles
 from tempfile import NamedTemporaryFile
 
 
