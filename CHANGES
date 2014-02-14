@@ -6,6 +6,7 @@ Fixed
 * Missing import statement. Now you are informed about a misspelled
   pygments theme instead of a traceback.
 * Refactored config.py again, see #409.
+* Do not use colors by default, see #350.
 
 
 pynote 0.2.2 (2014-02-05)
