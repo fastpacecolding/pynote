@@ -235,7 +235,7 @@ def revisions(key):
     print(table)
 
 
-def compare(key, to_rev, from_rev, no_color=False):
+def compare(key, to_rev, from_rev, color=False):
     """
     Compare the given revisions of a note and create a unified diff.
 
@@ -273,10 +273,9 @@ def compare(key, to_rev, from_rev, no_color=False):
                                     tofiledate=to_date)
 
         diff = ''.join(tuple(diff))
-        # REVIEW
-        if no_color is False:
+        if color is True:
             diff = helper.highlight(diff, lang='diff')
-        print(diff, end='')
+        print(diff)
     else:
         print(_('Error: Maybe the revisions do not exist?'))
 

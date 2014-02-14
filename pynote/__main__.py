@@ -55,8 +55,8 @@ def run():
                                                  'shown in the table'))
     compare.add_argument('to_rev', type=int, help=_('new revision number'))
     compare.add_argument('from_rev', type=int, help=_('old revision number'))
-    compare.add_argument('-n', '--no-color', action='store_true',
-                         help=_('do not use colors'))
+    compare.add_argument('-c', '--color', action='store_true',
+                         help=_('use colors'))
 
     # note init
     init = subparsers.add_parser('init', help=_('initialize pynote'))
@@ -108,7 +108,7 @@ def run():
         note.restore(args.key)
     elif args.cmd == 'compare':
         if args.to_rev > args.from_rev:
-            note.compare(args.key, args.to_rev, args.from_rev, args.no_color)
+            note.compare(args.key, args.to_rev, args.from_rev, args.color)
         else:
             print(_('Error: from_rev must not be smaller than to_rev!'))
             exit(1)
