@@ -286,30 +286,39 @@ def compare(key, new_rev, old_rev, color=False):
 # - Commands for tags -
 # ---------------------
 
-# TODO: Maybe split up into two methods.
-def tags(key=None):
+def tags():
     """
     Display all available tags.
 
     """
     data = container.Data()
+    tags = set()
 
-    if key:
-        note = data[key]
-        tags = note.tags
-        if tags:
-            print(_('Note {}, {}, is tagged with:').format(key, note.title))
-        else:
-            print(_('Note {}, {}, is not tagged!').format(key, note.title))
+    for note in data:
+        for tag in note.tags:
+            tags.add(tag)
+    if tags:
+        print(_('The following tags exist:'))
     else:
-        tags = set()
-        for note in data:
-            for tag in note.tags:
-                tags.add(tag)
-        if tags:
-            print(_('The following tags exist:'))
-        else:
-            print(_('No tags exist!'))
+        print(_('No tags exist!'))
+
+    for tag in tags:
+        print(tag)
+
+
+def note_tags(key):
+    """
+    Display all available tags of one note.
+
+    """
+    data = container.Data()
+    note = data[key]
+    tags = note.tags
+
+    if tags:
+        print(_('Note {}, {}, is tagged with:').format(key, note.title))
+    else:
+        print(_('Note {}, {}, is not tagged!').format(key, note.title))
 
     for tag in tags:
         print(tag)

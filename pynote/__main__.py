@@ -89,31 +89,41 @@ def run():
     # command is entered.
     if args.cmd is None:
         note.list_()
+
     elif args.cmd == 'list':
         note.list_(args.tags)
+
     elif args.cmd == 'show':
         if args.all:
             note.show_all(args.no_header)
         else:
             note.show(args.key, args.no_header, args.lang)
+
     elif args.cmd == 'new':
         note.new(args.title)
+
     elif args.cmd == 'edit':
         note.edit(args.key, args.title)
+
     elif args.cmd == 'delete':
         note.delete(args.key)
+
     elif args.cmd == 'trash':
         note.trash()
+
     elif args.cmd == 'restore':
         note.restore(args.key)
+
     elif args.cmd == 'compare':
         if args.new_rev > args.old_rev:
             note.compare(args.key, args.new_rev, args.old_rev, args.color)
         else:
             print(_('Error: old_rev must not be smaller than new_rev!'))
             exit(1)
+
     elif args.cmd == 'revisions':
         note.revisions(args.key)
+
     elif args.cmd == 'tags':
         if args.add and args.key:
             note.add_tags(args.key, args.add)
@@ -126,9 +136,10 @@ def run():
             print(_('Error: missing key!'))
             exit(1)
         elif args.key:
-            note.tags(args.key)
+            note.note_tags(args.key)
         else:
             note.tags()
+
     elif args.cmd == 'init':
         if args.config:
             pynote.init.create_config_string()
