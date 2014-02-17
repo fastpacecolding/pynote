@@ -53,8 +53,8 @@ def run():
     compare = subparsers.add_parser('compare', help=_('compare two notes'))
     compare.add_argument('key', type=int, help=_('integer key which is '
                                                  'shown in the table'))
-    compare.add_argument('to_rev', type=int, help=_('new revision number'))
-    compare.add_argument('from_rev', type=int, help=_('old revision number'))
+    compare.add_argument('new_rev', type=int, help=_('new revision number'))
+    compare.add_argument('old_rev', type=int, help=_('old revision number'))
     compare.add_argument('-c', '--color', action='store_true',
                          help=_('use colors'))
 
@@ -107,10 +107,10 @@ def run():
     elif args.cmd == 'restore':
         note.restore(args.key)
     elif args.cmd == 'compare':
-        if args.to_rev > args.from_rev:
-            note.compare(args.key, args.to_rev, args.from_rev, args.color)
+        if args.new_rev > args.old_rev:
+            note.compare(args.key, args.new_rev, args.old_rev, args.color)
         else:
-            print(_('Error: from_rev must not be smaller than to_rev!'))
+            print(_('Error: old_rev must not be smaller than new_rev!'))
             exit(1)
     elif args.cmd == 'revisions':
         note.revisions(args.key)

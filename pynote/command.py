@@ -237,7 +237,7 @@ def revisions(key):
     print(table)
 
 
-def compare(key, to_rev, from_rev, color=False):
+def compare(key, new_rev, old_rev, color=False):
     """
     Compare the given revisions of a note and create a unified diff.
 
@@ -246,33 +246,33 @@ def compare(key, to_rev, from_rev, color=False):
     revisions = container.Revisions()
     note = data[key]
     uuid = note.uuid
-    from_note = None
-    to_note = note if note.revision == to_rev else None
+    old_note = None
+    new_note = note if note.revision == new_rev else None
 
     for v in revisions:
-        # If to_rev is the most recent revision in data then it has
+        # If new_rev is the most recent revision in data then it has
         # already been set.
-        if to_note is None and (v.uuid == uuid and v.revision == to_rev):
-            to_note = v
-        if v.uuid == uuid and v.revision == from_rev:
-            from_note = v
+        if new_note is None and (v.uuid == uuid and v.revision == new_rev):
+            new_note = v
+        if v.uuid == uuid and v.revision == old_rev:
+            old_note = v
 
     # Check if both revisions have been found.  Otherwise
     # let the user know there are no revisions.
     # splitlines(keepends=True) ensures '\n' endings.
-    if to_note and from_note:
-        from_content = from_note.content.splitlines(keepends=True)
-        to_content = to_note.content.splitlines(keepends=True)
-        from_date = from_note.updated.strftime(config.DATEFORMAT)
-        to_date = to_note.updated.strftime(config.DATEFORMAT)
-        from_title = from_note.title + ', revision: ' + str(from_note.revision)
-        to_title = to_note.title + ', revision: ' + str(to_note.revision)
+    if new_note and old_note:
+        old_content = old_note.content.splitlines(keepends=True)
+        new_content = new_note.content.splitlines(keepends=True)
+        old_date = old_note.updated.strftime(config.DATEFORMAT)
+        new_date = new_note.updated.strftime(config.DATEFORMAT)
+        old_title = old_note.title + ', revision: ' + str(old_note.revision)
+        new_title = new_note.title + ', revision: ' + str(new_note.revision)
 
-        diff = difflib.unified_diff(from_content, to_content,
-                                    fromfile=from_title,
-                                    tofile=to_title,
-                                    fromfiledate=from_date,
-                                    tofiledate=to_date)
+        diff = difflib.unified_diff(old_content, new_content,
+                                    fromfile=old_title,
+                                    tofile=new_title,
+                                    fromfiledate=old_date,
+                                    tofiledate=new_date)
 
         diff = ''.join(tuple(diff))
         if color is True:
