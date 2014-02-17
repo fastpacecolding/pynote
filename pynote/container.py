@@ -162,6 +162,8 @@ class Note:
         updated = self.updated.strftime(config.DATEFORMAT)
         table.add_row(['updated', updated])
 
+        table.add_row(['revision', self.revision])
+
         tags = sorted(self.tags)
         tags = format(tags) if tags else _('None')
         tags = re.sub('[\'\[\]]', '', tags)  # Strip '[]' and "'" chars.
