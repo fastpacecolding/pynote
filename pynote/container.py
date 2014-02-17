@@ -3,6 +3,7 @@ import json
 import uuid
 import os.path
 from datetime import datetime
+from prettytable import PrettyTable
 
 from pynote import config
 
@@ -152,23 +153,24 @@ class Note:
         return d
 
     def get_header(self):
+        table = PrettyTable(header=False)
+        table.add_row(['title', self.title])
+
         created = self.created.strftime(config.DATEFORMAT)
+        table.add_row(['created', created])
+
         updated = self.updated.strftime(config.DATEFORMAT)
+        table.add_row(['updated', updated])
+
         tags = sorted(self.tags)
         tags = format(tags) if tags else _('None')
         tags = re.sub('[\'\[\]]', '', tags)  # Strip '[]' and "'" chars.
+        table.add_row(['tags', tags])
 
-        string = ('+-------------------------------------------------+\n'
-                  '| title:    {}\n'
-                  '| created:  {}\n'
-                  '| updated:  {}\n'
-                  '| revision: {}\n'
-                  '| tags:     {}\n'
-                  '| uuid:     {}\n'
-                  '+-------------------------------------------------+\n'
-                  '\n').format(self.title, created, updated, self.revision,
-                               tags, self.uuid)
-        return string
+        table.add_row(['uuid', self.uuid])
+        table.align = 'l'
+
+        return table.get_string()
 
     def __contains__(self, tag):
         if tag in self.tags:

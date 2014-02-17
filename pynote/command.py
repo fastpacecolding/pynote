@@ -55,9 +55,10 @@ def show(key, no_header=False, lang=None):
     content = helper.highlight(note.content, lang) if lang else note.content
 
     if no_header:
-        print(content, end='')
+        print(content)
     else:
-        print(note.get_header(), end='')
+        print(note.get_header())
+        print()
         print(content)
 
 
@@ -78,10 +79,11 @@ def show_all(no_header=False):
         print()
 
         if no_header:
-            print(note.content, end='')
+            print(note.content)
         else:
-            print(note.get_header(), end='')
-            print(note.content, end='')
+            print(note.get_header())
+            print()
+            print(note.content)
 
 
 def trash():
