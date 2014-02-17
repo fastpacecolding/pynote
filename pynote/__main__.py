@@ -2,7 +2,7 @@ import argparse
 
 import pynote
 import pynote.init
-import pynote.command as note
+import pynote.commands as note
 
 
 def run():
