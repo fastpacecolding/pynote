@@ -2,7 +2,6 @@ import argparse
 
 import pynote
 import pynote.init
-import pynote.sync
 import pynote.commands as note
 
 
@@ -81,11 +80,11 @@ def run():
 
     # note export
     export = subparsers.add_parser('export', help='export notes')
-    export_opts = export.add_mutually_exclusive_group()
-    export_opts.add_argument('--txt', action='store_true',
-                             help=_('export all notes as plain text files'))
-    export_opts.add_argument('--json', action='store_true',
-                             help=_('export all notes as json files'))
+    export.add_argument('key', type=int, nargs='?')
+    export.add_argument('-n', '--no-header', action='store_true',
+                        help=_('do not show header data'))
+    export.add_argument('--force', action='store_true',
+                        help=_('overwrite existing export directory'))
 
     # note --version
     parser.add_argument('--version', help=_('show version'), action='version',
@@ -150,13 +149,10 @@ def run():
             note.tags()
 
     elif args.cmd == 'export':
-        exporter = pynote.sync.Exporter()
-        if args.txt:
-            exporter.to_txt()
-        elif args.json:
-            exporter.to_json()
+        if args.key:
+            note.export(args.key, args.no_header, args.force)
         else:
-            exporter.to_txt()
+            note.export_all(args.no_header, args.force)
 
     elif args.cmd == 'init':
         if args.config:

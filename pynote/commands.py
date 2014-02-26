@@ -1,5 +1,6 @@
 import os
 import sys
+import shutil
 import difflib
 import hashlib
 import subprocess
@@ -348,3 +349,57 @@ def del_tags(key, tags=()):
         note.tags.discard(tag)
 
     data[key] = note
+
+
+# -----------------
+# - Import/Export -
+# -----------------
+
+def export(key, no_header, force):
+    data = container.Data()
+    note = data[key]
+    cwd = os.path.join(os.getcwd(), 'pynote-export')
+
+    # REVIEW
+    if force:
+        shutil.rmtree(cwd)
+
+    try:
+        os.mkdir(cwd)
+    except FileExistsError:
+        print(_("'pynote-export' already exists!"))
+        print(_("Use '--force' to overwrite!"))
+        exit(1)
+
+    with open(os.path.join(cwd, note.title), 'w') as f:
+        if no_header:
+            f.write(note.content)
+        else:
+            f.write(note.get_header())
+            f.write('\n\n')
+            f.write(note.content)
+
+
+def export_all(no_header, force):
+    data = container.Data()
+    cwd = os.path.join(os.getcwd(), 'pynote-export')
+
+    # REVIEW
+    if force:
+        shutil.rmtree(cwd)
+
+    try:
+        os.mkdir(cwd)
+    except FileExistsError:
+        print(_("'pynote-export' already exists!"))
+        print(_("Use '--force' to overwrite!"))
+        exit(1)
+
+    for note in data:
+        with open(os.path.join(cwd, note.title), 'w') as f:
+            if no_header:
+                f.write(note.content)
+            else:
+                f.write(note.get_header())
+                f.write('\n\n')
+                f.write(note.content)
