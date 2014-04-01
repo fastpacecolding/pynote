@@ -1,4 +1,3 @@
-import re
 import json
 import uuid
 import os.path
@@ -164,8 +163,7 @@ class Note:
         table.add_row(['revision', self.revision])
 
         tags = sorted(self.tags)
-        tags = str(tags) if tags else _('None')
-        tags = re.sub('[\'\[\]]', '', tags)  # Strip '[]' and "'" chars.
+        tags = ', '.join(tags) if tags else _('None')
         table.add_row(['tags', tags])
 
         table.add_row(['uuid', self.uuid])
