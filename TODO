@@ -1,5 +1,7 @@
-features:
-  ☐ autoexport/autoimport function -> sync with an external folder
-  ☐ store hash in database as well
-  ☐ drop prettytable in favor of tabulate
-  ☐ note edit: edit header as well -> parse metadata
+[ ] autoexport/autoimport function -> sync with an external folder
+[ ] store hash in database as well
+[ ] drop prettytable in favor of tabulate
+[ ] note edit: edit header as well -> parse metadata
+[ ] change hash to sha512
+[ ] report which has a tag column
+[ ] customize reports
