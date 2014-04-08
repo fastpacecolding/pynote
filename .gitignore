@@ -6,3 +6,5 @@ dist
 MANIFEST
 *.pyc
 pynote-export
+html
+doctrees
