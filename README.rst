@@ -3,14 +3,10 @@ pynote
 
 pynote is a project to manage your notes on the commandline. It is
 entirely written in Python 3 and provides a very handy cmd-interface.
-You can browse the source code in `cgit`_ or in `github`_. Checkout
-the `release notes`_ in redmine and the `changelog`_ before updating!
-If something does not behave as expected please file a bug in the
-official `bugtracker`_, write an `email`_ or look at the `support thread`_
-in the arch linux forums.
-
-**Please do not use any of these cool github pull requests** because
-they will mess up the git history (see `contributing`_)!
+You can browse the source code in `cgit`_ or in `github`_.
+If something does not behave as expected please file a bug in github,
+write an `email`_ or check out the `support thread`_ in the arch linux
+forums.
 
 
 features
@@ -42,7 +38,7 @@ In Arch Linux you can use the PKGBUILD in AUR_. Otherwise use::
 
 
 .. Links:
-.. _cgit: http://cgit.sevenbyte.org/pynote/
+.. _`cgit`: http://cgit.sevenbyte.org/pynote/
 .. _`github`: https://github.com/statschner/pynote
 .. _`release notes`: http://redmine.sevenbyte.org/projects/pynote/wiki/Releases
 .. _`changelog`: http://cgit.sevenbyte.org/pynote/plain/CHANGES
@@ -51,4 +47,4 @@ In Arch Linux you can use the PKGBUILD in AUR_. Otherwise use::
 .. _`support thread`: https://bbs.archlinux.org/viewtopic.php?pid=1362268
 .. _`via pypi`: http://pythonhosted.org//pynote/
 .. _`contributing`: http://cgit.sevenbyte.org/pynote/plain/CONTRIBUTING
-.. _AUR: https://aur.archlinux.org/packages/pynote/
+.. _`AUR`: https://aur.archlinux.org/packages/pynote/

@@ -9,9 +9,9 @@ The location of this file is ``~/.noterc``. The synthax of this file
 is quite easy. It is formatted as a line-separated list of ``KEY=VALUE``
 pairs, blank lines, and lines starting with ``#``, are ignored.
 The whole documatation of this synthax is located in the official
-`python documentation`_.
+`Python Documentation`_.
 
-.. _`documentation`: http://docs.python.org/3.3/library/configparser.html#quick-start
+.. _`Python Documentation`: http://docs.python.org/3.3/library/configparser.html#quick-start
 
 Please ensure you have a ``[DEFAULT]`` section on top of your file.
 Support for additional sections may come in future releases...
@@ -79,4 +79,4 @@ Bugs
 
 Bugs? You must be kidding; there are no bugs in this software. But if
 this crazy thing happens write an email to stefan@sevenbyte.org or checkout
-the official bugtracker http://redmine.sevenbyte.org/projects/pynote/issues
+the bugtracker on github https://github.com/rumpelsepp/pynote

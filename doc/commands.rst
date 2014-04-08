@@ -150,15 +150,11 @@ Shows all available revisions of a note as a table.
 compare
 -------
 
-``usage: note compare [-h] [-n] key to_rev from_rev``
+``usage: note compare [-h] [-c] new_rev old_rev``
 
 Create a unified diff of two notes. Pass the numeric id of a note
 and the two revision numbers which you want to compare. This command
-uses colors by default.
-
-.. note::
-    I think i will change the behaviour. I think it's better to make
-    colors optional with ``-c, --colors``.
+supports colors!
 
 ::
 
@@ -178,8 +174,8 @@ uses colors by default.
 
 **Accepted options**
 
-``-n, --no-color``
-    Supress colors!
+``-c, --color``
+    Use colors!
 
 
 init

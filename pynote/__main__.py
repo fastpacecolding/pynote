@@ -58,6 +58,7 @@ def run():
     compare.add_argument('-c', '--color', action='store_true',
                          help=_('use colors'))
 
+    # DEPRECATED
     # note init
     init = subparsers.add_parser('init', help=_('initialize pynote'))
     init_opts = init.add_mutually_exclusive_group()

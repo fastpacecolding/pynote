@@ -1,6 +1,5 @@
-**********
 Quickstart
-**********
+==========
 
 
 At first you have to create the configfile ``noterc`` and the data

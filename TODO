@@ -5,3 +5,4 @@
 [ ] change hash to sha512
 [ ] report which has a tag column
 [ ] customize reports
+[ ] drop note init
