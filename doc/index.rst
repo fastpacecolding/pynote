@@ -15,7 +15,7 @@ Contents
 
    quickstart
    commands
-   configuration
+   Configuration <configuration>
    changelog
    contributing
 

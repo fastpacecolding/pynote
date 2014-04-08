@@ -54,8 +54,6 @@ to pass the numeric id of the note to show, e.g. ``$ note show 0``.
     Spam, Spam, Spam, Spaaam!
 
 
-**Accepted options**
-
 ``-n, --no-header``
     Supresses the header.
 
@@ -85,8 +83,6 @@ edit
 Your editor opens with the content of the note. After saving your
 modifications the revision number is incremented.
 
-
-**Accepted options**
 
 ``-t, --title``
     Edit the title instead of the content.
@@ -172,8 +168,6 @@ supports colors!
     +This is a change!
 
 
-**Accepted options**
-
 ``-c, --color``
     Use colors!
 
@@ -186,8 +180,6 @@ init
 Create an inital ``~/.noterc`` and a data directory. This command
 is interactive and asks you what it should do.
 
-
-**Accepted options**
 
 ``--config``
     Only create a new ``~/.noterc``. Useful when you have messed up
@@ -223,8 +215,6 @@ of this note::
 
 For deleting and adding tags checkout out the accepted options!
 
-
-**Accepted options**
 
 ``-a ADD, --add ADD``
     Add one or more tags to a note. ``$ note tags 1 --add "foo"``
