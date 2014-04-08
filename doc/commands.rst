@@ -28,7 +28,7 @@ the updated time.
 show
 ----
 
-``usage: usage: note show [-h] [-a] [-n] [-l LANG] [key]``
+``usage: note show [-h] [-a] [-n] [-l LANG] [key]``
 
 Shows a specific note including a header with some metadata. You have
 to pass the numeric id of the note to show, e.g. ``$ note show 0``.

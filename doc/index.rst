@@ -6,8 +6,6 @@ Welcome to pynote's documentation!
 
 .. image:: pynote.png
 
-pynote is a project to manage your notes on the commandline. It is entirely
-written in Python 3 and provides a very handy cmd-interface.
 
 Contents
 --------
