@@ -228,7 +228,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('manpages/noterc', 'noterc', 'runtime configuration for pynote',
+    ('configuration', 'noterc', 'runtime configuration for pynote',
      ['Stefan Tatschner <stefan@sevenbyte.org>'], 5)
 ]
 

@@ -15,7 +15,7 @@ Contents
 
    quickstart
    commands
-   Configuration <noterc>
+   configuration
    changelog
    contributing
 
