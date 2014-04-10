@@ -19,8 +19,7 @@ test:
 
 extract-messages:
 	@pybabel extract pynote --project=$(PROJECT) --copyright=$(COPYRIGHT) \
-	  --version=$(VERSION) --msgid-bugs-address=$(EMAIL)  \
-	  --output=messages.pot
+	  --version=$(VERSION) --msgid-bugs-address=$(EMAIL) --output=messages.pot
 
 init-locale:
 	@pybabel init --domain=pynote --locale=$(LOCALE) --input-file=locale/messages.pot \
