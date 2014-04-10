@@ -5,6 +5,7 @@ pynote 0.3 (XXXX-XX-XX)
 -----------------------
 
 .. note::
+
   Switched to https://pynote.readthedocs.org/ for hosting documentation
   and switched to github issues. There are no reasons to maintain my own
   setup. Issue IDs below this entry refer to my old redmine tracker.
@@ -13,7 +14,7 @@ Fixed
 
 * Missing import statement. Now you are informed about a misspelled
   pygments theme instead of a traceback.
-* Refactored ``config.py`` again
+* Refactored ``config.py`` to use default values.
 * Do not use colors in ``note compare`` by default.
 * Now prettytable is used to generate the header as well.
 
