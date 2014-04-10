@@ -4,8 +4,7 @@
         {
             "follow_symlinks": true,
             "path": ".",
-            "folder_exclude_patterns": ["__pycache__", "doctrees", "html",
-                                        "dist"],
+            "folder_exclude_patterns": ["__pycache__", "doctrees", "html", "dist", "man"],
             "file_exclude_patterns": ["MANIFEST"],
         }
     ],
