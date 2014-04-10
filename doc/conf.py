@@ -32,7 +32,7 @@ import os
 extensions = []
 
 # Add any paths that contain templates here, relative to this directory.
-templates_path = ['_templates']
+# templates_path = ['_templates']
 
 # The suffix of source filenames.
 source_suffix = '.rst'
@@ -52,7 +52,7 @@ copyright = '(c) 2013-2014 Stefan Tatschner'
 # built documents.
 #
 # The short X.Y version.
-version = '0.2.2'
+version = '0.2'
 # The full version, including alpha/beta/rc tags.
 release = '0.2.2'
 
@@ -129,7 +129,7 @@ if os.environ.get('READTHEDOCS', None) != 'True':
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
+#html_static_path = ['_static']
 
 # Add any extra paths that contain custom files (such as robots.txt or
 # .htaccess) here, relative to this directory. These files are copied
@@ -228,8 +228,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('configuration', 'noterc', 'runtime configuration for pynote',
-     ['Stefan Tatschner <stefan@sevenbyte.org>'], 5)
+    ('configuration', 'noterc', 'runtime configuration for pynote', '', 5)
 ]
 
 # If true, show URL addresses after external links.
