@@ -1,3 +1,4 @@
+misc:
   [ ] autoexport/autoimport function -> sync with an external folder
   [ ] store hash in database as well
   [ ] drop prettytable in favor of tabulate
@@ -8,8 +9,11 @@
   [ ] remove deprecated links
   [ ] fix tests
 
+docs:
+  [ ] building
+
 infrastructure:
-  [ ] keep an eye on https://github.com/pypa, https://github.com/pypa/python-packaging-user-guide
-  [ ] convert sdist package to wheel
-  [ ] use twine for uploading
-  [ ] use setuptools: http://pythonhosted.org/setuptools/setuptools.html#developer-s-guide
+  [ ] keep an eye on https://github.com/pypa, https://github.com/pypa/python-packaging-user-guide @later
+  [ ] convert sdist package to wheel @later
+  [ ] use twine for uploading @later
+  [ ] use setuptools: http://pythonhosted.org/setuptools/setuptools.html#developer-s-guide @later
