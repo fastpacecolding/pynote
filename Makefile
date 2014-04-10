@@ -5,7 +5,7 @@ EMAIL = "stefan@sevenbyte.org"
 LOCALE = de
 VERSION = 0.2.2
 
-.PHONY: release test pybabel-extract pybabel-init pybabel-update pybabel-compile
+.PHONY: release test extract-messages init-locale update-locale compile-locales
 
 docs:
 	$(MAKE) --directory=doc html
