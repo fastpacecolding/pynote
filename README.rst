@@ -44,5 +44,16 @@ In Arch Linux you can use the PKGBUILD in AUR_. Otherwise use::
 
     $ pip install pynote
 
+.. _AUR: https://aur.archlinux.org/packages/pynote/
 
-.. _`AUR`: https://aur.archlinux.org/packages/pynote/
+
+install from source
+-------------------
+
+- Make sure you have installed babel_ and sphinx_.
+- Clone the project with ``git clone https://github.com/rumpelsepp/pynote.git``
+- Create docs and locales with ``make docs`` and ``make compile-locales``.
+- Now you are ready to fire ``python setup.py install``.
+
+.. _babel: http://babel.pocoo.org/
+.. _sphinx: http://sphinx-doc.org/index.html

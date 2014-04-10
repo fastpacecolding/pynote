@@ -1,17 +1,3 @@
-misc:
-  [ ] autoexport/autoimport function -> sync with an external folder
-  [ ] store hash in database as well
-  [ ] drop prettytable in favor of tabulate
-  [ ] note edit: edit header as well -> parse metadata
-  [ ] change hash to sha512
-  [ ] report which has a tag column
-  [ ] customize reports
-  [ ] remove deprecated links
-  [ ] fix tests
-
-docs:
-  [ ] building
-
 infrastructure:
   [ ] keep an eye on https://github.com/pypa, https://github.com/pypa/python-packaging-user-guide @later
   [ ] convert sdist package to wheel @later

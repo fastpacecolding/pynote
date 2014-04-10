@@ -6,12 +6,15 @@ pynote 0.3 (XXXX-XX-XX)
 
 .. note::
 
-  Switched to https://pynote.readthedocs.org/ for hosting documentation
-  and switched to github issues. There are no reasons to maintain my own
-  setup. Issue IDs below this entry refer to my old redmine tracker.
+    I switched pynote to https://pynote.readthedocs.org/ for hosting
+    documentation and I switched to github issues as well. There are
+    no reasons to maintain my own setup. Any issue IDs below this entry
+    are obsolte and refer to my old redmine tracker.
 
-Fixed
-
+* Do not include any precompiled files in git. You can create the docs
+  (man and html) with ``make docs``.
+* Do not include any precompiled locale files. Use ``make compile-locales``
+  to do this.
 * Missing import statement. Now you are informed about a misspelled
   pygments theme instead of a traceback.
 * Refactored ``config.py`` to use default values.

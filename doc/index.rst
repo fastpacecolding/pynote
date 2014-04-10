@@ -18,6 +18,7 @@ Contents
    Configuration <configuration>
    changelog
    contributing
+   roadmap
 
 
 Useful Links
