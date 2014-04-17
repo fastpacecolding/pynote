@@ -1,5 +1,3 @@
 include README.rst
-include CHANGES
-include COPYING
-include CONTRIBUTING
+include LICENSE
 include tests.py
