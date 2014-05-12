@@ -6,7 +6,9 @@ pynote 0.4 (XXXX-XX-XX)
 
 .. note::
     
-    This section here is used as a roadmap for the future releases!
+    This section here is used as a roadmap for the future release!
+
+* Fixed tests, switched to pytest and setup travis.
 
 
 pynote 0.3 (XXXX-XX-XX)
@@ -30,7 +32,7 @@ pynote 0.3 (XXXX-XX-XX)
   create a transifex account to involve other people.
 * New header design, thanks to Philipp Göttlich!
 * Do not include any precompiled files in git. You can create the docs
-  (man and html) with ``make docs``.
+  (man and html) with ``make docs`` in the doc folder.
 * Missing import statement. Now you are informed about a misspelled
   pygments theme instead of a traceback.
 * Refactored ``config.py`` to use default values.

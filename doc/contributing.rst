@@ -4,8 +4,7 @@ Contributing
 Hacking
 -------
 
-Please stick to PEP8_ and PEP257_. If you are a Sublime Text 3 User you
-can use the ``pynote.sublime-project`` file with the required settings.
+Please stick to PEP8_ and PEP257_.
 
 .. _PEP8: http://www.python.org/dev/peps/pep-0008/
 .. _PEP257: http://www.python.org/dev/peps/pep-0257/
@@ -24,23 +23,6 @@ Pull Request
 
 Feel free to send me any request! I don't care about the pull request format
 any more but please keep an eye on PEP8_... :-)
-
-
-How to create a translation
----------------------------
-
-* Make sure you have installed babel_.
-* Clone the project with ``git clone https://github.com/rumpelsepp/pynote.git``
-* At first you have to create a translation catalogue. There is a make target
-  included for doing this. For creating a polish message catolgue you can use
-  ``make init-locale LOCALE=pl``.
-* You will find the new translation files in the ``locale`` directory.
-* Finish your translation e.g. with poedit_ and send a pullrequest! It
-  may be included in the next release.
-
-.. _babel: http://babel.pocoo.org/
-.. _poedit: http://www.poedit.net/
-
 
 
 GPG Key
