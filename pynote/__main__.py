@@ -1,7 +1,6 @@
 import argparse
 
 import pynote
-import pynote.init
 import pynote.commands as note
 
 
@@ -51,15 +50,6 @@ def run():
     compare.add_argument('old_rev', type=int, help='old revision number')
     compare.add_argument('-c', '--color', action='store_true',
                          help='use colors')
-
-    # DEPRECATED
-    # note init
-    init = subparsers.add_parser('init', help='initialize pynote')
-    init_opts = init.add_mutually_exclusive_group()
-    init_opts.add_argument('--config', action='store_true',
-                           help='only create a new config string and print it out')
-    init_opts.add_argument('--force', action='store_true',
-                           help='remove an existing rc-file and init pynote')
 
     # note revisions
     revisions = subparsers.add_parser('revisions')
@@ -141,19 +131,6 @@ def run():
             note.note_tags(args.key)
         else:
             note.tags()
-
-    elif args.cmd == 'export':
-        if args.key:
-            note.export(args.key, args.no_header, args.force)
-        else:
-            note.export_all(args.no_header, args.force)
-
-    elif args.cmd == 'init':
-        if args.config:
-            pynote.init.create_config_string()
-        else:
-            pynote.init.create_noterc(args.force)
-
 
 if __name__ == '__main__':
     run()

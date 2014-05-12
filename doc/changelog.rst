@@ -26,6 +26,8 @@ pynote 0.3 (XXXX-XX-XX)
   JSON files are not used for storing data any more. Simple plain
   text files do the job much better. Git is used via git_wrapper
   to take care of revision control.
+* Removed **note init** command, pynote will do these things
+  automatically.
 
 .. implemented
 * Removed translation things (for now). If anybody needs this we can 

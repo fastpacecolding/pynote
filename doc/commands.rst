@@ -1,6 +1,7 @@
 Commands
 ========
 
+.. TODO remove `` things
 .. note::
     Every command is to be used like ``$ note cmd``, e.g. ``$ note list``.
     Every command supports the ``-h, --help`` option.
@@ -170,24 +171,6 @@ supports colors!
 
 ``-c, --color``
     Use colors!
-
-
-init
-----
-
-``usage: note init [-h] [--config | --force]``
-
-Create an inital ``~/.noterc`` and a data directory. This command
-is interactive and asks you what it should do.
-
-
-``--config``
-    Only create a new ``~/.noterc``. Useful when you have messed up
-    your previous ``~/.noterc`` or when you want to check out the
-    defaults.
-
-``--force``
-    Overwrite an existing ``~/.noterc``.
 
 
 tags
