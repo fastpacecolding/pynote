@@ -25,5 +25,4 @@ setup(name='pynote',
                    'License :: OSI Approved :: MIT License',
                    'Natural Language :: English',
                    'Natural Language :: German',
-                   'Programming Language :: Python :: 3.3'
                    'Programming Language :: Python :: 3.4'])
