@@ -15,5 +15,6 @@ else:
     try:
         pynote.__main__.run()
     except KeyboardInterrupt:
-        print('\nExited by user. Bye bye...')
+        print()
+        print('Exited by user. Bye bye...')
         exit(1)

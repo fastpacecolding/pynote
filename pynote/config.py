@@ -4,7 +4,7 @@ import configparser
 from pynote import helper
 
 
-NOTERC = os.path.expanduser('~/.noterc')
+NOTERC = os.path.expanduser('~/.noterc.devel')
 config = configparser.ConfigParser()
 config.read(NOTERC)
 

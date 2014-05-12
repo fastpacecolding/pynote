@@ -1,6 +1,14 @@
 Changelog
 =========
 
+pynote 0.4 (XXXX-XX-XX)
+-----------------------
+
+.. note::
+    
+    This section here is used as a roadmap for the future releases!
+
+
 pynote 0.3 (XXXX-XX-XX)
 -----------------------
 
@@ -8,18 +16,25 @@ pynote 0.3 (XXXX-XX-XX)
 
     I switched pynote to https://pynote.readthedocs.org/ for hosting
     documentation and I switched to github issues as well. There are
-    no reasons to maintain my own setup. Any issue IDs below this entry
-    are obsolte and refer to my old redmine tracker.
+    no reasons to maintain my own setup. Every issue ID below this 
+    entry is obsolte and refer to my old redmine tracker.
 
+.. work in progress
+* Big data storage refactoring!
+  JSON files are not used for storing data any more. Simple plain
+  text files do the job much better. Git is used via git_wrapper
+  to take care of revision control.
+
+.. implemented
+* Removed translation things (for now). If anybody needs this we can 
+  create a transifex account to involve other people.
+* New header design, thanks to Philipp Göttlich!
 * Do not include any precompiled files in git. You can create the docs
   (man and html) with ``make docs``.
-* Do not include any precompiled locale files. Use ``make compile-locales``
-  to do this.
 * Missing import statement. Now you are informed about a misspelled
   pygments theme instead of a traceback.
 * Refactored ``config.py`` to use default values.
 * Do not use colors in ``note compare`` by default.
-* Now prettytable is used to generate the header as well.
 
 
 pynote 0.2.2 (2014-02-05)
@@ -28,8 +43,8 @@ pynote 0.2.2 (2014-02-05)
 Fixed some problems which especially occured since the last release.
 
 * Fixed a wrong method call, see #370. Thanks to Klaus Seistrup.
-* Fixed a problems with ``pynote.init`` and ``pynote.config``, see 368 and
-  forum posts. Thanks to tonk and null.
+* Fixed a problems with ``pynote.init`` and ``pynote.config``, see #368 
+  and forum posts. Thanks to tonk and null.
 * Improved ``pynote.container``. If no data files exist exit and print
   an error message.
 * Got rid of git flow, see #369. The errors occured because I forgot

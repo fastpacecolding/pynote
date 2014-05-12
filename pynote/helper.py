@@ -25,14 +25,8 @@ def expand_dateformat(dateformat):
     return format_str
 
 
-def create_tempfile():
-    tmp_file = NamedTemporaryFile(delete=False)
-    tmp_file.close()
-    return tmp_file.name
-
-
 def exit_not_exists():
-    print(_('Error: This note does not exist!'))
+    print('Error: This note does not exist!')
     exit(1)
 
 
@@ -42,16 +36,16 @@ def highlight(data, lang):
     try:
         lexer = lexers.get_lexer_by_name(lang)
     except ClassNotFound:
-        print(_('Lexer not found!'))
+        print('Lexer not found!')
         exit(1)
 
     try:
         formatter = formatters.Terminal256Formatter(style=config.PYGMENTS_THEME)
     except ClassNotFound:
         styles = list(get_all_styles())
-        print(_('Theme {} not found!').format(config.PYGMENTS_THEME))
-        print(_("Please correct pygments_theme in your '~/.noterc'!"))
-        print(_('Supported themes are:'))
+        print('Theme {} not found!'.format(config.PYGMENTS_THEME))
+        print("Please correct pygments_theme in your '~/.noterc'!")
+        print('Supported themes are:')
         print()
         for style in styles:
             print(style)
@@ -61,5 +55,9 @@ def highlight(data, lang):
     return data
 
 
+# DEPRECATED
 def get_md5(item):
     return hashlib.md5(item.encode('UTF-8')).digest()
+
+def get_sha512(item):
+    return hashlib.sha512(item.encode('UTF-8')).digest()

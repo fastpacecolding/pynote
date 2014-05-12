@@ -7,6 +7,9 @@ import subprocess
 from datetime import datetime
 from prettytable import PrettyTable
 
+from plaintable import Table
+from pynote import containerng
+
 from pynote import config
 from pynote import container
 from pynote import helper
@@ -17,7 +20,7 @@ from pynote import report
 # - Commands for reading and displaying notes -
 # ---------------------------------------------
 
-def list_(tags=()):
+def list_(tags=None):
     """
     Print out a table with all notes.
 
@@ -26,12 +29,13 @@ def list_(tags=()):
                         filtered , e.g.: ('tag1', 'tag2')
 
     """
-    table = report.DataTable(tags)
+    data = containerng.Notes()
+    notes = []
 
-    if table:
-        print(table)
-    else:
-        print(_('No data!'))
+    for i, note in enumerate(data):
+        notes.append([i, note.title, note.updated])
+    notes = sorted(notes, key=lambda l: l[2], reverse=True)
+    print(Table(notes, headline=['ID', 'Title', 'Updated']))
 
 
 def show(key, no_header=False, lang=None):
@@ -46,7 +50,7 @@ def show(key, no_header=False, lang=None):
                         for pygments highlighting
 
     """
-    data = container.Data()
+    data = containerng.Notes()
     try:
         note = data[key]
     except IndexError:
@@ -71,7 +75,7 @@ def show_all(no_header=False):
         - no_header:    supress the note header
 
     """
-    data = container.Data()
+    data = containerng.Notes()
 
     for i, note in enumerate(data):
         print()
@@ -97,7 +101,7 @@ def trash():
     if table:
         print(table)
     else:
-        print(_('You have no data in pynote trash... :-)'))
+        print('You have no data in pynote trash... :-)')
 
 
 # ----------------------------------------
@@ -171,8 +175,8 @@ def edit(key, title=False):
         note.revision += 1
         data[key] = note
     else:
-        print(_('You have not changed anything!'))
-        print(_('No new revision has been created!'))
+        print('You have not changed anything!')
+        print('No new revision has been created!')
 
     os.remove(tmp_file)
 
@@ -233,7 +237,7 @@ def revisions(key):
     note = data[key]
     table = report.RevisionsTable(note)
 
-    print(_("There are {} revisions of '{}':").format(len(table), note.title))
+    print("There are {} revisions of '{}':".format(len(table), note.title))
     print()
     print(table)
 
@@ -280,7 +284,7 @@ def compare(key, new_rev, old_rev, color=False):
             diff = helper.highlight(diff, lang='diff')
         print(diff)
     else:
-        print(_('Error: Maybe the revisions do not exist?'))
+        print('Error: Maybe the revisions do not exist?')
 
 
 # ---------------------
@@ -299,9 +303,9 @@ def tags():
         for tag in note.tags:
             tags.add(tag)
     if tags:
-        print(_('The following tags exist:'))
+        print('The following tags exist:')
     else:
-        print(_('No tags exist!'))
+        print('No tags exist!')
 
     for tag in tags:
         print(tag)
@@ -317,9 +321,9 @@ def note_tags(key):
     tags = note.tags
 
     if tags:
-        print(_('Note {}, {}, is tagged with:').format(key, note.title))
+        print('Note {}, {}, is tagged with:'.format(key, note.title))
     else:
-        print(_('Note {}, {}, is not tagged!').format(key, note.title))
+        print('Note {}, {}, is not tagged!'.format(key, note.title))
 
     for tag in tags:
         print(tag)
@@ -367,8 +371,8 @@ def export(key, no_header, force):
     try:
         os.mkdir(cwd)
     except FileExistsError:
-        print(_("'pynote-export' already exists!"))
-        print(_("Use '--force' to overwrite!"))
+        print("'pynote-export' already exists!")
+        print("Use '--force' to overwrite!")
         exit(1)
 
     with open(os.path.join(cwd, note.title), 'w') as f:
@@ -391,8 +395,8 @@ def export_all(no_header, force):
     try:
         os.mkdir(cwd)
     except FileExistsError:
-        print(_("'pynote-export' already exists!"))
-        print(_("Use '--force' to overwrite!"))
+        print("'pynote-export' already exists!")
+        print("Use '--force' to overwrite!")
         exit(1)
 
     for note in data:

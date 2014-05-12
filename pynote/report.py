@@ -7,6 +7,10 @@ from pynote import config
 from pynote import container
 
 
+# -----------------------------------
+# DEPRECATED
+# -----------------------------------
+
 class Table(metaclass=ABCMeta):
 
     @abstractmethod
@@ -60,7 +64,7 @@ class DataTable(Table):
         return self.table.get_string(fields=['id', 'title', 'updated'])
 
 
-class TrashTable(container.Trash):
+class TrashTable(Table):
 
     def __init__(self):
         self.data = container.Trash()

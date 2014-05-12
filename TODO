@@ -1,17 +1,19 @@
-bugs & features:
-  [ ] http://cgit.sevenbyte.org/pynote/tree/pynote/report.py#n63
-  [ ] report.py -> reports.py
-  [ ] relative time
-  [ ] better trash commands
-  [ ] help page translation
-  [ ] better tags
-  [ ] shell completion
-  [ ] manpage
-  [ ] refactor databackend
-  [ ] fix tests.py
+bugs & features
+---------------
 
-infrastructure:
-  [ ] keep an eye on https://github.com/pypa, https://github.com/pypa/python-packaging-user-guide @later
-  [ ] convert sdist package to wheel @later
-  [ ] use twine for uploading @later
-  [ ] use setuptools: http://pythonhosted.org/setuptools/setuptools.html#developer-s-guide @later
+[ ] relative time
+[ ] better trash commands
+[ ] help page translation
+[ ] better tags
+[ ] shell completion
+[ ] manpage
+[ ] refactor databackend
+[ ] fix tests.py
+
+
+infrastructure
+--------------
+[ ] keep an eye on https://github.com/pypa, https://github.com/pypa/python-packaging-user-guide 
+[ ] convert sdist package to wheel 
+[ ] use twine for uploading 
+[ ] use setuptools: http://pythonhosted.org/setuptools/setuptools.html#developer-s-guide 
