@@ -13,7 +13,7 @@ Contents
 .. toctree::
    :maxdepth: 2
 
-   quickstart
+   Overview <overview>
    commands
    Configuration <configuration>
    changelog

@@ -17,7 +17,7 @@ Documentation is hosted on `Read the Docs`_.
 .. _`Read the Docs`: https://pynote.readthedocs.org
 
 
-features
+Features
 --------
 
 - create, delete, update, list and read notes
@@ -30,14 +30,7 @@ features
 - syntax highlighting using pygments for managing code snippets
 
 
-planned
--------
-
-- more version control (diff revisions, revert revisions)
-- export module
-
-
-install
+Install
 -------
 
 In Arch Linux you can use the PKGBUILD in AUR_. Otherwise use::
@@ -47,13 +40,25 @@ In Arch Linux you can use the PKGBUILD in AUR_. Otherwise use::
 .. _AUR: https://aur.archlinux.org/packages/pynote/
 
 
-install from source
+Install from source
 -------------------
 
-- Make sure you have installed babel_ and sphinx_.
+- Make sure you have installed sphinx_.
 - Clone the project with ``git clone https://github.com/rumpelsepp/pynote.git``
-- Create docs and locales with ``make docs`` and ``make compile-locales``.
+- Create manpages with ``make man`` in the ``doc`` folder.
 - Now you are ready to fire ``python setup.py install``.
 
-.. _babel: http://babel.pocoo.org/
 .. _sphinx: http://sphinx-doc.org/index.html
+
+
+Quickstart
+----------
+
+* create a new note: ``$ note new "spam"``
+* list notes in a table: ``$ note list``
+* read a note (use the numeric ID from the table): ``note show 1``
+* edit a note: ``$ note edit 1``
+* move a note to trash: ``$ note delete 1``
+* show trash: ``$ note trash``
+* restore a note from trash: ``$ note restore 1``
+* For help just pass ``--help`` to any command!
