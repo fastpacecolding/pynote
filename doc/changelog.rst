@@ -24,10 +24,15 @@ pynote 0.3 (XXXX-XX-XX)
 .. work in progress
 * Big data storage refactoring!
   JSON files are not used for storing data any more. Simple plain
-  text files do the job much better. Git is used via git_wrapper
-  to take care of revision control.
-* Removed **note init** command, pynote will do these things
+  text files do the job much better.
+  I have created a Gist_ on Github to migrate your data to the
+  new format. You can either download this file and run it with
+  Python 3.4 or you can run it directly with e.g. curl.
+* Git is used via git_wrapper_ to take care of revision control.
+* Removed **note init** command, pynote will do these things 
   automatically.
+* I replaced prettytable with my own - much simpler - library 
+  plaintable_.
 
 .. implemented
 * Removed translation things (for now). If anybody needs this we can 
@@ -38,7 +43,10 @@ pynote 0.3 (XXXX-XX-XX)
 * Missing import statement. Now you are informed about a misspelled
   pygments theme instead of a traceback.
 * Refactored ``config.py`` to use default values.
-* Do not use colors in ``note compare`` by default.
+
+.. _Gist: https://gist.githubusercontent.com/rumpelsepp/9b17cda631af5cdbb412/raw/7c3b950ffba4a4233f4123db4f96a2de48518fbe/note_migrate.py
+.. _git_wrapper: https://github.com/rumpelsepp/git_wrapper
+.. _plaintable: https://github.com/rumpelsepp/plaintable
 
 
 pynote 0.2.2 (2014-02-05)
