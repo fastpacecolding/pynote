@@ -4,11 +4,14 @@ from datetime import datetime
 from pathlib import Path
 from plaintable import Table
 
+from pynote import config
+
 
 class Notes:
     def __init__(self):
-        self.path = Path(os.path.expanduser('~/.note'))
-        self.data = [Note(f) for f in self.path.iterdir() if f.is_file()]
+        self.path = Path(os.path.expanduser(config.DATA))
+        self.data = [Note(f) for f in self.path.iterdir()
+                     if (f.is_file() and f.suffix != '.json')]
 
     def __getitem__(self, key):
         try:
@@ -61,7 +64,7 @@ class Note:
         self.__init__(self.path)
 
     def get_header(self):
-        updated = self.updated.strftime('%Y-%m-%d %H:%M')
+        updated = self.updated.strftime(config.DATEFORMAT)
         s  = '{} @ {}'.format(self.title, updated)
         return s
 

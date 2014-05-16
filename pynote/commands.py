@@ -35,7 +35,8 @@ def list_(tags=None):
     for i, note in enumerate(data):
         notes.append([i, note.title, note.updated])
     notes = sorted(notes, key=lambda l: l[2], reverse=True)
-    print(Table(notes, headline=['ID', 'Title', 'Updated']))
+    print(Table(notes, headline=['ID', 'Title', 'Updated'],
+          datetimefs=config.DATEFORMAT))
 
 
 def show(key, no_header=False, lang=None):
