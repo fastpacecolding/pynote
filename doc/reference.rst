@@ -1,6 +1,6 @@
-Refernce Guide
-==============
-.. TODO remove `` things
+Reference Guide
+===============
+
 .. note::
     Every command is to be used like ``$ note cmd``, e.g. ``$ note list``.
     Every command supports the ``-h, --help`` option.
