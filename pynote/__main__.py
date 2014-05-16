@@ -62,14 +62,6 @@ def run():
     tags_opts.add_argument('-a', '--add', nargs='+')
     tags_opts.add_argument('-d', '--delete', nargs='+')
 
-    # note export
-    export = subparsers.add_parser('export', help='export notes')
-    export.add_argument('key', type=int, nargs='?')
-    export.add_argument('-n', '--no-header', action='store_true',
-                        help='do not show header data')
-    export.add_argument('--force', action='store_true',
-                        help='overwrite existing export directory')
-
     # note --version
     parser.add_argument('--version', help='show version', action='version',
                         version='pynote {}'.format(pynote.__version__))
