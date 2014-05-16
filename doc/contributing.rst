@@ -4,10 +4,7 @@ Contributing
 Hacking
 -------
 
-Please stick to PEP8_ and PEP257_.
-
-.. _PEP8: http://www.python.org/dev/peps/pep-0008/
-.. _PEP257: http://www.python.org/dev/peps/pep-0257/
+Please stick to :pep:`8` and :pep:`257`.
 
 
 Commit Messages
@@ -22,7 +19,7 @@ Pull Request
 ------------
 
 Feel free to send me any request! I don't care about the pull request format
-any more but please keep an eye on PEP8_... :-)
+any more but please keep an eye on :pep:`8`... :-)
 
 
 GPG Key

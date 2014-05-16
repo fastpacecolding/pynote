@@ -1,6 +1,5 @@
-Commands
-========
-
+Refernce Guide
+==============
 .. TODO remove `` things
 .. note::
     Every command is to be used like ``$ note cmd``, e.g. ``$ note list``.
@@ -10,41 +9,32 @@ Commands
 list
 ----
 
-``usage: note list [-h]``
+::
+
+    note list [-h]
 
 This prints out a table with all stores notes. This is the default
 command if you pass nothing to ``$ note``. The columns are sorted by
-the updated time.
-
-::
+the updated time::
 
     $ note list
-    +----+-------+------------------+
-    | id | title | updated          |
-    +----+-------+------------------+
-    | 0  | spam  | 2013-12-09 10:59 |
-    +----+-------+------------------+
+    ID  Title  Updated          
+    --  -----  ----------------
+    0   spam   2013-12-09 10:59 
 
 
 show
 ----
 
-``usage: note show [-h] [-a] [-n] [-l LANG] [key]``
-
-Shows a specific note including a header with some metadata. You have
-to pass the numeric id of the note to show, e.g. ``$ note show 0``.
-
 ::
 
+    note show [-h] [-a] [-n] [-l LANG] [key]
+
+Shows a specific note including a header with some metadata. You have
+to pass the numeric id of the note to show, e.g. ``$ note show 0``::
+
     $ note show 1
-    +-------------------------------------------------+
-    | title:    spam
-    | created:  2013-12-09 10:59
-    | updated:  2013-12-09 10:59
-    | revision: 1
-    | tags:     foo, bar
-    | uuid:     188fcae5-86cf-4e5a-b955-35b38694bb43
-    +-------------------------------------------------+
+    spam @ 2013-12-09 10:59
 
     Spam, Spam, Spam, lovely Spam
     Wonderful Spam, Lovely Spam.
@@ -55,14 +45,17 @@ to pass the numeric id of the note to show, e.g. ``$ note show 0``.
     Spam, Spam, Spam, Spaaam!
 
 
-``-n, --no-header``
+.. cmdoption:: -n, --no-header
+    
     Supresses the header.
 
-``-a, --all``
+.. cmdoption:: -a, --all
+    
     Print out every active note. Supressing the header is supported
     as well. Passing a numeric id is not mandatory.
 
-``-l LANG, --lang LANG``
+.. cmdoption:: -l LANG, --lang LANG
+    
     Use pygments for synthax-highlighting. It is nice for storing
     code snippets into pynote. You have to pass the programming
     language, e.g. ``$ note show 5 -l python``.
@@ -71,7 +64,9 @@ to pass the numeric id of the note to show, e.g. ``$ note show 0``.
 new
 ---
 
-``usage: usage: note new [-h] title``
+::
+    
+    note new [-h] title
 
 Your editor (e.g. nano) opens and you can type in your content.
 
@@ -79,20 +74,25 @@ Your editor (e.g. nano) opens and you can type in your content.
 edit
 ----
 
-``usage: usage: note edit [-h] [-t] key``
+::
+
+    usage: note edit [-h] [-t] key
 
 Your editor opens with the content of the note. After saving your
 modifications the revision number is incremented.
 
 
-``-t, --title``
+.. cmdoption:: -t, --title`
+    
     Edit the title instead of the content.
 
 
 delete
 ------
 
-``usage: note delete [-h] key``
+::
+    
+    note delete [-h] key
 
 Move a note to trash.
 
@@ -100,11 +100,11 @@ Move a note to trash.
 trash
 -----
 
-``usage: note trash [-h]``
-
-Prints out all delete notes in a table.
-
 ::
+    
+    note trash [-h]
+
+Prints out all delete notes in a table::
 
     $ note trash
     +----+--------+------------------+
@@ -118,7 +118,9 @@ Prints out all delete notes in a table.
 restore
 -------
 
-``usage: note restore [-h] key``
+::
+    
+    note restore [-h] key
 
 Restore a delete note from trash. You have to use the numeric id
 from ``$ note trash``.
@@ -127,11 +129,11 @@ from ``$ note trash``.
 revisions
 ---------
 
-``usage: note revisions [-h] key``
-
-Shows all available revisions of a note as a table.
-
 ::
+
+    note revisions [-h] key
+
+Shows all available revisions of a note as a table::
 
     $ note revisions 8
     There are 2 revisions of 'spam':
@@ -147,13 +149,13 @@ Shows all available revisions of a note as a table.
 compare
 -------
 
-``usage: note compare [-h] [-c] new_rev old_rev``
+::
+        
+    note compare [-h] [-c] new_rev old_rev
 
 Create a unified diff of two notes. Pass the numeric id of a note
 and the two revision numbers which you want to compare. This command
-supports colors!
-
-::
+supports colors::
 
     $ note compare 1 2 1
     --- my silly spam, revision: 1   2014-01-06 22:31
@@ -169,14 +171,17 @@ supports colors!
     +This is a change!
 
 
-``-c, --color``
+.. cmdoption:: -c, --color
+    
     Use colors!
 
 
 tags
 ----
 
-``usage: note tags [-h] [-a ADD [ADD ...] | -d DELETE [DELETE ...]] [key]``
+::
+
+    note tags [-h] [-a ADD [ADD ...] | -d DELETE [DELETE ...]] [key]
 
 View, delete or add tags. This command is quite new and maybe some features
 are missing. A tag is just an arbitrary string. A note can contain multiple
@@ -199,8 +204,10 @@ of this note::
 For deleting and adding tags checkout out the accepted options!
 
 
-``-a ADD, --add ADD``
+.. cmdoption:: -a ADD, --add ADD
+    
     Add one or more tags to a note. ``$ note tags 1 --add "foo"``
 
-``-d DELETE, --delete DELETE``
+.. cmdoption:: -d DELETE, --delete DELETE
+    
     Remove one or more tags from a note, ``$ note tags 1 --delete "foo"``

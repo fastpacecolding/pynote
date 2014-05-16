@@ -14,7 +14,7 @@ Contents
    :maxdepth: 2
 
    Overview <overview>
-   commands
+   reference
    Configuration <configuration>
    changelog
    contributing
