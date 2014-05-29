@@ -10,3 +10,4 @@ html
 doctrees
 man
 *.mo
+*.egg-info
