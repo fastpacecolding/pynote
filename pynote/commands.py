@@ -114,18 +114,14 @@ def new(title):
     Create a new note and save it in data.json.
 
     """
-    data = container.Data()
-    note = container.Note.create(title)
-    tmp_file = helper.create_tempfile()
+    try:
+        note = containerng.Note.create(title)
+    except FileExistsError:
+        print('Error: This note already exists!')
+        exit(1)
 
     # Open the chosen editor to enter the content.
-    # Read the entered data from the tempfile.
-    subprocess.call([config.EDITOR, tmp_file])
-    with open(tmp_file, 'r') as f:
-        note.content = f.read().rstrip()  # Strip trailing whitespace.
-
-    data.append(note)
-    os.remove(tmp_file)
+    subprocess.call([config.EDITOR, str(note.path)])
 
 
 def edit(key, title=False):

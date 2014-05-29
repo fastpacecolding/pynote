@@ -9,7 +9,7 @@ from pynote import config
 
 class Notes:
     def __init__(self):
-        self.path = Path(os.path.expanduser(config.DATA))
+        self.path = Path(config.DATA)
         self.data = [Note(f) for f in self.path.iterdir()
                      if (f.is_file() and f.suffix != '.json')]
 
@@ -58,6 +58,14 @@ class Note:
             path.touch()
         self.updated = self._getmtime()
 
+    @classmethod
+    def create(cls, title):
+        path = Path(os.path.join(config.DATA, title))
+        if path.exists():
+            raise FileExistsError()
+        else:
+            return cls(path)
+
     def update(self):
         with self.path.open('w') as f:
             f.write(self.content)
@@ -74,4 +82,3 @@ class Note:
 
     def __repr__(self):
         return "{}('{}')".format(self.__class__.__name__, self.path)
-
