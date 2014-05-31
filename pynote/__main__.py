@@ -87,7 +87,7 @@ def run():
         note.new(args.title)
 
     elif args.cmd == 'edit':
-        note.edit(args.key, args.title)
+        note.edit(args.key)
 
     elif args.cmd == 'delete':
         note.delete(args.key)
@@ -123,6 +123,7 @@ def run():
             note.note_tags(args.key)
         else:
             note.tags()
+
 
 if __name__ == '__main__':
     run()
