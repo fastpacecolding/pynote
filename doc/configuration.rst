@@ -28,8 +28,19 @@ data
 
 dateformat
     Set the default dateformat for all dates shown in pynote.
-    It must be a string like e.g. ``d.m.Y H:M``.
-    **Default**: ``Y-m-d H:M``
+    It must be a string like e.g. ``YYYY-MM-dd HH:mm``, see `babel docs`_.
+    The values "full", "long", "medium", or "short" are allowed as well,
+    but you may have to set *locale*.
+    **Default**: ``YYYY-MM-dd HH:mm``
+
+.. _`babel docs`: http://babel.pocoo.org/docs/dates/#date-fields
+
+locale
+    Set the locale for datetime formatting. **Default: en_US**
+
+reldates
+    Use relative dates in your notes table. **Values: yes, no;
+    Default: no**
 
 editor
     The command line editor which is used to create and edit notes.
@@ -61,7 +72,6 @@ pygments_theme
     * default
 
 
-
 Example Noterc File
 -------------------
 
@@ -69,7 +79,9 @@ Example Noterc File
 
     [DEFAULT]
     data = ~/Dropbox/.note/
-    dateformat = d.m.Y H:M
+    dateformat = medium
+    reldates = yes
+    locale = de_DE
     editor = vim
     pygments_theme = monokai
 

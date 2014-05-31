@@ -19,7 +19,7 @@ Pull Request
 ------------
 
 Feel free to send me any request! I don't care about the pull request format
-any more but please keep an eye on :pep:`8`... :-)
+any more but please keep an eye on :pep:`8`... ``:-)``
 
 
 GPG Key

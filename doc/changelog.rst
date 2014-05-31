@@ -1,14 +1,31 @@
 Changelog
 =========
 
-pynote 0.4 (XXXX-XX-XX)
+Work in Progress
+----------------
+
+* **Big data storage refactoring!**
+  JSON files are not used for storing data any more. Simple plain
+  text files do the job much better.
+  I have created a Gist_ on Github to migrate your data to the
+  new format. You can either download this file and run it with
+  Python 3.4 or you can run it directly with e.g. curl.
+* Git is used via git_wrapper_ to take care of revision control.
+* Removed **note init** command, pynote will do these things
+  automatically.
+* I replaced prettytable with my own - much simpler - library
+  plaintable_.
+
+
+pynote X.X (XXXX-XX-XX)
 -----------------------
 
 .. note::
-    
-    This section here is used as a roadmap for the future release!
+
+    This section here is used as a roadmap for future releases!
 
 * Fixed tests, switched to pytest and setup travis.
+* shell completion
 
 
 pynote 0.3 (XXXX-XX-XX)
@@ -18,28 +35,19 @@ pynote 0.3 (XXXX-XX-XX)
 
     I switched pynote to https://pynote.readthedocs.org/ for hosting
     documentation and I switched to github issues as well. There are
-    no reasons to maintain my own setup. Every issue ID below this 
+    no reasons to maintain my own setup. Every issue ID below this
     entry is obsolte and refer to my old redmine tracker.
 
-.. work in progress
-* Big data storage refactoring!
-  JSON files are not used for storing data any more. Simple plain
-  text files do the job much better.
-  I have created a Gist_ on Github to migrate your data to the
-  new format. You can either download this file and run it with
-  Python 3.4 or you can run it directly with e.g. curl.
-* Git is used via git_wrapper_ to take care of revision control.
-* Removed **note init** command, pynote will do these things 
-  automatically.
-* I replaced prettytable with my own - much simpler - library 
-  plaintable_.
 
-.. implemented
-* Removed translation things (for now). If anybody needs this we can 
+* Dropped python 3.3 support. I love the new pathlib module!
+* Use relative dates with babel_. You have to enable it in your configfile,
+  see :doc:`configuration`.
+* The numeric note ids are now orderd from 0 to n.
+* Removed translation things (for now). If anybody needs this we can
   create a transifex account to involve other people.
 * New header design, thanks to Philipp Göttlich!
-* Do not include any precompiled files in git. You can create the docs
-  (man and html) with ``make docs`` in the doc folder.
+* Do not include any precompiled files in git. I will create an AUR-
+  package with the docs.
 * Missing import statement. Now you are informed about a misspelled
   pygments theme instead of a traceback.
 * Refactored ``config.py`` to use default values.
@@ -47,6 +55,7 @@ pynote 0.3 (XXXX-XX-XX)
 .. _Gist: https://gist.githubusercontent.com/rumpelsepp/9b17cda631af5cdbb412/raw/7c3b950ffba4a4233f4123db4f96a2de48518fbe/note_migrate.py
 .. _git_wrapper: https://github.com/rumpelsepp/git_wrapper
 .. _plaintable: https://github.com/rumpelsepp/plaintable
+.. _babel: http://babel.pocoo.org/docs/api/dates/#date-and-time-formatting
 
 
 pynote 0.2.2 (2014-02-05)
@@ -55,7 +64,7 @@ pynote 0.2.2 (2014-02-05)
 Fixed some problems which especially occured since the last release.
 
 * Fixed a wrong method call, see #370. Thanks to Klaus Seistrup.
-* Fixed a problems with ``pynote.init`` and ``pynote.config``, see #368 
+* Fixed a problems with ``pynote.init`` and ``pynote.config``, see #368
   and forum posts. Thanks to tonk and null.
 * Improved ``pynote.container``. If no data files exist exit and print
   an error message.
