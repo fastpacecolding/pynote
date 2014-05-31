@@ -36,7 +36,7 @@ class Notes:
         except IndexError:
             raise
 
-    def __len(self):
+    def __len__(self):
         return len(self.data)
 
     def __iter__(self):
