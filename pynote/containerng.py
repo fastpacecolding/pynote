@@ -1,8 +1,12 @@
 import os.path
 import io
 from datetime import datetime
+from datetime import timedelta
 from pathlib import Path
+
 from plaintable import Table
+from babel.dates import format_timedelta
+from babel.dates import format_datetime
 
 from pynote import config
 
@@ -12,6 +16,7 @@ class Notes:
         self.path = Path(config.DATA)
         self.data = [Note(f) for f in self.path.iterdir()
                      if (f.is_file() and f.suffix != '.json')]
+        self.data = sorted(self.data, key=lambda n: n.age)
 
     def __getitem__(self, key):
         try:
@@ -57,6 +62,7 @@ class Note:
         else:
             path.touch()
         self.updated = self._getmtime()
+        self.age = self._calc_age()
 
     @classmethod
     def create(cls, title):
@@ -72,9 +78,21 @@ class Note:
         self.__init__(self.path)
 
     def get_header(self):
-        updated = self.updated.strftime(config.DATEFORMAT)
-        s  = '{} @ {}'.format(self.title, updated)
+        s  = '{} @ {}, {} ago'.format(self.title, self.format_updated(),
+                                      self.format_age())
         return s
+
+    def _calc_age(self):
+        now = datetime.now()
+        age = now - self.updated
+        return age
+
+    def format_age(self):
+        return format_timedelta(self.age, locale=config.LOCALE)
+
+    def format_updated(self):
+        return format_datetime(self.updated, format=config.DATEFORMAT,
+                               locale=config.LOCALE)
 
     def _getmtime(self):
         updated = os.path.getmtime(str(self.path))

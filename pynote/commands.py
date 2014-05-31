@@ -7,6 +7,7 @@ import subprocess
 from datetime import datetime
 from prettytable import PrettyTable
 
+from babel.dates import format_timedelta
 from plaintable import Table
 from pynote import containerng
 
@@ -33,10 +34,12 @@ def list_(tags=None):
     notes = []
 
     for i, note in enumerate(data):
-        notes.append([i, note.title, note.updated])
-    notes = sorted(notes, key=lambda l: l[2], reverse=True)
-    print(Table(notes, headline=['ID', 'Title', 'Updated'],
-          datetimefs=config.DATEFORMAT))
+        if config.RELDATES:
+            notes.append([i, note.title, note.format_age()])
+        else:
+            notes.append([i, note.title, note.format_updated()])
+
+    print(Table(notes, headline=['ID', 'Title', 'Updated']))
 
 
 def show(key, no_header=False, lang=None):
