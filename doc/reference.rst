@@ -18,9 +18,9 @@ command if you pass nothing to ``$ note``. The columns are sorted by
 the updated time::
 
     $ note list
-    ID  Title  Updated          
-    --  -----  ----------------
-    0   spam   2013-12-09 10:59 
+    ID  Title   Updated
+    --  ------  ---------
+    0   spam    3 seconds
 
 
 show
@@ -33,8 +33,8 @@ show
 Shows a specific note including a header with some metadata. You have
 to pass the numeric id of the note to show, e.g. ``$ note show 0``::
 
-    $ note show 1
-    spam @ 2013-12-09 10:59
+    $ note show 0
+    spam @ 2014-05-31 17:19, 48 seconds ago
 
     Spam, Spam, Spam, lovely Spam
     Wonderful Spam, Lovely Spam.
@@ -46,16 +46,16 @@ to pass the numeric id of the note to show, e.g. ``$ note show 0``::
 
 
 .. cmdoption:: -n, --no-header
-    
+
     Supresses the header.
 
 .. cmdoption:: -a, --all
-    
+
     Print out every active note. Supressing the header is supported
     as well. Passing a numeric id is not mandatory.
 
 .. cmdoption:: -l LANG, --lang LANG
-    
+
     Use pygments for synthax-highlighting. It is nice for storing
     code snippets into pynote. You have to pass the programming
     language, e.g. ``$ note show 5 -l python``.
@@ -65,7 +65,7 @@ new
 ---
 
 ::
-    
+
     note new [-h] title
 
 Your editor (e.g. nano) opens and you can type in your content.
@@ -83,7 +83,7 @@ modifications the revision number is incremented.
 
 
 .. cmdoption:: -t, --title`
-    
+
     Edit the title instead of the content.
 
 
@@ -91,7 +91,7 @@ delete
 ------
 
 ::
-    
+
     note delete [-h] key
 
 Move a note to trash.
@@ -101,7 +101,7 @@ trash
 -----
 
 ::
-    
+
     note trash [-h]
 
 Prints out all delete notes in a table::
@@ -119,7 +119,7 @@ restore
 -------
 
 ::
-    
+
     note restore [-h] key
 
 Restore a delete note from trash. You have to use the numeric id
@@ -150,7 +150,7 @@ compare
 -------
 
 ::
-        
+
     note compare [-h] [-c] new_rev old_rev
 
 Create a unified diff of two notes. Pass the numeric id of a note
@@ -172,7 +172,7 @@ supports colors::
 
 
 .. cmdoption:: -c, --color
-    
+
     Use colors!
 
 
@@ -205,9 +205,9 @@ For deleting and adding tags checkout out the accepted options!
 
 
 .. cmdoption:: -a ADD, --add ADD
-    
+
     Add one or more tags to a note. ``$ note tags 1 --add "foo"``
 
 .. cmdoption:: -d DELETE, --delete DELETE
-    
+
     Remove one or more tags from a note, ``$ note tags 1 --delete "foo"``
