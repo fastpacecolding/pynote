@@ -48,9 +48,9 @@ Create a new note::
 List notes in a table::
 
     $ note list
-    ID  Title   Updated
-    --  ------  ---------
-    0   spam    3 seconds
+    ID  Title  Updated
+    --  -----  ---------
+    0   spam   3 seconds
 
 Read a note (use the numeric ID from the table)::
 

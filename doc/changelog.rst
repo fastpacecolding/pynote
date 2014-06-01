@@ -28,7 +28,7 @@ pynote X.X (XXXX-XX-XX)
 * shell completion
 
 
-pynote 0.3 (XXXX-XX-XX)
+pynote 1.0 (XXXX-XX-XX)
 -----------------------
 
 .. note::
