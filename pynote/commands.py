@@ -20,7 +20,7 @@ def list_(tags=None):
                         filtered , e.g.: ('tag1', 'tag2')
 
     """
-    data = container.Notes()
+    data = container.load_notes()
     notes = []
 
     for i, note in enumerate(data):
@@ -44,7 +44,7 @@ def show(key, no_header=False, lang=None):
                         for pygments highlighting
 
     """
-    data = container.Notes()
+    data = container.load_notes()
     try:
         note = data[key]
     except IndexError:
@@ -69,7 +69,7 @@ def show_all(no_header=False):
         - no_header:    supress the note header
 
     """
-    data = container.Notes()
+    data = container.load_notes()
 
     for i, note in enumerate(data):
         print()
@@ -108,7 +108,7 @@ def edit(key):
     Edit a note's content or title and create new revision.
 
     """
-    notes = container.Notes()
+    notes = container.load_notes()
     try:
         note = notes[key]
     except IndexError:

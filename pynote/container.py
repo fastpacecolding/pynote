@@ -8,44 +8,11 @@ from babel.dates import format_datetime
 from pynote import config
 
 
-class Notes:
-    def __init__(self):
-        self.path = Path(config.DATA)
-        self.data = [Note(f) for f in self.path.iterdir()
-                     if f.is_file() and f.suffix != '.json']
-        self.data = sorted(self.data, key=lambda n: n.age)
-
-    def __getitem__(self, key):
-        try:
-            return self.data[key]
-        except IndexError:
-            raise
-
-    def __setitem__(self, key, value):
-        try:
-            if isinstance(value, Note):
-                self.data[key] = value
-                self.data[key].update()
-            else:
-                raise AttributeError('You can only assign Note objects!')
-        except IndexError:
-            raise
-
-    def __delitem__(self, key):
-        try:
-            self.data[key].unlink()
-            del self.data[key]
-        except IndexError:
-            raise
-
-    def __len__(self):
-        return len(self.data)
-
-    def __iter__(self):
-        return iter(self.data)
-
-    def __repr__(self):
-        return "{}('{}')".format(self.__class__.__name__, self.path)
+def load_notes():
+    path = Path(config.DATA)
+    data = [Note(f) for f in path.iterdir()
+            if f.is_file() and f.suffix != '.json']
+    return sorted(data, key=lambda n: n.age)
 
 
 class Note:
