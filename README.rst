@@ -19,11 +19,13 @@ Documentation is hosted on `Read the Docs`_.
 Install
 -------
 
-In Arch Linux you can use the PKGBUILDs in AUR_. Otherwise use::
+In Arch Linux you can use the PKGBUILDs in the AUR. There is a git_ and a
+stable_ version. Otherwise use::
 
     $ pip install pynote
 
-.. _AUR: https://aur.archlinux.org/packages/?K=pynote
+.. _git: https://aur.archlinux.org/pkgbase/pynote-git/
+.. _stable: https://aur.archlinux.org/pkgbase/pynote/
 
 
 Install from source
