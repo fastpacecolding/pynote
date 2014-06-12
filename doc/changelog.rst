@@ -39,6 +39,7 @@ pynote 1.0 (XXXX-XX-XX)
     entry is obsolte and refer to my old redmine tracker.
 
 
+* New configuration option: ignore_suffixes, see :doc:`configuration`.
 * Dropped python 3.3 support. I love the new pathlib module!
 * Use relative dates with babel_. You have to enable it in your configfile,
   see :doc:`configuration`.

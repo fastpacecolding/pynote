@@ -11,7 +11,7 @@ from pynote import config
 def load_notes():
     path = Path(config.DATA)
     data = [Note(f) for f in path.iterdir()
-            if f.is_file() and f.suffix != '.json']
+            if f.is_file() and f.suffix not in config.IGNORE_SUFFIXES]
     return sorted(data, key=lambda n: n.age)
 
 

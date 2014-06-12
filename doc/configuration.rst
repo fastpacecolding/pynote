@@ -42,6 +42,12 @@ reldates
     Use relative dates in your notes table. **Values: yes, no;
     Default: no**
 
+ignore_suffixes
+    Ignore files in the notes folder with a specific suffic, e.g. '.pdf'.
+    It may be useful if you store other files, such as pdfs, in your
+    notes directory. This configuration value must be a valid JSON string.
+    **Default: []**
+
 editor
     The command line editor which is used to create and edit notes.
     If it is not present pynote takes the environment variable ``$EDITOR``.
@@ -81,6 +87,7 @@ Example Noterc File
     data = ~/Dropbox/.note/
     dateformat = medium
     reldates = yes
+    ignore_suffixes = [".pdf", ".odt"]
     locale = de_DE
     editor = vim
     pygments_theme = monokai
