@@ -25,11 +25,13 @@ def list_(tags=None):
 
     for i, note in enumerate(data):
         if config.RELDATES:
+            header = ['ID', 'Title', 'Age']
             notes.append([i, note.title, note.format_age()])
         else:
+            header = ['ID', 'Title', 'Updated']
             notes.append([i, note.title, note.format_updated()])
 
-    print(Table(notes, headline=['ID', 'Title', 'Updated']))
+    print(Table(notes, headline=header))
 
 
 def show(key, no_header=False, lang=None):
