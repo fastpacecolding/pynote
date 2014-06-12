@@ -1,33 +1,19 @@
-import json
-import uuid
 import os.path
+from pathlib import Path
 from datetime import datetime
-from prettytable import PrettyTable
+
+from babel.dates import format_timedelta
+from babel.dates import format_datetime
 
 from pynote import config
 
 
-class Data:
-    """
-    The main data container class for notes.
-
-    The content of this container class maps to
-    the data.json file.  Everything you append
-    to an instance of this class will be serialised
-    to json and written to data.json.
-
-    """
-    def __init__(self, data_file=config.DATA_FILE):
-        self.data_file = data_file
-        self.data = []
-        self.load()
-
-    def __setitem__(self, key, value):
-        try:
-            self.data[key] = value
-            self.refresh()
-        except IndexError:
-            raise
+class Notes:
+    def __init__(self):
+        self.path = Path(config.DATA)
+        self.data = [Note(f) for f in self.path.iterdir()
+                     if f.is_file() and f.suffix != '.json']
+        self.data = sorted(self.data, key=lambda n: n.age)
 
     def __getitem__(self, key):
         try:
@@ -35,10 +21,20 @@ class Data:
         except IndexError:
             raise
 
+    def __setitem__(self, key, value):
+        try:
+            if isinstance(value, Note):
+                self.data[key] = value
+                self.data[key].update()
+            else:
+                raise AttributeError('You can only assign Note objects!')
+        except IndexError:
+            raise
+
     def __delitem__(self, key):
         try:
+            self.data[key].unlink()
             del self.data[key]
-            self.refresh()
         except IndexError:
             raise
 
@@ -48,170 +44,55 @@ class Data:
     def __iter__(self):
         return iter(self.data)
 
-    def append(self, note):
-        self.data.append(note)
-        self.refresh()
-
-    def load(self):
-        try:
-            with open(self.data_file, 'r') as f:
-                self.data = json.load(f, cls=NoteJSONDecoder)
-        except FileNotFoundError as e:
-            print(_('Error: {} does not exist').format(self.data_file))
-            print(_('Maybe you have to init pynote first.'))
-            exit(1)
-
-    def dump(self):
-        with open(self.data_file, 'w') as f:
-            json.dump(self.data, f, cls=NoteJSONEncoder)
-
-    def refresh(self):
-        self.dump()
-        self.load()
-
-
-class Trash(Data):
-    """
-    A subclass of Data.
-
-    This class maps to trash.json. The rest is
-    similar to Data.
-
-    """
-    def __init__(self, trash_file=config.TRASH_FILE):
-        self.data_file = trash_file
-        self.data = []
-        self.load()
-
-
-class Revisions(Data):
-    """
-    A subclass of Data.
-
-    This class maps to versions.json. The rest is
-    similar to Data.
-
-    """
-    def __init__(self, revisions_file=config.REVISIONS_FILE):
-        self.data_file = revisions_file
-        self.data = []
-        self.load()
+    def __repr__(self):
+        return "{}('{}')".format(self.__class__.__name__, self.path)
 
 
 class Note:
-    """
-    This class is used to represent a note.
 
-    """
-    def __init__(self, title, created, updated, deleted,
-                 revision, uuid, tags, content):
-        self.title = title
-        self.created = created
-        self.updated = updated
-        self.deleted = deleted
-        self.revision = revision
-        self.uuid = uuid
-        self.tags = tags
-        self.content = content
+    def __init__(self, path):
+        self.path = path
+        self.title = path.name
+        if path.exists():
+            with path.open() as f:
+                self.content = f.read()
+        else:
+            path.touch()
+        self.updated = self._getmtime()
+        self.age = self._calc_age()
+
+    def __repr__(self):
+        return "{}('{}')".format(self.__class__.__name__, self.path)
 
     @classmethod
     def create(cls, title):
-        now = datetime.now()
-        note = cls(title=title, created=now, updated=now, deleted=None,
-                   revision=1, uuid=str(uuid.uuid4()), tags=set(),
-                   content='')
+        path = Path(os.path.join(config.DATA, title))
+        if path.exists():
+            raise FileExistsError()
+        else:
+            return cls(path)
 
-        return note
-
-    @classmethod
-    def from_dict(cls, d):
-        created = datetime.fromtimestamp(d['created'])
-        updated = datetime.fromtimestamp(d['updated'])
-        deleted = datetime.fromtimestamp(d['deleted']) if d['deleted'] else None
-
-        note = cls(title=d['title'], created=created,
-                   updated=updated, deleted=deleted,
-                   revision=d['revision'], uuid=d['uuid'],
-                   tags=set(d['tags']), content=d['content'])
-
-        return note
-
-    def to_dict(self):
-        created = self.created.timestamp()
-        updated = self.updated.timestamp()
-        deleted = self.deleted.timestamp() if self.deleted else None
-
-        d = {'title': self.title, 'created': created,
-             'updated': updated, 'deleted': deleted,
-             'revision': self.revision, 'uuid': self.uuid,
-             'tags': list(self.tags), 'content': self.content}
-
-        return d
-
-    def to_json(self):
-        return json.dumps(self.to_dict(), indent=4)
+    def update(self):
+        with self.path.open('w') as f:
+            f.write(self.content)
+        self.__init__(self.path)
 
     def get_header(self):
-        table = PrettyTable(header=False)
-        table.add_row(['title', self.title])
-        created = self.created.strftime(config.DATEFORMAT)
-        table.add_row(['created', created])
+        return '{} @ {}, {} ago'.format(self.title, self.format_updated(),
+                                        self.format_age())
 
-        updated = self.updated.strftime(config.DATEFORMAT)
-        table.add_row(['updated', updated])
+    def _calc_age(self):
+        now = datetime.now()
+        age = now - self.updated
+        return age
 
-        table.add_row(['revision', self.revision])
+    def format_age(self):
+        return format_timedelta(self.age, locale=config.LOCALE)
 
-        tags = sorted(self.tags)
-        tags = ', '.join(tags) if tags else _('None')
-        table.add_row(['tags', tags])
+    def format_updated(self):
+        return format_datetime(self.updated, format=config.DATEFORMAT,
+                               locale=config.LOCALE)
 
-        table.add_row(['uuid', self.uuid])
-        table.align = 'l'
-
-        return table.get_string()
-
-    def __contains__(self, tag):
-        if tag in self.tags:
-            return True
-        else:
-            return False
-
-    def __eq__(self, other):
-        if self.uuid == other.uuid and self.revision == other.revision:
-            return True
-        else:
-            return False
-
-    def __str__(self):
-        return self.content
-
-
-class NoteJSONEncoder(json.JSONEncoder):
-    """
-    JSON Encoder class.  Used to serialise
-    Note objects.
-
-    """
-    def default(self, o):
-        try:
-            note = o.to_dict()
-        except TypeError:
-            pass
-        else:
-            return note
-        # Let the base class default method raise the TypeError
-        return JSONEncoder.default(self, o)
-
-
-class NoteJSONDecoder(json.JSONDecoder):
-    """
-    JSON Decoder class.  Used to deserialise
-    Note objects.
-
-    """
-    def __init__(self):
-        json.JSONDecoder.__init__(self, object_hook=self.dict_to_object)
-
-    def dict_to_object(self, d):
-        return Note.from_dict(d)
+    def _getmtime(self):
+        updated = os.path.getmtime(str(self.path))
+        return datetime.fromtimestamp(updated)
