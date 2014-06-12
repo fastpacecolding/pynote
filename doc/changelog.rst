@@ -11,10 +11,6 @@ Work in Progress
   new format. You can either download this file and run it with
   Python 3.4 or you can run it directly with e.g. curl.
 * Git is used via git_wrapper_ to take care of revision control.
-* Removed **note init** command, pynote will do these things
-  automatically.
-* I replaced prettytable with my own - much simpler - library
-  plaintable_.
 
 
 pynote X.X (XXXX-XX-XX)
@@ -40,6 +36,7 @@ pynote 1.0 (XXXX-XX-XX)
 
 
 * New configuration option: ignore_suffixes, see :doc:`configuration`.
+* I replaced prettytable with my own - much simpler - library plaintable_.
 * Dropped python 3.3 support. I love the new pathlib module!
 * Use relative dates with babel_. You have to enable it in your configfile,
   see :doc:`configuration`.
@@ -47,8 +44,9 @@ pynote 1.0 (XXXX-XX-XX)
 * Removed translation things (for now). If anybody needs this we can
   create a transifex account to involve other people.
 * New header design, thanks to Philipp Göttlich!
-* Do not include any precompiled files in git. I will create an AUR-
-  package with the docs.
+* Removed **note init** command, pynote will do these things automatically.
+* Do not include any precompiled files in git. I will create an AUR-package
+  with the docs.
 * Missing import statement. Now you are informed about a misspelled
   pygments theme instead of a traceback.
 * Refactored ``config.py`` to use default values.
