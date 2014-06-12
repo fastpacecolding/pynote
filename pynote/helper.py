@@ -36,9 +36,5 @@ def highlight(data, lang):
     return data
 
 
-# DEPRECATED
-def get_md5(item):
-    return hashlib.md5(item.encode('UTF-8')).digest()
-
 def get_sha512(item):
     return hashlib.sha512(item.encode('UTF-8')).digest()
