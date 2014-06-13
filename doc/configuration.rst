@@ -50,7 +50,9 @@ ignore_suffixes
 
 editor
     The command line editor which is used to create and edit notes.
-    If it is not present pynote takes the environment variable ``$EDITOR``.
+    You can pass additional arguments to the editor as well, e.g.
+    ``vim -c "set ft=asciidoc"``. If it is not present pynote takes
+    the environment variable ``$EDITOR``.
 
 pygments_theme
     Choose the pygments theme for synthax highlighting things. If it is
