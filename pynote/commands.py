@@ -1,3 +1,4 @@
+import shlex
 import subprocess
 
 from plaintable import Table
@@ -102,7 +103,8 @@ def new(title):
         print('Error: This note already exists!')
         exit(1)
 
-    subprocess.call([config.EDITOR, str(note.path)])
+    cmd = shlex.split(config.EDITOR) + [str(note.path)]
+    subprocess.call(cmd)
 
 
 def edit(key):
@@ -116,4 +118,5 @@ def edit(key):
     except IndexError:
         helper.exit_not_exists()
 
-    subprocess.call([config.EDITOR, str(note.path)])
+    cmd = shlex.split(config.EDITOR) + [str(note.path)]
+    subprocess.call(cmd)
