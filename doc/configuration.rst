@@ -9,7 +9,7 @@ Pynote is configured with a local ressource file in your home directory
 easy. It is formatted as a line-separated list of ``KEY=VALUE`` pairs, blank
 lines, and lines starting with ``#``, are ignored. The whole documatation of
 the synthax is located here:
-http://docs.python.org/3.3/library/configparser.html#quick-start
+http://docs.python.org/3.4/library/configparser.html#quick-start
 
 Please ensure you have a ``[DEFAULT]`` section on top of your file.
 Support for additional sections may come in future releases...
