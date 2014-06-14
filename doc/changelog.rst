@@ -35,6 +35,8 @@ pynote 1.0 (XXXX-XX-XX)
     entry is obsolte and refer to my old redmine tracker.
 
 
+* First read ``/etc/noterc``, then read ``~/.noterc``. The local noterc
+  overrides settings in the global one, see `#1`_
 * The editor value in your noterc now accepts command line arguments,
   see `#2`_.
 * New configuration option: ignore_suffixes, see :doc:`configuration`.
@@ -53,6 +55,7 @@ pynote 1.0 (XXXX-XX-XX)
   pygments theme instead of a traceback.
 * Refactored ``config.py`` to use default values.
 
+.. _`#1`: https://github.com/rumpelsepp/pynote/issues/1
 .. _`#2`: https://github.com/rumpelsepp/pynote/issues/2
 .. _Gist: https://gist.githubusercontent.com/rumpelsepp/9b17cda631af5cdbb412/raw/7c3b950ffba4a4233f4123db4f96a2de48518fbe/note_migrate.py
 .. _git_wrapper: https://github.com/rumpelsepp/git_wrapper

@@ -4,14 +4,12 @@ Noterc
 Synopsis
 --------
 
-Pynote is configured with a ressource file in your home directory.
-The location of this file is ``~/.noterc``. The synthax of this file
-is quite easy. It is formatted as a line-separated list of ``KEY=VALUE``
-pairs, blank lines, and lines starting with ``#``, are ignored.
-The whole documatation of this synthax is located in the official
-`Python Documentation`_.
-
-.. _`Python Documentation`: http://docs.python.org/3.3/library/configparser.html#quick-start
+Pynote is configured with a local ressource file in your home directory
+(``~/.noterc``) and a global one in ``/etc/noterc``. Their synthax is quite
+easy. It is formatted as a line-separated list of ``KEY=VALUE`` pairs, blank
+lines, and lines starting with ``#``, are ignored. The whole documatation of
+the synthax is located here:
+http://docs.python.org/3.3/library/configparser.html#quick-start
 
 Please ensure you have a ``[DEFAULT]`` section on top of your file.
 Support for additional sections may come in future releases...
@@ -28,12 +26,11 @@ data
 
 dateformat
     Set the default dateformat for all dates shown in pynote.
-    It must be a string like e.g. ``YYYY-MM-dd HH:mm``, see `babel docs`_.
+    It must be a string like e.g. ``YYYY-MM-dd HH:mm``, see
+    http://babel.pocoo.org/docs/dates/#date-fields.
     The values "full", "long", "medium", or "short" are allowed as well,
     but you may have to set *locale*.
     **Default**: ``YYYY-MM-dd HH:mm``
-
-.. _`babel docs`: http://babel.pocoo.org/docs/dates/#date-fields
 
 locale
     Set the locale for datetime formatting. **Default: en_US**
@@ -55,29 +52,10 @@ editor
     the environment variable ``$EDITOR``.
 
 pygments_theme
-    Choose the pygments theme for synthax highlighting things. If it is
-    not present it takes the value ``default``. The following values are
-    supported:
-
-    * vs
-    * trac
-    * fruity
-    * borland
-    * pastie
-    * bw
-    * native
-    * emacs
-    * murphy
-    * manni
-    * monokai
-    * perldoc
-    * vim
-    * tango
-    * friendly
-    * autumn
-    * rrt
-    * colorful
-    * default
+    Choose the pygments theme for synthax highlighting things. If it is not
+    present it takes the value ``default``. You'll find instructions to get all
+    supported values on the pygments webpage here:
+    http://pygments.org/docs/styles/#getting-a-list-of-available-styles
 
 
 Example Noterc File
@@ -100,4 +78,4 @@ Bugs
 
 Bugs? You must be kidding; there are no bugs in this software. But if
 this crazy thing happens write an email to stefan@sevenbyte.org or checkout
-the bugtracker on github https://github.com/rumpelsepp/pynote
+the bugtracker on github https://github.com/rumpelsepp/pynote.
