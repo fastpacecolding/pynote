@@ -3,8 +3,10 @@ import configparser
 import json
 
 
+GLOBAL_NOTERC = '/etc/noterc'
 NOTERC = os.path.expanduser('~/.noterc')
 CONFIG = configparser.ConfigParser()
+CONFIG.read(GLOBAL_NOTERC)
 CONFIG.read(NOTERC)
 
 
