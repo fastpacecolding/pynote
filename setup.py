@@ -16,8 +16,11 @@ setup(name='pynote',
       packages=['pynote'],
       scripts=['note'],
       install_requires=['plaintable', 'pygments', 'babel'],
-      classifiers=['Development Status :: 5 - Production/Stable',
-                   'Environment :: Console',
-                   'Natural Language :: English',
-                   'License :: OSI Approved :: MIT License',
-                   'Programming Language :: Python :: 3.4'])
+      classifiers=[
+            'Development Status :: 5 - Production/Stable',
+            'Environment :: Console',
+            'Natural Language :: English',
+            'License :: OSI Approved :: MIT License',
+            'Programming Language :: Python :: 3.4',
+      ]
+)

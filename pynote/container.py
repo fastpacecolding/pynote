@@ -52,9 +52,7 @@ class Note:
                                         self.format_age())
 
     def _calc_age(self):
-        now = datetime.now()
-        age = now - self.updated
-        return age
+        return datetime.now() - self.updated
 
     def format_age(self):
         return format_timedelta(self.age, locale=config.LOCALE)
