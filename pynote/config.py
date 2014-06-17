@@ -18,6 +18,7 @@ DATEFORMAT = CONFIG.get('DEFAULT', 'dateformat', fallback='YYYY-MM-dd HH:mm')
 LOCALE = CONFIG.get('DEFAULT', 'locale', fallback='en_US')
 RELDATES = CONFIG.getboolean('DEFAULT', 'reldates', fallback=False)
 PYGMENTS_THEME = CONFIG.get('DEFAULT', 'pygments_theme', fallback='default')
+EXTENSION = CONFIG.get('DEFAULT', 'extension', fallback=None)
 
 IGNORE_SUFFIXES = CONFIG.get('DEFAULT', 'ignore_suffixes', fallback=[])
 IGNORE_SUFFIXES = json.loads(IGNORE_SUFFIXES) if IGNORE_SUFFIXES else []

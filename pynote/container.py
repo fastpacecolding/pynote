@@ -19,7 +19,7 @@ class Note:
 
     def __init__(self, path):
         self.path = path
-        self.title = path.name
+        self.title = path.stem
         if path.exists():
             with path.open() as f:
                 self.content = f.read()
@@ -33,7 +33,10 @@ class Note:
 
     @classmethod
     def create(cls, title):
-        path = Path(os.path.join(config.DATA, title))
+        if config.EXTENSION:
+            path = Path(os.path.join(config.DATA, title + config.EXTENSION))
+        else:
+            path = Path(os.path.join(config.DATA, title))
         if path.exists():
             raise FileExistsError()
         else:
