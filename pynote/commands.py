@@ -24,7 +24,7 @@ def list_(tags=None):
     data = container.load_notes()
     notes = []
 
-    for i, note in data:
+    for i, note in enumerate(data):
         if config.RELDATES:
             header = ['ID', 'Title', 'Age']
             notes.append([i, note.title, note.format_age()])
