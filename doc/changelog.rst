@@ -35,6 +35,7 @@ pynote 1.0 (XXXX-XX-XX)
     entry is obsolte and refer to my old redmine tracker.
 
 
+* Prefix all new git tags with 'v' as this is the recommendation by github.
 * First read ``/etc/noterc``, then read ``~/.noterc``. The local noterc
   overrides settings in the global one, see `#1`_
 * The editor value in your noterc now accepts command line arguments,
