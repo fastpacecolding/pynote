@@ -20,5 +20,5 @@ RELDATES = CONFIG.getboolean('DEFAULT', 'reldates', fallback=False)
 PYGMENTS_THEME = CONFIG.get('DEFAULT', 'pygments_theme', fallback='default')
 EXTENSION = CONFIG.get('DEFAULT', 'extension', fallback=None)
 
-IGNORE_SUFFIXES = CONFIG.get('DEFAULT', 'ignore_suffixes', fallback=[])
-IGNORE_SUFFIXES = json.loads(IGNORE_SUFFIXES) if IGNORE_SUFFIXES else []
+IGNORE_EXTENSION = CONFIG.get('DEFAULT', 'ignore_extension', fallback=[])
+IGNORE_EXTENSION = json.loads(IGNORE_EXTENSION) if IGNORE_EXTENSION else []
