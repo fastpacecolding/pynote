@@ -16,6 +16,7 @@ Contents
    Overview <overview>
    reference
    Configuration <configuration>
+   cookbook
    changelog
    contributing
    thanks

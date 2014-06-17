@@ -40,7 +40,7 @@ pynote 1.0 (XXXX-XX-XX)
   overrides settings in the global one, see `#1`_
 * The editor value in your noterc now accepts command line arguments,
   see `#2`_.
-* New configuration option: ignore_suffixes, see :doc:`configuration`.
+* New configuration option: ignore_extensions, see :doc:`configuration`.
 * I replaced prettytable with my own - much simpler - library plaintable_.
 * Dropped python 3.3 support. I love the new pathlib module!
 * Use relative dates with babel_. You have to enable it in your configfile,
