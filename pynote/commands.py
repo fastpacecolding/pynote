@@ -74,7 +74,7 @@ def show_all(no_header=False):
     """
     data = container.load_notes()
 
-    for i, note in data:
+    for i, note in enumerate(data):
         print()
         print()
         print('-- note {} --'.format(i))
