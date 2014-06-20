@@ -1,3 +1,4 @@
+from pathlib import Path
 import click
 import pynote
 from pynote import config
@@ -124,11 +125,20 @@ def highlight(ctx, key, lang, no_header):
 
 @cli.command()
 @click.argument('key', type=int)
+@click.option('-t', '--title', is_flag=True)
 @pass_ctx
-def edit(ctx, key):
+def edit(ctx, key, title):
     """Edit a specific note."""
     note = helper.get_note(ctx.data, key)
-    click.edit(editor=config.EDITOR, filename=str(note.path))
+    if title:
+        new_title = click.edit(note.title, editor=config.EDITOR)
+        new_title = new_title.strip()
+        new_path = note.path.parent / Path(new_title)
+        note.path.rename(new_path)
+        note.path = new_path
+        note.path.touch()  # Update mtime
+    else:
+        click.edit(editor=config.EDITOR, filename=str(note.path))
 
 
 @cli.command()
