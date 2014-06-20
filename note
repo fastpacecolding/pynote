@@ -13,7 +13,7 @@ if sys.version_info[0] < 3:
     exit(1)
 else:
     try:
-        pynote.__main__.run()
+        pynote.__main__.cli()
     except KeyboardInterrupt:
         print()
         print('Exited by user. Bye bye...')

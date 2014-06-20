@@ -4,13 +4,6 @@ Changelog
 Work in Progress
 ----------------
 
-* **Big data storage refactoring!**
-  JSON files are not used for storing data any more. Simple plain
-  text files do the job much better.
-  I have created a Gist_ on Github to migrate your data to the
-  new format. You can either download this file and run it with
-  Python 3.4 or you can run it directly with e.g. curl.
-* Git is used via git_wrapper_ to take care of revision control.
 
 
 pynote X.X (XXXX-XX-XX)
@@ -21,6 +14,7 @@ pynote X.X (XXXX-XX-XX)
     This section here is used as a roadmap for future releases!
 
 * Fixed tests, switched to pytest and setup travis.
+* Git is used via git_wrapper_ to take care of revision control.
 * shell completion
 
 
@@ -35,12 +29,25 @@ pynote 1.0 (XXXX-XX-XX)
     entry is obsolte and refer to my old redmine tracker.
 
 
+* **Big data storage refactoring!**
+  JSON files are not used for storing data any more. Simple plain
+  text files do the job much better.
+  I have created a Gist_ on Github to migrate your data to the
+  new format. Please refer to the :doc:`cookbook` for migrating.
+* Pynote now accepts command abbreviations such as ``note l`` for
+  ``note list``. This mechanism is handled by click_ and works for every
+  command so long as the short command is unique.
+* Automatically pass the output through a pager when the output string
+  is longer as the terminal height. This could be suppressed with
+  ``--no-pager``.
+* Migrated the cli interface to the click_ library.
 * Prefix all new git tags with 'v' as this is the recommendation by github.
 * First read ``/etc/noterc``, then read ``~/.noterc``. The local noterc
   overrides settings in the global one, see `#1`_
 * The editor value in your noterc now accepts command line arguments,
   see `#2`_.
-* New configuration option: ignore_extensions, see :doc:`configuration`.
+* **New configuration option**: ignore_extensions, see :doc:`configuration`.
+* **New configuration option**: extensions, see :doc:`configuration`.
 * I replaced prettytable with my own - much simpler - library plaintable_.
 * Dropped python 3.3 support. I love the new pathlib module!
 * Use relative dates with babel_. You have to enable it in your configfile,
@@ -62,6 +69,7 @@ pynote 1.0 (XXXX-XX-XX)
 .. _git_wrapper: https://github.com/rumpelsepp/git_wrapper
 .. _plaintable: https://github.com/rumpelsepp/plaintable
 .. _babel: http://babel.pocoo.org/docs/api/dates/#date-and-time-formatting
+.. _click: http://click.pocoo.org/
 
 
 pynote 0.2.2 (2014-02-05)

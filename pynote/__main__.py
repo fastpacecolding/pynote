@@ -1,129 +1,147 @@
-import argparse
-
+import click
 import pynote
-import pynote.commands as note
+from pynote import config
+from pynote import helper
+from pynote.container import Note
+from pynote.container import load_notes
+from plaintable import Table
 
 
-def run():
-    parser = argparse.ArgumentParser()
-    subparsers = parser.add_subparsers(dest='cmd')
+class Context:
 
-    # note list
-    list_ = subparsers.add_parser('list', help='show a table with all active notes')
-    list_.add_argument('-t', '--tags', nargs='+', help='filter tags')
+    def __init__(self, data=None, no_pager=False):
+        self.data = data
+        self.no_pager = no_pager
 
-    # note show
-    show = subparsers.add_parser('show', help='show a specific note')
-    show.add_argument('key', type=int, nargs='?', default=0,
-                      help='integer key which is shown in the table')
-    show.add_argument('-a', '--all', action='store_true',
-                      help='show all notes')
-    show.add_argument('-n', '--no-header', action='store_true',
-                      help='do not show header data')
-    show.add_argument('-l', '--lang', help='specify synthax highlighting')
+pass_ctx = click.make_pass_decorator(Context, ensure=True)
 
-    # note new
-    new = subparsers.add_parser('new', help='create a new note')
-    new.add_argument('title', type=str)
 
-    # note edit
-    edit = subparsers.add_parser('edit', help='edit a note')
-    edit.add_argument('key', type=int, help='integer key which is shown in the table')
-    edit.add_argument('-t', '--title', action='store_true',
-                      help='edit the title')
+class AliasedGroup(click.Group):
 
-    # note delete
-    delete = subparsers.add_parser('delete', help='move a note to trash')
-    delete.add_argument('key', type=int, help='integer key which is shown in the table')
+    def get_command(self, ctx, cmd_name):
+        rv = click.Group.get_command(self, ctx, cmd_name)
+        if rv is not None:
+            return rv
+        matches = [x for x in self.list_commands(ctx)
+                   if x.startswith(cmd_name)]
+        if not matches:
+            return None
+        elif len(matches) == 1:
+            return click.Group.get_command(self, ctx, matches[0])
+        ctx.fail('Too many matches: %s' % ', '.join(sorted(matches)))
 
-    # note trash
-    trash = subparsers.add_parser('trash', help='show a table with all deleted notes')
 
-    # note restore
-    restore = subparsers.add_parser('restore', help='restore a deleted note')
-    restore.add_argument('key', type=int, help='integer key which is shown in the trash table')
+@click.command(cls=AliasedGroup)
+@click.version_option(version=pynote.__version__, prog_name='pynote')
+@click.option('--no-pager', is_flag=True, help="Supress paging long output.")
+@pass_ctx
+def cli(ctx, no_pager):
+    ctx.data = load_notes()
+    ctx.no_pager = no_pager
 
-    # note compare
-    compare = subparsers.add_parser('compare', help='compare two notes')
-    compare.add_argument('key', type=int, help='integer key which is shown in the table')
-    compare.add_argument('new_rev', type=int, help='new revision number')
-    compare.add_argument('old_rev', type=int, help='old revision number')
-    compare.add_argument('-c', '--color', action='store_true',
-                         help='use colors')
 
-    # note revisions
-    revisions = subparsers.add_parser('revisions')
-    revisions.add_argument('key', type=int)
+@cli.command()
+@pass_ctx
+def list(ctx):
+    """Print out a table with all notes."""
+    notes = []
 
-    # note tags
-    tags = subparsers.add_parser('tags')
-    tags.add_argument('key', type=int, nargs='?')
-    tags_opts = tags.add_mutually_exclusive_group()
-    tags_opts.add_argument('-a', '--add', nargs='+')
-    tags_opts.add_argument('-d', '--delete', nargs='+')
-
-    # note --version
-    parser.add_argument('--version', help='show version', action='version',
-                        version='pynote {}'.format(pynote.__version__))
-
-    args = parser.parse_args()
-
-    # Choose the correct function from pynote.command
-    # depending on args.cmd.  Choose note list if no
-    # command is entered.
-    if args.cmd is None:
-        note.list_()
-
-    elif args.cmd == 'list':
-        note.list_(args.tags)
-
-    elif args.cmd == 'show':
-        if args.all:
-            note.show_all(args.no_header)
+    for i, note in enumerate(ctx.data):
+        if config.RELDATES:
+            header = ['ID', 'Title', 'Age']
+            notes.append([i, note.title, note.format_age()])
         else:
-            note.show(args.key, args.no_header, args.lang)
+            header = ['ID', 'Title', 'Updated']
+            notes.append([i, note.title, note.format_updated()])
 
-    elif args.cmd == 'new':
-        note.new(args.title)
+    click.echo(Table(notes, headline=header))
 
-    elif args.cmd == 'edit':
-        note.edit(args.key)
 
-    elif args.cmd == 'delete':
-        note.delete(args.key)
+@cli.command()
+@click.argument('key', type=int)
+@click.option('-n', '--no-header', is_flag=True)
+@pass_ctx
+def show(ctx, key, no_header):
+    """Show a specific note."""
+    note = helper.get_note(ctx.data, key)
 
-    elif args.cmd == 'trash':
-        note.trash()
+    if no_header:
+        output = note.content
+    else:
+        output = note.get_header() + '\n\n' + note.content
 
-    elif args.cmd == 'restore':
-        note.restore(args.key)
+    condition = (
+        click.get_terminal_size()[1] < len(note.content.splitlines())
+        and not ctx.no_pager
+    )
+    if condition:
+        click.echo_via_pager(output)
+    else:
+        click.echo(output)
 
-    elif args.cmd == 'compare':
-        if args.new_rev > args.old_rev:
-            note.compare(args.key, args.new_rev, args.old_rev, args.color)
+
+@cli.command()
+@click.option('-n', '--no-header', is_flag=True)
+@pass_ctx
+def all(ctx, no_header):
+    """Print out all notes in the data directory."""
+    output = ''
+    for i, note in enumerate(ctx.data):
+        output += '\n\n'
+        output += '-- note {} --'.format(i)
+        output += '\n\n'
+
+        if no_header:
+            output += note.content
         else:
-            print('Error: old_rev must not be smaller than new_rev!')
-            exit(1)
+            output += note.get_header()
+            output += '\n\n'
+            output += note.content
 
-    elif args.cmd == 'revisions':
-        note.revisions(args.key)
+    condition = (
+        click.get_terminal_size()[1] < len(output.splitlines())
+        and not ctx.no_pager
+    )
+    if condition:
+        click.echo_via_pager(output)
+    else:
+        click.echo(output)
 
-    elif args.cmd == 'tags':
-        if args.add and args.key:
-            note.add_tags(args.key, args.add)
-        elif args.delete and args.key:
-            note.del_tags(args.key, args.delete)
-        elif args.add and not args.key:
-            print('Error: missing key!')
-            exit(1)
-        elif args.delete and not args.key:
-            print('Error: missing key!')
-            exit(1)
-        elif args.key:
-            note.note_tags(args.key)
-        else:
-            note.tags()
+
+@cli.command()
+@click.argument('key', type=int)
+@click.option('-l', '--lang', default='text')
+@click.option('-n', '--no-header', is_flag=True)
+@pass_ctx
+def highlight(ctx, key, lang, no_header):
+    """Show a specific note with synthax highlighting."""
+    note = helper.get_note(ctx.data, key)
+    output = helper.highlight(note.content, lang)
+    if no_header is False:
+        output = note.get_header() + '\n\n' + output
+    click.echo(output)
+
+
+@cli.command()
+@click.argument('key', type=int)
+@pass_ctx
+def edit(ctx, key):
+    """Edit a specific note."""
+    note = helper.get_note(ctx.data, key)
+    click.edit(editor=config.EDITOR, filename=str(note.path))
+
+
+@cli.command()
+@click.argument('title', type=str)
+def new(title):
+    """Create a new note."""
+    try:
+        note = Note.create(title)
+    except FileExistsError:
+        print('Error: This note already exists!')
+        exit(1)
+    click.edit(editor=config.EDITOR, filename=str(note.path))
 
 
 if __name__ == '__main__':
-    run()
+    cli()

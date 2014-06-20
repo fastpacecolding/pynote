@@ -1,6 +1,6 @@
+import json
 import os.path
 import configparser
-import json
 
 
 GLOBAL_NOTERC = '/etc/noterc'

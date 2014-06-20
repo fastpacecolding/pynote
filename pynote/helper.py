@@ -1,4 +1,3 @@
-import hashlib
 import pygments
 import pygments.lexers as lexers
 import pygments.formatters as formatters
@@ -6,9 +5,13 @@ from pygments.util import ClassNotFound
 from pygments.styles import get_all_styles
 
 
-def exit_not_exists():
-    print('Error: This note does not exist!')
-    exit(1)
+def get_note(data, key):
+    try:
+        note = data[key]
+    except IndexError:
+        print('Error: This note does not exist!')
+        exit(1)
+    return note
 
 
 def highlight(data, lang):
@@ -34,7 +37,3 @@ def highlight(data, lang):
 
     data = pygments.highlight(data, lexer, formatter)
     return data
-
-
-def get_sha512(item):
-    return hashlib.sha512(item.encode('UTF-8')).digest()
