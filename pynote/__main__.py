@@ -3,6 +3,7 @@ import click
 import pynote
 from pynote import config
 from pynote import helper
+from pynote import crypt
 from pynote.container import Note
 from pynote.container import load_notes
 from plaintable import Table
@@ -67,9 +68,9 @@ def show(ctx, key, no_header):
     note = helper.get_note(ctx.data, key)
 
     if no_header:
-        output = note.content
+        output = note.content.decode()
     else:
-        output = note.get_header() + '\n\n' + note.content
+        output = note.get_header() + '\n\n' + note.content.decode()
 
     condition = (
         click.get_terminal_size()[1] < len(note.content.splitlines())
@@ -92,12 +93,16 @@ def all(ctx, no_header):
         output += '-- note {} --'.format(i)
         output += '\n\n'
 
-        if no_header:
-            output += note.content
+        if note.is_encrypted:
+            output += 'Encrypted note!'
+            output += '\n'
         else:
-            output += note.get_header()
-            output += '\n\n'
-            output += note.content
+            if no_header:
+                output += note.content.decode()
+            else:
+                output += note.get_header()
+                output += '\n\n'
+                output += note.content.decode()
 
     condition = (
         click.get_terminal_size()[1] < len(output.splitlines())
@@ -109,6 +114,7 @@ def all(ctx, no_header):
         click.echo(output)
 
 
+# Maybe obsolete in click 3.0: http://click.pocoo.org/changelog/#version-3-0
 @cli.command()
 @click.argument('key', type=int)
 @click.option('-l', '--lang', default='text')
@@ -117,7 +123,7 @@ def all(ctx, no_header):
 def highlight(ctx, key, lang, no_header):
     """Show a specific note with synthax highlighting."""
     note = helper.get_note(ctx.data, key)
-    output = helper.highlight(note.content, lang)
+    output = helper.highlight(note.content.decode(), lang)
     if no_header is False:
         output = note.get_header() + '\n\n' + output
     click.echo(output)
@@ -151,6 +157,34 @@ def new(title):
         print('Error: This note already exists!')
         exit(1)
     click.edit(editor=config.EDITOR, filename=str(note.path))
+
+
+@cli.command()
+@click.argument('key', type=int)
+@click.password_option()
+@pass_ctx
+def encrypt(ctx, key, password):
+    note = helper.get_note(ctx.data, key)
+
+    aes_key = crypt.password_digest(password)
+    ciphertext = crypt.encrypt(note.content, aes_key)
+    encrypted_note = Note.create(note.title, encrypted=True)
+
+    # TODO: Refacator this out, see container.Note
+    with encrypted_note.path.open('bw') as f:
+        f.write(ciphertext)
+
+
+@cli.command()
+@click.argument('key', type=int)
+@click.password_option()
+@pass_ctx
+def decrypt(ctx, key, password):
+    note = helper.get_note(ctx.data, key)
+
+    aes_key = crypt.password_digest(password)
+    ciphertext = crypt.encrypt(note.content, aes_key)
+    print(ciphertext)
 
 
 if __name__ == '__main__':

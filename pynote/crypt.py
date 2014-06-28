@@ -1,12 +1,13 @@
 from Crypto import Random
 from Crypto.Cipher import AES
 from Crypto.Hash import SHA256
+from base64 import b64encode
 
 
 def encrypt(plaintext, key):
     iv = Random.new().read(AES.block_size)
     cipher = AES.new(key, AES.MODE_CFB, iv)
-    return cipher.encrypt(iv + plaintext.encode())
+    return cipher.encrypt(iv + plaintext)
 
 
 def decrypt(ciphertext, key):

@@ -15,6 +15,7 @@ def load_notes():
     return sorted(data, key=lambda n: n.age)
 
 
+# TODO: content should be a property
 class Note:
 
     def __init__(self, path):
@@ -25,7 +26,7 @@ class Note:
             path.touch()
             self.content = ''
         else:
-            with path.open() as f:
+            with path.open('br') as f:
                 self.content = f.read()
 
         # Check whether the note is encrypted or not.
@@ -45,13 +46,19 @@ class Note:
         return "{}('{}')".format(self.__class__.__name__, self.path)
 
     @classmethod
-    def create(cls, title):
-        if config.EXTENSION:
-            path = Path(os.path.join(config.DATA, title + config.EXTENSION))
+    def create(cls, title, encrypted=False):
+        if config.EXTENSION and encrypted:
+            filename = title + '.crypt' + config.EXTENSION
+        elif config.EXTENSION and encrypted is False:
+            filename = title + config.EXTENSION
+        elif not config.EXTENSION and encrypted:
+            filename = title + '.crypt'
         else:
-            path = Path(os.path.join(config.DATA, title))
+            filename = title
+
+        path = Path(os.path.join(config.DATA, filename))
         if path.exists():
-            raise FileExistsError()
+            raise FileExistsError('Note already exists!')
         else:
             return cls(path)
 
