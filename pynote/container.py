@@ -20,11 +20,24 @@ class Note:
     def __init__(self, path):
         self.path = path
         self.title = path.stem
-        if path.exists():
+        # Get content, if the file is not present create an empty one.
+        if not path.exists():
+            path.touch()
+            self.content = ''
+        else:
             with path.open() as f:
                 self.content = f.read()
+
+        # Check whether the note is encrypted or not.
+        # It is indicated by the first suffix: my-note.crypt.txt
+        if path.suffixes:
+            if path.suffixes[0] == '.crypt':
+                self.is_encrypted = True
+            else:
+                self.is_encrypted = False
         else:
-            path.touch()
+            self.is_encrypted = False
+
         self.updated = self._getmtime()
         self.age = self._calc_age()
 
