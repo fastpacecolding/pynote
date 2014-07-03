@@ -15,35 +15,30 @@ def load_notes():
     return sorted(data, key=lambda n: n.age)
 
 
-# TODO: content should be a property
 class Note:
 
     def __init__(self, path):
         self.path = path
         self.title = path.stem
-        # Get content, if the file is not present create an empty one.
+        self._content = b''
+        # If the file is not present create an empty one.
         if not path.exists():
             path.touch()
-            self.content = ''
-        else:
-            with path.open('br') as f:
-                self.content = f.read()
-
-        # Check whether the note is encrypted or not.
-        # It is indicated by the first suffix: my-note.crypt.txt
-        if path.suffixes:
-            if path.suffixes[0] == '.crypt':
-                self.is_encrypted = True
-            else:
-                self.is_encrypted = False
-        else:
-            self.is_encrypted = False
-
+        self.is_encrypted = self._check_encrypted()
         self.updated = self._getmtime()
         self.age = self._calc_age()
 
     def __repr__(self):
         return "{}('{}')".format(self.__class__.__name__, self.path)
+
+    @property
+    def content(self):
+        return self._read_content()
+
+    @content.setter
+    def content(self, value):
+        self._content = value
+        self._write_content()
 
     @classmethod
     def create(cls, title, encrypted=False):
@@ -62,17 +57,9 @@ class Note:
         else:
             return cls(path)
 
-    def update(self):
-        with self.path.open('w') as f:
-            f.write(self.content)
-        self.__init__(self.path)
-
     def get_header(self):
         return '{} @ {}, {} ago'.format(self.title, self.format_updated(),
                                         self.format_age())
-
-    def _calc_age(self):
-        return datetime.now() - self.updated
 
     def format_age(self):
         return format_timedelta(self.age, locale=config.LOCALE)
@@ -81,6 +68,27 @@ class Note:
         return format_datetime(self.updated, format=config.DATEFORMAT,
                                locale=config.LOCALE)
 
+    def _check_encrypted(self):
+        # This is indicated by the first suffix: my-note.crypt.txt
+        if self.path.suffixes:
+            if self.path.suffixes[0] == '.crypt':
+                return True
+            else:
+                return False
+        else:
+            return False
+
     def _getmtime(self):
         updated = os.path.getmtime(str(self.path))
         return datetime.fromtimestamp(updated)
+
+    def _calc_age(self):
+        return datetime.now() - self.updated
+
+    def _read_content(self):
+        with self.path.open('br') as f:
+            return f.read()
+
+    def _write_content(self):
+        with self.path.open('bw') as f:
+            return f.write(self._content)
