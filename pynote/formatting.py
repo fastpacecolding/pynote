@@ -3,6 +3,7 @@ from pynote import config
 
 
 def echo(text, no_pager=False):
+    """A helper which decides between using a pager or not."""
     if click.get_terminal_size()[1] < len(text.splitlines()) and not no_pager:
         click.echo_via_pager(text)
     else:
@@ -10,6 +11,7 @@ def echo(text, no_pager=False):
 
 
 def echo_error(text):
+    """Add 'Error: ' prefix and colorize output."""
     msg = 'Error: ' + text
     if config.COLORS:
         click.secho(msg, fg='red')
@@ -18,6 +20,7 @@ def echo_error(text):
 
 
 def echo_hint(text):
+    """Add 'Hint: ' prefix and colorize output."""
     msg = 'Hint: ' + text
     if config.COLORS:
         click.secho(msg, fg='yellow')
@@ -59,4 +62,3 @@ def highlight_(data, lang):
         exit(1)
 
     return highlight(data, lexer, formatter)
-    return "dei mama"
