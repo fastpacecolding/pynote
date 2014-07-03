@@ -1,12 +1,12 @@
 from pathlib import Path
 import click
-from click import echo
-from click import echo_via_pager
 import pynote
 from pynote import config
 from pynote import crypt
+from pynote.formatting import echo
+from pynote.formatting import echo_hint
 from pynote.formatting import echo_error
-from pynote.formatting import highlight
+from pynote.formatting import highlight_
 from pynote.container import Note
 from pynote.container import load_notes
 from pynote.container import get_note
@@ -40,10 +40,12 @@ class AliasedGroup(click.Group):
 @click.command(cls=AliasedGroup)
 @click.version_option(version=pynote.__version__, prog_name='pynote')
 @click.option('--no-pager', is_flag=True, help="Supress paging long output.")
+@click.option('--no-header', is_flag=True, help="Supress header.")
 @pass_ctx
-def cli(ctx, no_pager):
+def cli(ctx, no_pager, no_header):
     ctx.data = load_notes()
     ctx.no_pager = no_pager
+    ctx.no_header = no_header
 
 
 @cli.command()
@@ -60,77 +62,54 @@ def list(ctx):
             header = ['ID', 'Title', 'Updated']
             notes.append([i, note.title, note.format_updated()])
 
-    echo(Table(notes, headline=header))
+    echo(str(Table(notes, headline=header)))
 
 
 @cli.command()
 @click.argument('key', type=int)
-@click.option('-n', '--no-header', is_flag=True)
+@click.option('-l', '--lang', default=None)
 @pass_ctx
-def show(ctx, key, no_header):
+def show(ctx, key, lang):
     """Show a specific note."""
     note = get_note(ctx.data, key)
-
-    if no_header:
-        output = note.content.decode()
+    if lang:
+        content = highlight_(note.content.decode(), lang)
     else:
-        output = note.get_header() + '\n\n' + note.content.decode()
+        content = note.content.decode()
 
-    condition = (
-        click.get_terminal_size()[1] < len(note.content.splitlines())
-        and not ctx.no_pager
-    )
-    if condition:
-        echo_via_pager(output)
+    if ctx.no_header:
+        output = content
     else:
-        echo(output)
+        output = note.get_header() + '\n\n' + content
+
+    echo(output, ctx.no_pager)
 
 
 @cli.command()
-@click.option('-n', '--no-header', is_flag=True)
 @pass_ctx
-def all(ctx, no_header):
+def all(ctx):
     """Print out all notes in the data directory."""
     output = ''
     for i, note in enumerate(ctx.data):
+        counter = '-- note {} --'.format(i)
+        counter = click.style(counter, bold=True) if config.COLORS else counter
+
         output += '\n\n'
-        output += '-- note {} --'.format(i)
+        output += counter
         output += '\n\n'
 
         if note.is_encrypted:
             output += 'Encrypted note!'
             output += '\n'
         else:
-            if no_header:
+            if ctx.no_header:
                 output += note.content.decode()
             else:
                 output += note.get_header()
                 output += '\n\n'
                 output += note.content.decode()
 
-    condition = (
-        click.get_terminal_size()[1] < len(output.splitlines())
-        and not ctx.no_pager
-    )
-    if condition:
-        echo_via_pager(output)
-    else:
-        echo(output)
-
-
-# Maybe obsolete in click 3.0: http://click.pocoo.org/changelog/#version-3-0
-@cli.command()
-@click.argument('key', type=int)
-@click.option('-l', '--lang', default='text')
-@click.option('-n', '--no-header', is_flag=True)
-@pass_ctx
-def highlight(ctx, key, lang, no_header):
-    """Show a specific note with synthax highlighting."""
-    note = get_note(ctx.data, key)
-    output = highlight(note.content.decode(), lang)
-    if no_header is False:
-        output = note.get_header() + '\n\n' + output
-    echo(output)
+    echo(output, ctx.no_pager)
 
 
 @cli.command()
@@ -142,13 +121,22 @@ def edit(ctx, key, title):
     note = get_note(ctx.data, key)
     if title:
         new_title = click.edit(note.title, editor=config.EDITOR)
-        new_title = new_title.strip()
+        if new_title:
+            new_title = new_title.strip()
+        else:
+            echo_hint('No changes detected')
+
         new_path = note.path.parent / Path(new_title)
         note.path.rename(new_path)
         note.path = new_path
         note.path.touch()  # Update mtime
     else:
-        click.edit(editor=config.EDITOR, filename=str(note.path))
+        new_content = click.edit(note.content.decode(), editor=config.EDITOR,
+                                 extension=config.EXTENSION)
+        if new_content:
+            note.content = new_content.encode()
+        else:
+            echo_hint('No changes detected')
 
 
 @cli.command()
@@ -158,9 +146,10 @@ def new(title):
     try:
         note = Note.create(title)
     except FileExistsError:
-        echo_error('Error: This note already exists!', fg='red')
+        echo_error('This note already exists!')
         exit(1)
-    click.edit(editor=config.EDITOR, filename=str(note.path))
+    content = click.edit(note.content.decode(), editor=config.EDITOR)
+    note.content = content.encode() if content else ''
 
 
 @cli.command()
