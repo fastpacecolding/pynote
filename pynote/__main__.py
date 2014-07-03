@@ -72,7 +72,7 @@ def list(ctx):
 def show(ctx, key, lang):
     """Show a specific note."""
     note = get_note(ctx.data, key)
-    if lang:
+    if lang and config.COLORS:
         content = highlight_(note.content.decode(), lang)
     else:
         content = note.content.decode()
