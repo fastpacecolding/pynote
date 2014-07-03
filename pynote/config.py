@@ -17,6 +17,7 @@ EDITOR = CONFIG.get('DEFAULT', 'editor', fallback=os.getenv('EDITOR', 'nano'))
 DATEFORMAT = CONFIG.get('DEFAULT', 'dateformat', fallback='YYYY-MM-dd HH:mm')
 LOCALE = CONFIG.get('DEFAULT', 'locale', fallback='en_US')
 RELDATES = CONFIG.getboolean('DEFAULT', 'reldates', fallback=False)
+COLORS = CONFIG.getboolean('DEFAULT', 'colors', fallback=False)
 PYGMENTS_THEME = CONFIG.get('DEFAULT', 'pygments_theme', fallback='default')
 EXTENSION = CONFIG.get('DEFAULT', 'extension', fallback=None)
 

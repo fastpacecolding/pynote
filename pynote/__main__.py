@@ -1,9 +1,12 @@
 from pathlib import Path
 import click
+from click import echo
+from click import echo_via_pager
 import pynote
 from pynote import config
-from pynote import helper
 from pynote import crypt
+from pynote.formatting import echo_error
+from pynote.formatting import highlight
 from pynote.container import Note
 from pynote.container import load_notes
 from pynote.container import get_note
@@ -57,7 +60,7 @@ def list(ctx):
             header = ['ID', 'Title', 'Updated']
             notes.append([i, note.title, note.format_updated()])
 
-    click.echo(Table(notes, headline=header))
+    echo(Table(notes, headline=header))
 
 
 @cli.command()
@@ -78,9 +81,9 @@ def show(ctx, key, no_header):
         and not ctx.no_pager
     )
     if condition:
-        click.echo_via_pager(output)
+        echo_via_pager(output)
     else:
-        click.echo(output)
+        echo(output)
 
 
 @cli.command()
@@ -110,9 +113,9 @@ def all(ctx, no_header):
         and not ctx.no_pager
     )
     if condition:
-        click.echo_via_pager(output)
+        echo_via_pager(output)
     else:
-        click.echo(output)
+        echo(output)
 
 
 # Maybe obsolete in click 3.0: http://click.pocoo.org/changelog/#version-3-0
@@ -124,10 +127,10 @@ def all(ctx, no_header):
 def highlight(ctx, key, lang, no_header):
     """Show a specific note with synthax highlighting."""
     note = get_note(ctx.data, key)
-    output = _highlight(note.content.decode(), lang)
+    output = highlight(note.content.decode(), lang)
     if no_header is False:
         output = note.get_header() + '\n\n' + output
-    click.echo(output)
+    echo(output)
 
 
 @cli.command()
@@ -155,7 +158,7 @@ def new(title):
     try:
         note = Note.create(title)
     except FileExistsError:
-        print('Error: This note already exists!')
+        echo_error('Error: This note already exists!', fg='red')
         exit(1)
     click.edit(editor=config.EDITOR, filename=str(note.path))
 
@@ -186,41 +189,6 @@ def decrypt(ctx, key, password):
     aes_key = crypt.password_digest(password)
     ciphertext = crypt.encrypt(note.content, aes_key)
     print(ciphertext)
-
-
-def _highlight(data, lang):
-    """A helper function for highlighting data with pygments."""
-    try:
-        from pygments import highlight
-        from pygments.util import ClassNotFound
-        from pygments.styles import get_all_styles
-        from pygments.lexers import get_lexer_by_name
-        from pygments.formatters import Terminal256Formatter
-    except ImportError:
-        click.secho('Error: Pygments is missing', fg='red')
-        click.echo('Syntax highlighting is provided by pygments.')
-        click.echo('Please install pygments (http://pygments.org)!')
-        exit(1)
-
-    try:
-        lexer = get_lexer_by_name(lang)
-    except ClassNotFound:
-        click.secho('Error: Lexer not found!', fg='red')
-        exit(1)
-
-    try:
-        formatter = Terminal256Formatter(style=config.PYGMENTS_THEME)
-    except ClassNotFound:
-        styles = get_all_styles()
-        error_msg = 'Error: Pygments theme {} not found!'.format(config.PYGMENTS_THEME)
-        click.secho(error_msg, fg='red')
-        click.echo("Please correct pygments_theme in your '~/.noterc'!")
-        click.echo('Supported themes are:')
-        click.echo()
-        click.echo('\n'.join(styles))
-        exit(1)
-
-    return highlight(data, lexer, formatter)
 
 
 if __name__ == '__main__':

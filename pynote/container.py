@@ -1,4 +1,5 @@
 import os.path
+import click
 from pathlib import Path
 from datetime import datetime
 from babel.dates import format_timedelta
@@ -16,7 +17,7 @@ def get_note(data, key):
     try:
         note = data[key]
     except IndexError:
-        print('Error: This note does not exist!')
+        click.secho('Error: This note does not exist!', fg='red')
         exit(1)
     return note
 
@@ -63,9 +64,11 @@ class Note:
         else:
             return cls(path)
 
-    def get_header(self):
-        return '{} @ {}, {} ago'.format(self.title, self.format_updated(),
-                                        self.format_age())
+    def get_header(self, styled=config.COLORS):
+        header = '{} @ {}, {} ago'.format(self.title, self.format_updated(),
+                                          self.format_age())
+        header = click.style(header, bold=True) if styled else header
+        return header
 
     def format_age(self):
         return format_timedelta(self.age, locale=config.LOCALE)
