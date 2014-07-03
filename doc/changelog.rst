@@ -31,7 +31,7 @@ pynote 1.0 (XXXX-XX-XX)
 
 * Converted pygments to an optional dependency.
 * ``--no-header`` now is a global option.
-* Color support! Activate this in your configfile.
+* **New configuration option**: color, see :doc:`configuration`.
 * **Big data storage refactoring!**
   JSON files are not used for storing data any more. Simple plain
   text files do the job much better.
