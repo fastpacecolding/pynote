@@ -15,7 +15,8 @@ def get_note(data, key):
 
 
 def highlight(data, lang):
-    from pynote import config  # avoid circular importing
+    # Avoid circular importing.
+    from pynote import config
 
     try:
         lexer = lexers.get_lexer_by_name(lang)
