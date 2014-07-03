@@ -1,18 +1,24 @@
 import os.path
 from pathlib import Path
 from datetime import datetime
-
 from babel.dates import format_timedelta
 from babel.dates import format_datetime
-
 from pynote import config
 
 
-def load_notes():
-    path = Path(config.DATA)
+def load_notes(path=Path(config.DATA)):
     data = [Note(f) for f in path.iterdir()
             if f.is_file() and f.suffix not in config.IGNORE_EXTENSIONS]
     return sorted(data, key=lambda n: n.age)
+
+
+def get_note(data, key):
+    try:
+        note = data[key]
+    except IndexError:
+        print('Error: This note does not exist!')
+        exit(1)
+    return note
 
 
 class Note:

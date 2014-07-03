@@ -6,6 +6,7 @@ from pynote import helper
 from pynote import crypt
 from pynote.container import Note
 from pynote.container import load_notes
+from pynote.container import get_note
 from plaintable import Table
 
 
@@ -65,7 +66,7 @@ def list(ctx):
 @pass_ctx
 def show(ctx, key, no_header):
     """Show a specific note."""
-    note = helper.get_note(ctx.data, key)
+    note = get_note(ctx.data, key)
 
     if no_header:
         output = note.content.decode()
@@ -122,8 +123,8 @@ def all(ctx, no_header):
 @pass_ctx
 def highlight(ctx, key, lang, no_header):
     """Show a specific note with synthax highlighting."""
-    note = helper.get_note(ctx.data, key)
-    output = helper.highlight(note.content.decode(), lang)
+    note = get_note(ctx.data, key)
+    output = _highlight(note.content.decode(), lang)
     if no_header is False:
         output = note.get_header() + '\n\n' + output
     click.echo(output)
@@ -135,7 +136,7 @@ def highlight(ctx, key, lang, no_header):
 @pass_ctx
 def edit(ctx, key, title):
     """Edit a specific note."""
-    note = helper.get_note(ctx.data, key)
+    note = get_note(ctx.data, key)
     if title:
         new_title = click.edit(note.title, editor=config.EDITOR)
         new_title = new_title.strip()
@@ -164,7 +165,7 @@ def new(title):
 @click.password_option()
 @pass_ctx
 def encrypt(ctx, key, password):
-    note = helper.get_note(ctx.data, key)
+    note = get_note(ctx.data, key)
 
     aes_key = crypt.password_digest(password)
     ciphertext = crypt.encrypt(note.content, aes_key)
@@ -180,11 +181,46 @@ def encrypt(ctx, key, password):
 @click.password_option()
 @pass_ctx
 def decrypt(ctx, key, password):
-    note = helper.get_note(ctx.data, key)
+    note = get_note(ctx.data, key)
 
     aes_key = crypt.password_digest(password)
     ciphertext = crypt.encrypt(note.content, aes_key)
     print(ciphertext)
+
+
+def _highlight(data, lang):
+    """A helper function for highlighting data with pygments."""
+    try:
+        from pygments import highlight
+        from pygments.util import ClassNotFound
+        from pygments.styles import get_all_styles
+        from pygments.lexers import get_lexer_by_name
+        from pygments.formatters import Terminal256Formatter
+    except ImportError:
+        click.secho('Error: Pygments is missing', fg='red')
+        click.echo('Syntax highlighting is provided by pygments.')
+        click.echo('Please install pygments (http://pygments.org)!')
+        exit(1)
+
+    try:
+        lexer = get_lexer_by_name(lang)
+    except ClassNotFound:
+        click.secho('Error: Lexer not found!', fg='red')
+        exit(1)
+
+    try:
+        formatter = Terminal256Formatter(style=config.PYGMENTS_THEME)
+    except ClassNotFound:
+        styles = get_all_styles()
+        error_msg = 'Error: Pygments theme {} not found!'.format(config.PYGMENTS_THEME)
+        click.secho(error_msg, fg='red')
+        click.echo("Please correct pygments_theme in your '~/.noterc'!")
+        click.echo('Supported themes are:')
+        click.echo()
+        click.echo('\n'.join(styles))
+        exit(1)
+
+    return highlight(data, lexer, formatter)
 
 
 if __name__ == '__main__':
