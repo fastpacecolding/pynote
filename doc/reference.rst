@@ -5,6 +5,23 @@ Reference Guide
     Every command is to be used like ``$ note cmd``, e.g. ``$ note list``.
     Every command supports the ``-h, --help`` option.
 
+.. todo::
+    This page has to be cleaned up for pynote 1.0
+
+
+note
+----
+
+This is the root command of pynote. It supports a few options as well.
+
+.. cmdoption:: --no-pager
+
+    Supress paging.
+
+.. cmdoption:: --no-header
+
+    Supress the header.
+
 
 list
 ----
@@ -44,15 +61,6 @@ to pass the numeric id of the note to show, e.g. ``$ note show 0``::
     Surgical Spam, splendiferous Spam.
     Spam, Spam, Spam, Spaaam!
 
-
-.. cmdoption:: -n, --no-header
-
-    Supresses the header.
-
-.. cmdoption:: -a, --all
-
-    Print out every active note. Supressing the header is supported
-    as well. Passing a numeric id is not mandatory.
 
 .. cmdoption:: -l LANG, --lang LANG
 

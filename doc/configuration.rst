@@ -24,6 +24,14 @@ data
 
     **Default**: ``~/.note``
 
+colors
+    Activate colorized output. Pynote automatically detects whether the output
+    supports colors. If you redirect pynote's output into a file ANSI color
+    codes will be stripped. You may have to add ``export PAGER=less -R`` to
+    your .bashrc or .zshrc for color support in the pager.
+
+    **Default**: no
+
 dateformat
     Set the default dateformat for all dates shown in pynote.
     It must be a string like e.g. ``YYYY-MM-dd HH:mm``, see

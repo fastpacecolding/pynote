@@ -29,11 +29,14 @@ pynote 1.0 (XXXX-XX-XX)
     entry is obsolte and refer to my old redmine tracker.
 
 
+* Converted pygments to an optional dependency.
+* ``--no-header`` now is a global option.
+* Color support! Activate this in your configfile.
 * **Big data storage refactoring!**
   JSON files are not used for storing data any more. Simple plain
   text files do the job much better.
   I have created a Gist_ on Github to migrate your data to the
-  new format. Please refer to the :doc:`cookbook` for migrating.
+  new format. Please refer to the :doc:`faq` for migrating.
 * Pynote now accepts command abbreviations such as ``note l`` for
   ``note list``. This mechanism is handled by click_ and works for every
   command so long as the short command is unique.

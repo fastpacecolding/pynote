@@ -1,9 +1,9 @@
-Cookbook
-========
+Frequently Asked Questions
+==========================
 
 
-How to change the extension of my notes?
-----------------------------------------
+How can I change the extension of my notes?
+-------------------------------------------
 
 In pynote 1.0 there is a new configuration option called ``extension``. Every
 new note will get this extension. This might be useful for setting the correct
