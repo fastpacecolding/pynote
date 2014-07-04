@@ -14,7 +14,10 @@ def load_notes(path=Path(config.DATA)):
                 if f.is_file() and f.suffix not in config.IGNORE_EXTENSIONS]
         return sorted(data, key=lambda n: n.age)
     else:
-        raise FileNotFoundError('Data directory does not exist!')
+        echo_error('Your data directory does not exist!')
+        click.echo('Please create a data directory.')
+        click.echo('You can do this with "mkdir {}".'.format(config.DATA))
+        exit(1)
 
 
 def get_note(data, key):

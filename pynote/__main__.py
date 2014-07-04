@@ -43,13 +43,7 @@ class AliasedGroup(click.Group):
 @click.option('--no-header', is_flag=True, help="Supress header.")
 @pass_ctx
 def cli(ctx, no_pager, no_header):
-    try:
-        ctx.data = load_notes()
-    except FileNotFoundError:
-        echo_error('Your data directory does not exist!')
-        click.echo('Please create a data directory.')
-        click.echo('You can do this with "mkdir {}".'.format(config.DATA))
-        exit(1)
+    ctx.data = load_notes()
     ctx.no_pager = no_pager
     ctx.no_header = no_header
 
