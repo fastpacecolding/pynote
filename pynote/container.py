@@ -9,9 +9,12 @@ from pynote.formatting import echo_error
 
 
 def load_notes(path=Path(config.DATA)):
-    data = [Note(f) for f in path.iterdir()
-            if f.is_file() and f.suffix not in config.IGNORE_EXTENSIONS]
-    return sorted(data, key=lambda n: n.age)
+    if path.exists():
+        data = [Note(f) for f in path.iterdir()
+                if f.is_file() and f.suffix not in config.IGNORE_EXTENSIONS]
+        return sorted(data, key=lambda n: n.age)
+    else:
+        raise FileNotFoundError('Data directory does not exist!')
 
 
 def get_note(data, key):
