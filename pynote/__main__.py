@@ -74,6 +74,9 @@ def show(ctx, key, lang):
     note = get_note(ctx.data, key)
     if lang and config.COLORS:
         content = highlight_(note.content.decode(), lang)
+    elif lang and config.COLORS is False:
+        echo_error('Color support is not enabled!')
+        exit(1)
     else:
         content = note.content.decode()
 
