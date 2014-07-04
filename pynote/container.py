@@ -5,6 +5,7 @@ from datetime import datetime
 from babel.dates import format_timedelta
 from babel.dates import format_datetime
 from pynote import config
+from pynote.formatting import echo_error
 
 
 def load_notes(path=Path(config.DATA)):
@@ -17,7 +18,7 @@ def get_note(data, key):
     try:
         note = data[key]
     except IndexError:
-        click.secho('Error: This note does not exist!', fg='red')
+        echo_error('This note does not exist!')
         exit(1)
     return note
 

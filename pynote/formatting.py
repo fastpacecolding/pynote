@@ -38,7 +38,7 @@ def highlight_(data, lang):
         from pygments.lexers import get_lexer_by_name
         from pygments.formatters import Terminal256Formatter
     except ImportError:
-        click.secho('Pygments is missing', fg='red')
+        echo_error('Pygments is missing')
         click.echo('Syntax highlighting is provided by pygments.')
         click.echo('Please install pygments (http://pygments.org)!')
         exit(1)
@@ -46,7 +46,7 @@ def highlight_(data, lang):
     try:
         lexer = get_lexer_by_name(lang)
     except ClassNotFound:
-        secho('Lexer not found!', fg='red')
+        echo_error('Lexer not found!')
         exit(1)
 
     try:
@@ -54,7 +54,7 @@ def highlight_(data, lang):
     except ClassNotFound:
         styles = get_all_styles()
         error_msg = 'Pygments theme {} not found!'.format(config.PYGMENTS_THEME)
-        secho(error_msg, fg='red')
+        echo_error(error_msg)
         click.echo("Please correct pygments_theme in your '~/.noterc'!")
         click.echo('Supported themes are:')
         click.echo()
