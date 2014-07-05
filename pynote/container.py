@@ -21,12 +21,12 @@ def load_notes(path=Path(config.DATA)):
 
 
 def get_note(data, key):
-    try:
+    if key < len(data):
         note = data[key]
-    except IndexError:
+        return note
+    else:
         echo_error('This note does not exist!')
         exit(1)
-    return note
 
 
 class Note:
