@@ -5,7 +5,7 @@ Reference Guide
     Every command is to be used like ``$ note cmd``, e.g. ``$ note list``.
     Every command supports the ``-h, --help`` option.
 
-.. todo::
+.. note::
     This page has to be cleaned up for pynote 1.0
 
 

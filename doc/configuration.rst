@@ -4,25 +4,25 @@ Noterc
 Synopsis
 --------
 
-Pynote is configured with a local ressource file in your home directory
-(``~/.noterc``) and a global one in ``/etc/noterc``. The local ressource file
-overwrites the global one. Their synthax is quite easy. It is formatted as a
-line-separated list of ``KEY=VALUE`` pairs, blank lines, and lines starting
-with ``#``, are ignored.  Please ensure you have a ``[DEFAULT]`` section on top
-of your file. The whole documatation of the synthax is located here:
+Pynote is configured with a local ressource file and a global one. The local
+ressource file can be used to overwrite values from the global one. Pynote
+supports the XDG Base Directory Specification. If the environment variable
+``XDG_CONFIG_HOME`` is set pynote searches the local config file in
+``$XDG_CONFIG_HOME/note/noterc``. If the variable is unset pynote looks into
+``$HOME/.config/note/noterc`` otherwise the local config file defaults to
+``~/.noterc``.
+
+Each file is formatted as a line-separated list of ``KEY=VALUE`` pairs, blank
+lines, and lines starting with ``#``, are ignored. Pynote's configuration is
+devided into several sections. A section starts with the section name in square
+brackets, e.g. ``[ui]``. If you want to learn more about python's configparser
+check out the official docs here:
 http://docs.python.org/3.4/library/configparser.html#quick-start
 
 
 
-Settings
---------
-
-data
-    Specifies the place where your stored notes live. ``~`` is to be
-    expanded to your homedir. You can set this location e.g. to your
-    Dropbox directory to ensure automatic syncing of your notes.
-
-    **Default**: ``~/.note``
+User Interface Section
+----------------------
 
 colors
     Activate colorized output. Pynote automatically detects whether the output
@@ -52,21 +52,6 @@ reldates
 
     **Default**: no
 
-extension
-    Specifiy a extension which should be added to the filename of each note.
-    This might be useful for using markup languages (such as rst, asciidoc,
-    markdown...) and synthax highlighting in your editor. You have to include
-    the dot.
-
-    **Default**: None
-
-ignore_extension
-    Ignore files in the notes folder with a specific extension, e.g. '.pdf'.
-    It may be useful if you store other files, such as pdfs, in your
-    notes directory. This configuration value must be a valid JSON string.
-
-    **Default**: ``[]``
-
 editor
     The command line editor which is used to create and edit notes.
     You can pass additional arguments to the editor as well, e.g.
@@ -82,22 +67,50 @@ pygments_theme
     **Default**: default
 
 
+Data section
+------------
+
+path
+    Specifies the place where your stored notes live. ``~`` is expanded to your
+    homedir. You can set this location e.g. to your Dropbox directory to ensure
+    automatic syncing of your notes. This value defaults to ``~/.note``. If you
+    want to use the XDG Base Directory Specification you can just create the
+    directory ``~/.local/share/note`` or set the environment variable
+    XDG_DATA_HOME.
+
+    **Default**: ``$XDG_DATA_HOME/note``, ``~/.local/share/note``, ``~/.note``
+
+extension
+    Specifiy a extension which should be added to the filename of each note.
+    This might be useful for using markup languages (such as rst, asciidoc,
+    markdown...) and synthax highlighting in your editor. You have to include
+    the dot.
+
+    **Default**: None
+
+ignore_extension
+    Ignore files in the notes folder with a specific extension, e.g. '.pdf'.
+    It may be useful if you store other files, such as pdfs, in your
+    notes directory. This configuration value must be a valid JSON string.
+
+    **Default**: ``[]``
+
+
 Example Noterc File
 -------------------
 
 ::
 
-    [DEFAULT]
-    data = ~/Dropbox/.note/
+    [ui]
     editor = vim
     pygments_theme = monokai
-
     # Dateformat settings
     dateformat = medium
     reldates = yes
     locale = de_DE
 
-    # File extension settings
+    [data]
+    path = ~/Dropbox/.note/
     extension = .rst
     ignore_extensions = [".pdf", ".odt"]
 
