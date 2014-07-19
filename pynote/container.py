@@ -12,7 +12,8 @@ from pynote.formatting import echo_error
 def load_notes(path=Path(config.data)):
     if path.exists():
         data = [Note(f) for f in path.iterdir()
-                if f.is_file() and f.suffix not in config.ignore_extensions]
+                if f.is_file() and (f.suffix not in config.ignore_extensions
+                    and f.name != 'tags.json')]
         return sorted(data, key=lambda n: n.age)
     else:
         echo_error('Your data directory does not exist!')
