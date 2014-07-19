@@ -83,7 +83,7 @@ def show(ctx, key, lang):
     if ctx.no_header:
         output = content
     else:
-        output = note.get_header() + '\n\n' + content
+        output = note.format_header() + '\n\n' + content
 
     echo(output, ctx.no_pager)
 
@@ -108,7 +108,7 @@ def all(ctx):
             if ctx.no_header:
                 output += note.content.decode()
             else:
-                output += note.get_header()
+                output += note.format_header()
                 output += '\n\n'
                 output += note.content.decode()
 
