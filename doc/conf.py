@@ -240,7 +240,7 @@ man_pages = [
         'note',
         'manage notes on the commandline',
         'Stefan Tatschner <stefan@sevenbyte.org>',
-        7,
+        1,
     ),
 ]
 
