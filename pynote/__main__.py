@@ -118,9 +118,10 @@ def all(ctx):
 
 @cli.command()
 @click.argument('key', type=int)
-@click.option('-t', '--title', is_flag=True)
+@click.option('--title', is_flag=True)
+@click.option('--tags', is_flag=True)
 @pass_ctx
-def edit(ctx, key, title):
+def edit(ctx, key, title, tags):
     """Edit a specific note."""
     note = get_note(ctx.data, key)
     if title:
@@ -134,6 +135,13 @@ def edit(ctx, key, title):
         note.path.rename(new_path)
         note.path = new_path
         note.path.touch()  # Update mtime
+    elif tags:
+        new_tags = click.edit('\n'.join(note.tags), editor=config.editor)
+        if new_tags:
+            new_tags = new_tags.strip().splitlines()
+            note.tags = new_tags
+        else:
+            echo_hint('No changes detected')
     else:
         new_content = click.edit(note.content.decode(), editor=config.editor,
                                  extension=config.extension)

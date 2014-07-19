@@ -93,6 +93,9 @@ class Note:
             tags = []
         tags[self.title] = value
 
+        with self.tagfile.open('w') as f:
+            json.dump(tags, f, indent=4)
+
     @classmethod
     def create(cls, title, encrypted=False):
         if config.extension and encrypted:
