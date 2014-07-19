@@ -228,11 +228,24 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('configuration', 'noterc', 'runtime configuration for pynote', '', 5)
+    (
+        'configuration',
+        'noterc',
+        'runtime configuration for pynote',
+        'Stefan Tatschner <stefan@sevenbyte.org>',
+        5,
+    ),
+    (
+        'reference',
+        'note',
+        'manage notes on the commandline',
+        'Stefan Tatschner <stefan@sevenbyte.org>',
+        7,
+    ),
 ]
 
 # If true, show URL addresses after external links.
-#man_show_urls = False
+man_show_urls = True
 
 
 # -- Options for Texinfo output -------------------------------------------

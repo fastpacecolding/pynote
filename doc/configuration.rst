@@ -16,8 +16,9 @@ Each file is formatted as a line-separated list of ``KEY=VALUE`` pairs, blank
 lines, and lines starting with ``#``, are ignored. Pynote's configuration is
 devided into several sections. A section starts with the section name in square
 brackets, e.g. ``[ui]``. If you want to learn more about python's configparser
-check out the official docs here:
-http://docs.python.org/3.4/library/configparser.html#quick-start
+check out the `official docs`_.
+
+.. _`official docs`: http://docs.python.org/3.4/library/configparser.html#quick-start
 
 
 
@@ -34,8 +35,7 @@ colors
 
 dateformat
     Set the default dateformat for all dates shown in pynote.
-    It must be a string like e.g. ``YYYY-MM-dd HH:mm``, see
-    http://babel.pocoo.org/docs/dates/#date-fields.
+    It must be a string like e.g. ``YYYY-MM-dd HH:mm``, see `babel docs`_.
     The values "full", "long", "medium", or "short" are allowed as well,
     but you may have to set *locale*.
 
@@ -61,10 +61,12 @@ editor
 
 pygments_theme
     Choose the pygments theme for synthax highlighting things. You'll find
-    instructions to get all supported values on the pygments webpage here:
-    http://pygments.org/docs/styles/#getting-a-list-of-available-styles
+    instructions to get all supported values on the `pygments webpage`_.
 
     **Default**: default
+
+.. _`babel docs`: http://babel.pocoo.org/docs/dates/#date-fields
+.. _`pygments webpage`: http://pygments.org/docs/styles/#getting-a-list-of-available-styles
 
 
 Data section
@@ -113,11 +115,3 @@ Example Noterc File
     path = ~/Dropbox/.note/
     extension = .rst
     ignore_extensions = [".pdf", ".odt"]
-
-
-Bugs
-----
-
-Bugs? You must be kidding; there are no bugs in this software. But if
-this crazy thing happens write an email to stefan@sevenbyte.org or checkout
-the bugtracker on github https://github.com/rumpelsepp/pynote.
