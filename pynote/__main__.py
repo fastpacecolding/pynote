@@ -44,12 +44,18 @@ def cli(ctx, no_pager, no_header):
 
 
 @cli.command()
+@click.option('-t', '--tags', default=None)
 @pass_ctx
-def list(ctx):
+def list(ctx, tags):
     """Print out a table with all notes."""
     notes = []
 
-    for i, note in enumerate(ctx.data):
+    if tags:
+        data = filter_tags(ctx.data, tags)
+    else:
+        data = enumerate(ctx.data)
+
+    for i, note in data:
         if config.reldates:
             header = ['ID', 'Title', 'Age']
             notes.append([i, note.title, note.format_age()])

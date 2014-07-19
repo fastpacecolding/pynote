@@ -30,10 +30,16 @@ def get_note(data, key):
         exit(1)
 
 
-def filter_tags(data, tags):
+def filter_tags(data, tag_str):
+    # Avoid duplicates
+    # http://stackoverflow.com/a/4230131/2587286
+    seen = set()
+    tag_list = tag_str.split()
     for i, note in enumerate(data):
-        if tags in note.tags:
-            yield (i, note)
+        for tag in tag_list:
+            if tag in note.tags and note not in seen:
+                yield (i, note)
+                seen.add(note)
 
 
 class Note:
@@ -72,9 +78,9 @@ class Note:
             if self.title in tags:
                 return tags[self.title]
             else:
-                return None
+                return []
         else:
-            return None
+            return []
 
     @tags.setter
     def tags(self, value):
