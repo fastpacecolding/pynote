@@ -1,7 +1,7 @@
 import os.path
-import click
 from pathlib import Path
 from datetime import datetime
+import click
 from babel.dates import format_timedelta
 from babel.dates import format_datetime
 from pynote import config
