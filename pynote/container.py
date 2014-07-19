@@ -1,4 +1,5 @@
 import os.path
+import json
 from pathlib import Path
 from datetime import datetime
 import click
@@ -37,28 +38,53 @@ def filter_tags(data, tags):
 
 class Note:
 
+    tagfile = Path(config.data) / 'tags.json'
+
     def __init__(self, path):
         self.path = path
         self.title = path.stem
-        self._content = b''
         # If the file is not present create an empty one.
         if not path.exists():
             path.touch()
-        self.is_encrypted = self._check_encrypted()
         self.updated = self._getmtime()
         self.age = self._calc_age()
+        self.is_encrypted = self._check_encrypted()
 
     def __repr__(self):
         return "{}('{}')".format(self.__class__.__name__, self.path)
 
     @property
     def content(self):
-        return self._read_content()
+        with self.path.open('br') as f:
+            return f.read()
 
     @content.setter
     def content(self, value):
-        self._content = value
-        self._write_content()
+        with self.path.open('bw') as f:
+            return f.write(value)
+
+    @property
+    def tags(self):
+        self.tagfile = Path(config.data) / 'tags.json'
+        if self.tagfile.exists():
+            with self.tagfile.open() as f:
+                tags = json.load(f)
+            if self.title in tags:
+                return tags[self.title]
+            else:
+                return None
+        else:
+            return None
+
+    @tags.setter
+    def tags(self, value):
+        if self.tagfile.exists():
+            with self.tagfile.open() as f:
+                tags = json.load(f)
+        else:
+            self.tagfile.touch()
+            tags = []
+        tags[self.title] = value
 
     @classmethod
     def create(cls, title, encrypted=False):
@@ -77,10 +103,13 @@ class Note:
         else:
             return cls(path)
 
-    def get_header(self, styled=config.colors):
+    def format_header(self, colors=config.colors):
         header = '{} @ {}, {} ago'.format(self.title, self.format_updated(),
                                           self.format_age())
-        header = click.style(header, bold=True) if styled else header
+        header = click.style(header, bold=True) if colors else header
+        if self.tags:
+            header += '\n'
+            header += ' / '.join(self.tags)
         return header
 
     def format_age(self):
@@ -106,11 +135,3 @@ class Note:
 
     def _calc_age(self):
         return datetime.now() - self.updated
-
-    def _read_content(self):
-        with self.path.open('br') as f:
-            return f.read()
-
-    def _write_content(self):
-        with self.path.open('bw') as f:
-            return f.write(self._content)
