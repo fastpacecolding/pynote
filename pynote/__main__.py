@@ -34,8 +34,8 @@ class AliasedGroup(click.Group):
 
 @click.command(cls=AliasedGroup)
 @click.version_option(version=pynote.__version__, prog_name='pynote')
-@click.option('--no-pager', is_flag=True, help="Supress paging long output.")
-@click.option('--no-header', is_flag=True, help="Supress header.")
+@click.option('--no-pager', is_flag=True, help='Supress paging long output.')
+@click.option('--no-header', is_flag=True, help='Supress header.')
 @pass_ctx
 def cli(ctx, no_pager, no_header):
     ctx.data = load_notes()
@@ -44,9 +44,10 @@ def cli(ctx, no_pager, no_header):
 
 
 @cli.command()
-@click.option('-t', '--tags', default=None)
+@click.option('-t', '--tags', default=None, help='Filter appropriate tags.')
+@click.option('-e', '--extended', is_flag=True, help='Add a tags column.')
 @pass_ctx
-def list(ctx, tags):
+def list(ctx, tags, extended):
     """Print out a table with all notes."""
     notes = []
 
@@ -57,11 +58,19 @@ def list(ctx, tags):
 
     for i, note in data:
         if config.reldates:
-            header = ['ID', 'Title', 'Age']
-            notes.append([i, note.title, note.format_age()])
+            if extended:
+                header = ['ID', 'Title', 'Age', 'Tags']
+                notes.append([i, note.title, note.format_age(), ', '.join(note.tags)])
+            else:
+                header = ['ID', 'Title', 'Age']
+                notes.append([i, note.title, note.format_age()])
         else:
-            header = ['ID', 'Title', 'Updated']
-            notes.append([i, note.title, note.format_updated()])
+            if extended:
+                header = ['ID', 'Title', 'Updated', 'Tags']
+                notes.append([i, note.title, note.format_age(), ', '.join(note.tags)])
+            else:
+                header = ['ID', 'Title', 'Updated']
+                notes.append([i, note.title, note.format_updated()])
 
     echo(str(Table(notes, headline=header)))
 
@@ -118,8 +127,8 @@ def all(ctx):
 
 @cli.command()
 @click.argument('key', type=int)
-@click.option('--title', is_flag=True)
-@click.option('--tags', is_flag=True)
+@click.option('--title', is_flag=True, help='Edit the title instead.')
+@click.option('--tags', is_flag=True, help='Edit assigned tags instead.')
 @pass_ctx
 def edit(ctx, key, title, tags):
     """Edit a specific note."""
