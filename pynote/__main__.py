@@ -1,16 +1,11 @@
 from pathlib import Path
 import click
+from plaintable import Table
 import pynote
 from pynote import config
 from pynote import crypt
-from pynote.formatting import echo
-from pynote.formatting import echo_hint
-from pynote.formatting import echo_error
-from pynote.formatting import highlight_
-from pynote.container import Note
-from pynote.container import load_notes
-from pynote.container import get_note
-from plaintable import Table
+from pynote.formatting import echo, echo_hint, echo_error, highlight_
+from pynote.container import Note, load_notes, get_note, filter_tags
 
 
 class Context:
