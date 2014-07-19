@@ -29,6 +29,12 @@ def get_note(data, key):
         exit(1)
 
 
+def filter_tags(data, tags):
+    for i, note in enumerate(data):
+        if tags in note.tags:
+            yield (i, note)
+
+
 class Note:
 
     def __init__(self, path):
