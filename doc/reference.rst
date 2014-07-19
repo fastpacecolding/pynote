@@ -26,26 +26,28 @@ This is the root command of pynote. It supports a few options as well.
 list
 ----
 
-::
-
-    note list [-h]
-
 This prints out a table with all stores notes. This is the default
 command if you pass nothing to ``$ note``. The columns are sorted by
 the updated time::
 
     $ note list
-    ID  Title   Updated
+    ID  Title   Age
     --  ------  ---------
     0   spam    3 seconds
 
 
+.. cmdoption:: --tags TAGS
+
+    Filter appropriate tags. You can pass several tags just like this: ``note
+    list --tags "tag1 tag2"``
+
+.. cmdoption:: -e, --extended
+
+    Add a tags column to the table.
+
+
 show
 ----
-
-::
-
-    note show [-h] [-a] [-n] [-l LANG] [key]
 
 Shows a specific note including a header with some metadata. You have
 to pass the numeric id of the note to show, e.g. ``$ note show 0``::
@@ -72,45 +74,33 @@ to pass the numeric id of the note to show, e.g. ``$ note show 0``::
 new
 ---
 
-::
-
-    note new [-h] title
-
 Your editor (e.g. nano) opens and you can type in your content.
 
 
 edit
 ----
 
-::
-
-    usage: note edit [-h] [-t] key
-
-Your editor opens with the content of the note. After saving your
-modifications the revision number is incremented.
+Your editor opens with the content of the note. After saving the note will
+be updated. You choose between editing the content, title and tags.
 
 
-.. cmdoption:: -t, --title`
+.. cmdoption:: --title
 
     Edit the title instead of the content.
+
+.. cmdoption:: --tags
+
+    Edit attached tags. Every line in the editor indicates one tag.
 
 
 delete
 ------
-
-::
-
-    note delete [-h] key
 
 Move a note to trash.
 
 
 trash
 -----
-
-::
-
-    note trash [-h]
 
 Prints out all delete notes in a table::
 
@@ -126,20 +116,12 @@ Prints out all delete notes in a table::
 restore
 -------
 
-::
-
-    note restore [-h] key
-
 Restore a delete note from trash. You have to use the numeric id
 from ``$ note trash``.
 
 
 revisions
 ---------
-
-::
-
-    note revisions [-h] key
 
 Shows all available revisions of a note as a table::
 
@@ -156,10 +138,6 @@ Shows all available revisions of a note as a table::
 
 compare
 -------
-
-::
-
-    note compare [-h] [-c] new_rev old_rev
 
 Create a unified diff of two notes. Pass the numeric id of a note
 and the two revision numbers which you want to compare. This command
@@ -186,10 +164,6 @@ supports colors::
 
 tags
 ----
-
-::
-
-    note tags [-h] [-a ADD [ADD ...] | -d DELETE [DELETE ...]] [key]
 
 View, delete or add tags. This command is quite new and maybe some features
 are missing. A tag is just an arbitrary string. A note can contain multiple
