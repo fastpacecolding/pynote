@@ -13,7 +13,7 @@ def echo(text, no_pager=False):
 def echo_error(text):
     """Add 'Error: ' prefix and colorize output."""
     msg = 'Error: ' + text
-    if config.COLORS:
+    if config.colors:
         click.secho(msg, fg='red')
     else:
         click.echo(msg)
@@ -22,7 +22,7 @@ def echo_error(text):
 def echo_hint(text):
     """Add 'Hint: ' prefix and colorize output."""
     msg = 'Hint: ' + text
-    if config.COLORS:
+    if config.colors:
         click.secho(msg, fg='yellow')
     else:
         click.echo(msg)
@@ -50,10 +50,10 @@ def highlight_(data, lang):
         exit(1)
 
     try:
-        formatter = Terminal256Formatter(style=config.PYGMENTS_THEME)
+        formatter = Terminal256Formatter(style=config.pygments_theme)
     except ClassNotFound:
         styles = get_all_styles()
-        error_msg = 'Pygments theme {} not found!'.format(config.PYGMENTS_THEME)
+        error_msg = 'Pygments theme {} not found!'.format(config.pygments_theme)
         echo_error(error_msg)
         click.echo("Please correct pygments_theme in your '~/.noterc'!")
         click.echo('Supported themes are:')

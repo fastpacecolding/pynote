@@ -55,7 +55,7 @@ def list(ctx):
     notes = []
 
     for i, note in enumerate(ctx.data):
-        if config.RELDATES:
+        if config.reldates:
             header = ['ID', 'Title', 'Age']
             notes.append([i, note.title, note.format_age()])
         else:
@@ -72,9 +72,9 @@ def list(ctx):
 def show(ctx, key, lang):
     """Show a specific note."""
     note = get_note(ctx.data, key)
-    if lang and config.COLORS:
+    if lang and config.colors:
         content = highlight_(note.content.decode(), lang)
-    elif lang and config.COLORS is False:
+    elif lang and config.colors is False:
         echo_error('Color support is not enabled!')
         exit(1)
     else:
@@ -95,7 +95,7 @@ def all(ctx):
     output = ''
     for i, note in enumerate(ctx.data):
         counter = '-- note {} --'.format(i)
-        counter = click.style(counter, bold=True) if config.COLORS else counter
+        counter = click.style(counter, bold=True) if config.colors else counter
 
         output += '\n\n'
         output += counter
@@ -123,7 +123,7 @@ def edit(ctx, key, title):
     """Edit a specific note."""
     note = get_note(ctx.data, key)
     if title:
-        new_title = click.edit(note.title, editor=config.EDITOR)
+        new_title = click.edit(note.title, editor=config.editor)
         if new_title:
             new_title = new_title.strip()
         else:
@@ -134,8 +134,8 @@ def edit(ctx, key, title):
         note.path = new_path
         note.path.touch()  # Update mtime
     else:
-        new_content = click.edit(note.content.decode(), editor=config.EDITOR,
-                                 extension=config.EXTENSION)
+        new_content = click.edit(note.content.decode(), editor=config.editor,
+                                 extension=config.extension)
         if new_content:
             note.content = new_content.encode()
         else:
@@ -151,7 +151,7 @@ def new(title):
     except FileExistsError:
         echo_error('This note already exists!')
         exit(1)
-    content = click.edit(note.content.decode(), editor=config.EDITOR)
+    content = click.edit(note.content.decode(), editor=config.editor)
     note.content = content.encode() if content else ''
 
 

@@ -8,15 +8,15 @@ from pynote import config
 from pynote.formatting import echo_error
 
 
-def load_notes(path=Path(config.DATA)):
+def load_notes(path=Path(config.data)):
     if path.exists():
         data = [Note(f) for f in path.iterdir()
-                if f.is_file() and f.suffix not in config.IGNORE_EXTENSIONS]
+                if f.is_file() and f.suffix not in config.ignore_extensions]
         return sorted(data, key=lambda n: n.age)
     else:
         echo_error('Your data directory does not exist!')
         click.echo('Please create a data directory.')
-        click.echo('You can do this with "mkdir {}".'.format(config.DATA))
+        click.echo('You can do this with "mkdir {}".'.format(config.data))
         exit(1)
 
 
@@ -56,11 +56,11 @@ class Note:
 
     @classmethod
     def create(cls, title, encrypted=False):
-        if config.EXTENSION and encrypted:
-            filename = title + '.crypt' + config.EXTENSION
-        elif config.EXTENSION and encrypted is False:
-            filename = title + config.EXTENSION
-        elif not config.EXTENSION and encrypted:
+        if config.extension and encrypted:
+            filename = title + '.crypt' + config.extension
+        elif config.extension and encrypted is False:
+            filename = title + config.extension
+        elif not config.extension and encrypted:
             filename = title + '.crypt'
         else:
             filename = title
@@ -71,18 +71,18 @@ class Note:
         else:
             return cls(path)
 
-    def get_header(self, styled=config.COLORS):
+    def get_header(self, styled=config.colors):
         header = '{} @ {}, {} ago'.format(self.title, self.format_updated(),
                                           self.format_age())
         header = click.style(header, bold=True) if styled else header
         return header
 
     def format_age(self):
-        return format_timedelta(self.age, locale=config.LOCALE)
+        return format_timedelta(self.age, locale=config.locale)
 
     def format_updated(self):
-        return format_datetime(self.updated, format=config.DATEFORMAT,
-                               locale=config.LOCALE)
+        return format_datetime(self.updated, format=config.dateformat,
+                               locale=config.locale)
 
     def _check_encrypted(self):
         # This is indicated by the first suffix: my-note.crypt.txt

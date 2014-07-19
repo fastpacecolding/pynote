@@ -1,25 +1,53 @@
 import json
+import os
 import os.path
 import configparser
+from pathlib import Path
 
 
-GLOBAL_NOTERC = '/etc/noterc'
-NOTERC = os.path.expanduser('~/.noterc')
-CONFIG = configparser.ConfigParser()
-CONFIG.read(GLOBAL_NOTERC)
-CONFIG.read(NOTERC)
+# Set global and local config paths. Pynote supports XDG Base Directory
+# Specification. If the environment variable XDG_CONFIG_HOME is set choose
+# $XDG_CONFIG_HOME/note/noterc otherwise fall back to $HOME/.config/note/noterc
+# but only if this file exists. If this file is not present always fall back to
+# $HOME/.noterc.
+global_config = Path('/etc/noterc')
+if os.getenv('XDG_CONFIG_HOME'):
+    local_config = Path(os.getenv('XDG_CONFIG_HOME')) / Path('note/noterc')
+elif Path(os.path.expanduser('~/.config/note/noterc')).exists():
+    local_config = Path(os.path.expanduser('~/.config/note/noterc'))
+else:
+    local_config = Path(os.path.expanduser('~/.noterc'))
+
+# Set pynote's data path according to XDG Base Directory Specification. If
+# XDG_DATA_HOME is set choose $XDG_DATA_HOME/note otherwise fall back to
+# $HOME/.local/share/note but only if this directory exists. If it does not
+# exist fall back to $HOME/.note. This value can also be overwritten in the
+# global or local configfile.
+if os.getenv('XDG_DATA_HOME'):
+    data = Path(os.getenv('XDG_DATA_HOME')) / Path('note')
+elif Path(os.path.expanduser('~/.local/share/note')).exists():
+    data = Path(os.path.expanduser('~/.local/share/note'))
+else:
+    data = Path(os.path.expanduser('~/.note'))
 
 
-DATA = CONFIG.get('DEFAULT', 'data', fallback='~/.note')
-DATA = os.path.expanduser(DATA)
+# Initialize config parser object
+# Read global config first, overwrite with local config
+config = configparser.ConfigParser()
+config.read([str(global_config), str(local_config)])
 
-EDITOR = CONFIG.get('DEFAULT', 'editor', fallback=os.getenv('EDITOR', 'nano'))
-DATEFORMAT = CONFIG.get('DEFAULT', 'dateformat', fallback='YYYY-MM-dd HH:mm')
-LOCALE = CONFIG.get('DEFAULT', 'locale', fallback='en_US')
-RELDATES = CONFIG.getboolean('DEFAULT', 'reldates', fallback=False)
-COLORS = CONFIG.getboolean('DEFAULT', 'colors', fallback=False)
-PYGMENTS_THEME = CONFIG.get('DEFAULT', 'pygments_theme', fallback='default')
-EXTENSION = CONFIG.get('DEFAULT', 'extension', fallback='')
 
-IGNORE_EXTENSIONS = CONFIG.get('DEFAULT', 'ignore_extensions', fallback=[])
-IGNORE_EXTENSIONS = json.loads(IGNORE_EXTENSIONS) if IGNORE_EXTENSIONS else []
+# user interface (ui) section
+editor = config.get('ui', 'editor', fallback=os.getenv('EDITOR', 'nano'))
+colors = config.getboolean('ui', 'colors', fallback=False)
+dateformat = config.get('ui', 'dateformat', fallback='YYYY-MM-dd HH:mm')
+reldates = config.getboolean('ui', 'reldates', fallback=False)
+locale = config.get('ui', 'locale', fallback='en_US')
+pygments_theme = config.get('ui', 'pygments_theme', fallback='default')
+
+# data section
+data = config.get('data', 'path')
+data = os.path.expanduser(data)
+extension = config.get('data', 'extension', fallback='')
+ignore_extensions = config.get('data', 'ignore_extensions', fallback=[])
+ignore_extensions = json.loads(ignore_extensions) if ignore_extensions else []
