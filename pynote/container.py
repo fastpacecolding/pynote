@@ -72,7 +72,6 @@ class Note:
 
     @property
     def tags(self):
-        self.tagfile = Path(config.data) / 'tags.json'
         if self.tagfile.exists():
             with self.tagfile.open() as f:
                 tags = json.load(f)
