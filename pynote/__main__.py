@@ -1,3 +1,4 @@
+import textwrap
 from pathlib import Path
 import click
 from plaintable import Table
@@ -78,8 +79,9 @@ def list(ctx, tags, extended):
 @cli.command()
 @click.argument('key', type=int)
 @click.option('-l', '--lang', default=None)
+@click.option('-w', '--wrap-text', is_flag=True, help="Wrap output text at 70 chars.")
 @pass_ctx
-def show(ctx, key, lang):
+def show(ctx, key, lang, wrap_text):
     """Show a specific note."""
     note = get_note(ctx.data, key)
     if lang and config.colors:
@@ -94,6 +96,9 @@ def show(ctx, key, lang):
         output = content
     else:
         output = note.format_header() + '\n\n' + content
+
+    if wrap_text:
+        output = textwrap.fill(output, replace_whitespace=False)
 
     echo(output, ctx.no_pager)
 
