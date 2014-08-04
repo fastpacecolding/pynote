@@ -36,6 +36,11 @@ else:
 config = configparser.ConfigParser()
 config.read([str(global_config), str(local_config)])
 
+# fix #14
+if not 'ui' in config.sections():
+    config.add_section('ui')
+if not 'data' in config.sections():
+    config.add_section('data')
 
 # user interface (ui) section
 editor = config.get('ui', 'editor', fallback=os.getenv('EDITOR', 'nano'))
@@ -46,7 +51,7 @@ locale = config.get('ui', 'locale', fallback='en_US')
 pygments_theme = config.get('ui', 'pygments_theme', fallback='default')
 
 # data section
-data = config.get('data', 'path')
+data = config.get('data', 'path', fallback='~/.note')
 data = os.path.expanduser(data)
 extension = config.get('data', 'extension', fallback='')
 ignore_extensions = config.get('data', 'ignore_extensions', fallback=[])
