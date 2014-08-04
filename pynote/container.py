@@ -106,7 +106,7 @@ class Note:
         else:
             filename = title
 
-        path = Path(os.path.join(config.DATA, filename))
+        path = Path(os.path.join(config.data, filename))
         if path.exists():
             raise FileExistsError('Note already exists!')
         else:
