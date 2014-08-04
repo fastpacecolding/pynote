@@ -150,10 +150,12 @@ def edit(ctx, key, title, tags):
         note.path = new_path
         note.path.touch()  # Update mtime
     elif tags:
-        new_tags = click.edit('\n'.join(note.tags), editor=config.editor)
+        tag_str = '# Put each tag in one line! This line will be ignored.\n'
+        tag_str += '\n'.join(note.tags)
+        new_tags = click.edit(tag_str, editor=config.editor)
         if new_tags:
             new_tags = new_tags.strip().splitlines()
-            note.tags = new_tags
+            note.tags = new_tags[1:]  # strip comment
         else:
             echo_hint('No changes detected')
     else:
