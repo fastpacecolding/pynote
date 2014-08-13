@@ -180,7 +180,7 @@ def new(title):
         echo_error('This note already exists!')
         exit(1)
     content = click.edit(note.content.decode(), editor=config.editor)
-    note.content = content.encode() if content else ''
+    note.content = content.encode() if content else b''
 
 
 @cli.command()
