@@ -50,28 +50,26 @@ def cli(ctx, no_pager, no_header):
 def list(ctx, tags, extended):
     """Print out a table with all notes."""
     notes = []
-
-    if tags:
-        data = filter_tags(ctx.data, tags)
-    else:
-        data = enumerate(ctx.data)
-
+    data = filter_tags(ctx.data, tags) if tags else enumerate(ctx.data)
     for i, note in data:
         if config.reldates:
             if extended:
                 header = ['ID', 'Title', 'Age', 'Tags']
-                notes.append([i, note.title, note.format_age(), ', '.join(note.tags)])
+                notes.append(
+                    [i, note.title, note.format_age(), ', '.join(note.tags)]
+                )
             else:
                 header = ['ID', 'Title', 'Age']
                 notes.append([i, note.title, note.format_age()])
         else:
             if extended:
                 header = ['ID', 'Title', 'Updated', 'Tags']
-                notes.append([i, note.title, note.format_age(), ', '.join(note.tags)])
+                notes.append(
+                    [i, note.title, note.format_age(), ', '.join(note.tags)]
+                )
             else:
                 header = ['ID', 'Title', 'Updated']
                 notes.append([i, note.title, note.format_updated()])
-
     if notes:
         echo(str(Table(notes, headline=header)))
     else:
@@ -144,13 +142,12 @@ def edit(ctx, key, title, tags):
         new_title = click.edit(note.title, editor=config.editor)
         if new_title:
             new_title = new_title.strip()
+            new_path = note.path.parent / Path(new_title)
+            note.path.rename(new_path)
+            note.path = new_path
+            note.path.touch()  # Update mtime
         else:
             echo_hint('No changes detected')
-
-        new_path = note.path.parent / Path(new_title)
-        note.path.rename(new_path)
-        note.path = new_path
-        note.path.touch()  # Update mtime
     elif tags:
         tag_str = '# Put each tag in one line! This line will be ignored.\n'
         tag_str += '\n'.join(note.tags)
