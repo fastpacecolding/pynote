@@ -3,6 +3,7 @@ import json
 from pathlib import Path
 from datetime import datetime
 import click
+from slugify import slugify
 from babel.dates import format_timedelta
 from babel.dates import format_datetime
 from pynote import config
@@ -50,6 +51,7 @@ class Note:
     def __init__(self, path):
         self.path = path
         self.title = path.stem
+        self.slug = slugify(self.title)
         # If the file is not present create an empty one.
         if not path.exists():
             path.touch()

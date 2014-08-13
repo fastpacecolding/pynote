@@ -15,7 +15,7 @@ setup(name='pynote',
       license=pynote.__license__,
       packages=['pynote'],
       scripts=['note'],
-      install_requires=['plaintable', 'babel', 'click', 'pycrypto'],
+      install_requires=['plaintable', 'babel', 'click', 'awesome-slugify'],
       classifiers=[
             'Development Status :: 5 - Production/Stable',
             'Environment :: Console',
