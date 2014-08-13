@@ -1,7 +1,7 @@
 Thanks to
 =========
 
-If you have been left off, please let us know (preferably send a pull 
+If you have been left off, please let us know (preferably send a pull
 request on github with the "fix") and you will be added!
 
 * Philipp Göttlich
@@ -11,3 +11,4 @@ request on github with the "fix") and you will be added!
 * Udo Wendler
 * nsmathew
 * stewie
+* ag4ve

@@ -73,7 +73,10 @@ def list(ctx, tags, extended):
                 header = ['ID', 'Title', 'Updated']
                 notes.append([i, note.title, note.format_updated()])
 
-    echo(str(Table(notes, headline=header)))
+    if notes:
+        echo(str(Table(notes, headline=header)))
+    else:
+        echo_error('No notes exists! Create new ones with "note new TITLE"!')
 
 
 @cli.command()
