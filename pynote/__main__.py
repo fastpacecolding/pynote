@@ -4,7 +4,6 @@ import click
 from plaintable import Table
 import pynote
 from pynote import config
-from pynote import crypt
 from pynote.formatting import echo, echo_hint, echo_error, highlight_
 from pynote.container import Note, load_notes, get_note, filter_tags
 
@@ -181,34 +180,6 @@ def new(title):
         exit(1)
     content = click.edit(note.content.decode(), editor=config.editor)
     note.content = content.encode() if content else b''
-
-
-@cli.command()
-@click.argument('key', type=int)
-@click.password_option()
-@pass_ctx
-def encrypt(ctx, key, password):
-    note = get_note(ctx.data, key)
-
-    aes_key = crypt.password_digest(password)
-    ciphertext = crypt.encrypt(note.content, aes_key)
-    encrypted_note = Note.create(note.title, encrypted=True)
-
-    # TODO: Refacator this out, see container.Note
-    with encrypted_note.path.open('bw') as f:
-        f.write(ciphertext)
-
-
-@cli.command()
-@click.argument('key', type=int)
-@click.password_option()
-@pass_ctx
-def decrypt(ctx, key, password):
-    note = get_note(ctx.data, key)
-
-    aes_key = crypt.password_digest(password)
-    ciphertext = crypt.encrypt(note.content, aes_key)
-    print(ciphertext)
 
 
 if __name__ == '__main__':
