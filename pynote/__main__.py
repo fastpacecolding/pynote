@@ -79,7 +79,8 @@ def list(ctx, tags, extended):
 @cli.command()
 @click.argument('key', type=int)
 @click.option('-l', '--lang', default=None)
-@click.option('-w', '--wrap-text', is_flag=True, help="Wrap output text at 70 chars.")
+@click.option('-w', '--wrap-text', is_flag=True,
+              help="Wrap output text at 70 chars.")
 @pass_ctx
 def show(ctx, key, lang, wrap_text):
     """Show a specific note."""

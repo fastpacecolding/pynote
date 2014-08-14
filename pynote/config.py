@@ -37,9 +37,9 @@ config = configparser.ConfigParser()
 config.read([str(global_config), str(local_config)])
 
 # fix #14
-if not 'ui' in config.sections():
+if 'ui' not in config.sections():
     config.add_section('ui')
-if not 'data' in config.sections():
+if 'data' not in config.sections():
     config.add_section('data')
 
 # user interface (ui) section

@@ -53,8 +53,8 @@ def highlight_(data, lang):
         formatter = Terminal256Formatter(style=config.pygments_theme)
     except ClassNotFound:
         styles = get_all_styles()
-        error_msg = 'Pygments theme {} not found!'.format(config.pygments_theme)
-        echo_error(error_msg)
+        msg = 'Pygments theme {} not found!'.format(config.pygments_theme)
+        echo_error(msg)
         click.echo("Please correct pygments_theme in your '~/.noterc'!")
         click.echo('Supported themes are:')
         click.echo()
