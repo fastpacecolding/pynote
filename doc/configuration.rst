@@ -83,7 +83,7 @@ path
     **Default**: ``$XDG_DATA_HOME/note``, ``~/.local/share/note``, ``~/.note``
 
 extension
-    Specifiy a extension which should be added to the filename of each note.
+    Specifiy an extension which should be added to the filename of each note.
     This might be useful for using markup languages (such as rst, asciidoc,
     markdown...) and synthax highlighting in your editor. You have to include
     the dot.
