@@ -142,11 +142,17 @@ def edit(ctx, key, title, tags):
     if title:
         new_title = click.edit(note.title, editor=config.editor)
         if new_title:
+            # Delete old tags from tagsfile and save them in a variable.
+            tags = note.tags
+            del note.tags
             new_title = new_title.strip()
             new_path = note.path.parent / Path(new_title)
             note.path.rename(new_path)
-            note.path = new_path
-            note.path.touch()  # Update mtime
+            note.update_path(new_path)
+            # Add saved tags to the renamed note.
+            # This ensures correct dictionary keys.
+            note.tags = tags
+            note.path.touch()
         else:
             echo_hint('No changes detected')
     elif tags:

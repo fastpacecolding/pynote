@@ -98,6 +98,15 @@ class Note:
         with self.tagfile.open('w') as f:
             json.dump(tags, f, indent=4)
 
+    @tags.deleter
+    def tags(self):
+        if self.tagfile.exists():
+            with self.tagfile.open('r') as f:
+                tags = json.load(f)
+            del tags[self.title]
+            with self.tagfile.open('w') as f:
+                json.dump(tags, f, indent=4)
+
     @classmethod
     def create(cls, title, encrypted=False):
         if config.extension and encrypted:
@@ -114,6 +123,11 @@ class Note:
             raise FileExistsError('Note already exists!')
         else:
             return cls(path)
+
+    def update_path(self, path):
+        # When self.path is updated the note object needs to
+        # be reinitialized.  So let's wrap the constructor!
+        self.__init__(path)
 
     def format_header(self, colors=config.colors):
         header = '{} @ {}, {} ago'.format(self.title, self.format_updated(),
