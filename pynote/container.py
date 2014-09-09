@@ -2,8 +2,9 @@ import os.path
 import json
 from pathlib import Path
 from datetime import datetime
+import re
+import unicodedata
 import click
-from slugify import slugify
 from babel.dates import format_timedelta
 from babel.dates import format_datetime
 from pynote import config
@@ -51,7 +52,7 @@ class Note:
     def __init__(self, path):
         self.path = path
         self.title = path.stem
-        self.slug = slugify(self.title)
+        self.slug = self._slugify(self.title)
         # If the file is not present create an empty one.
         if not path.exists():
             path.touch()
@@ -146,3 +147,11 @@ class Note:
 
     def _calc_age(self):
         return datetime.now() - self.updated
+
+    @staticmethod
+    def _slugify(value):
+        # stolen from Django: django/utils/text.py
+        value = unicodedata.normalize('NFKD', value)
+        value = value.encode('ascii', 'ignore').decode('ascii')
+        value = re.sub('[^\w\s-]', '', value).strip().lower()
+        return re.sub('[-\s]+', '-', value)
