@@ -12,7 +12,7 @@ from pathlib import Path
 # $HOME/.noterc.
 global_config = Path('/etc/noterc')
 if os.getenv('XDG_CONFIG_HOME'):
-    local_config = Path(os.getenv('XDG_CONFIG_HOME')) / Path('note/noterc')
+    local_config = Path(os.getenv('XDG_CONFIG_HOME')) / 'note/noterc'
 elif Path(os.path.expanduser('~/.config/note/noterc')).exists():
     local_config = Path(os.path.expanduser('~/.config/note/noterc'))
 else:
@@ -24,7 +24,7 @@ else:
 # exist fall back to $HOME/.note. This value can also be overwritten in the
 # global or local configfile.
 if os.getenv('XDG_DATA_HOME'):
-    data_path = Path(os.getenv('XDG_DATA_HOME')) / Path('note')
+    data_path = Path(os.getenv('XDG_DATA_HOME')) / 'note'
 elif Path(os.path.expanduser('~/.local/share/note')).exists():
     data_path = Path(os.path.expanduser('~/.local/share/note'))
 else:
