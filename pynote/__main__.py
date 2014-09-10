@@ -186,5 +186,20 @@ def new(title):
     note.content = content.encode() if content else b''
 
 
+@cli.command()
+@click.argument('key', type=int)
+@pass_ctx
+def delete(ctx, key):
+    """Move a note to trash."""
+    # FIXME: Don't loose tags when deleting a note.
+    note = get_note(ctx.data, key)
+    if not config.trash_path.exists():
+        config.trash_path.mkdir()
+    new_path = config.trash_path / note.title
+    note.path.rename(new_path)
+    note.update_path(new_path)
+    note.path.touch()
+
+
 if __name__ == '__main__':
     cli()
