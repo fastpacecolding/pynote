@@ -45,13 +45,16 @@ def cli(ctx, no_pager, no_header):
 
 
 @cli.command()
+@click.option('--trash', is_flag=True, help='Show trash.')
 @click.option('-t', '--tags', default=None, help='Filter appropriate tags.')
 @click.option('-e', '--extended', is_flag=True, help='Add a tags column.')
 @pass_ctx
-def list(ctx, tags, extended):
+def list(ctx, trash, tags, extended):
     """Print out a table with all notes."""
     notes = []
-    data = filter_tags(ctx.data, tags) if tags else enumerate(ctx.data)
+    # Choose between data and trash depending on --trash.
+    data = enumerate(ctx.data) if not trash else enumerate(ctx.trash)
+    data = filter_tags(ctx.data, tags) if tags else data
     for i, note in data:
         if config.reldates:
             if extended:
