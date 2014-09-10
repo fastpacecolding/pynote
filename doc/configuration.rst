@@ -82,6 +82,12 @@ path
 
     **Default**: ``$XDG_DATA_HOME/note``, ``~/.local/share/note``, ``~/.note``
 
+trash_path
+    Specifies the place where your deleted notes are moved. ``~`` is expanded
+    to your homedir.
+
+    **Default**: ``data_path/.trash``
+
 extension
     Specifiy an extension which should be added to the filename of each note.
     This might be useful for using markup languages (such as rst, asciidoc,

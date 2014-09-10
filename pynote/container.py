@@ -1,6 +1,5 @@
 import os.path
 import json
-from pathlib import Path
 from datetime import datetime
 import re
 import unicodedata
@@ -11,7 +10,7 @@ from pynote import config
 from pynote.formatting import echo_error
 
 
-def load_notes(path=Path(config.data)):
+def load_notes(path=config.data):
     if path.exists():
         data = [Note(f) for f in path.iterdir()
                 if f.is_file() and (f.suffix not in config.ignore_extensions
@@ -47,7 +46,7 @@ def filter_tags(data, tag_str):
 
 class Note:
 
-    tagfile = Path(config.data) / 'tags.json'
+    tagfile = config.data / 'tags.json'
 
     def __init__(self, path):
         self.path = path

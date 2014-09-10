@@ -30,17 +30,29 @@ elif Path(os.path.expanduser('~/.local/share/note')).exists():
 else:
     data = Path(os.path.expanduser('~/.note'))
 
-
 # Initialize config parser object
 # Read global config first, overwrite with local config
 config = configparser.ConfigParser()
 config.read([str(global_config), str(local_config)])
 
 # fix #14
-if 'ui' not in config.sections():
-    config.add_section('ui')
 if 'data' not in config.sections():
     config.add_section('data')
+if 'ui' not in config.sections():
+    config.add_section('ui')
+
+# data section
+# Overwrite data and trash path when it is set in .noterc.
+if 'path' in config['data']:
+    data = config.get('data', 'path')
+    data = Path(os.path.expanduser(data))
+trash_path = data / '.trash'
+if 'trash_path' in config['data']:
+    trash_path = config.get('data', 'trash_path')
+    trash_path = Path(os.path.expanduser(trash_path))
+extension = config.get('data', 'extension', fallback='')
+ignore_extensions = config.get('data', 'ignore_extensions', fallback=[])
+ignore_extensions = json.loads(ignore_extensions) if ignore_extensions else []
 
 # user interface (ui) section
 editor = config.get('ui', 'editor', fallback=os.getenv('EDITOR', 'nano'))
@@ -49,10 +61,3 @@ dateformat = config.get('ui', 'dateformat', fallback='YYYY-MM-dd HH:mm')
 reldates = config.getboolean('ui', 'reldates', fallback=False)
 locale = config.get('ui', 'locale', fallback='en_US')
 pygments_theme = config.get('ui', 'pygments_theme', fallback='default')
-
-# data section
-data = config.get('data', 'path', fallback='~/.note')
-data = os.path.expanduser(data)
-extension = config.get('data', 'extension', fallback='')
-ignore_extensions = config.get('data', 'ignore_extensions', fallback=[])
-ignore_extensions = json.loads(ignore_extensions) if ignore_extensions else []
