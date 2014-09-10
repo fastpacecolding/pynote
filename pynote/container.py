@@ -10,7 +10,7 @@ from pynote import config
 from pynote.formatting import echo_error
 
 
-def load_notes(path=config.data):
+def load_notes(path=config.data_path):
     if path.exists():
         data = [Note(f) for f in path.iterdir()
                 if f.is_file() and (f.suffix not in config.ignore_extensions
@@ -46,7 +46,7 @@ def filter_tags(data, tag_str):
 
 class Note:
 
-    tagfile = config.data / 'tags.json'
+    tagfile = config.data_path / 'tags.json'
 
     def __init__(self, path):
         self.path = path

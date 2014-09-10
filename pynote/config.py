@@ -24,11 +24,11 @@ else:
 # exist fall back to $HOME/.note. This value can also be overwritten in the
 # global or local configfile.
 if os.getenv('XDG_DATA_HOME'):
-    data = Path(os.getenv('XDG_DATA_HOME')) / Path('note')
+    data_path = Path(os.getenv('XDG_DATA_HOME')) / Path('note')
 elif Path(os.path.expanduser('~/.local/share/note')).exists():
-    data = Path(os.path.expanduser('~/.local/share/note'))
+    data_path = Path(os.path.expanduser('~/.local/share/note'))
 else:
-    data = Path(os.path.expanduser('~/.note'))
+    data_path = Path(os.path.expanduser('~/.note'))
 
 # Initialize config parser object
 # Read global config first, overwrite with local config
@@ -43,10 +43,10 @@ if 'ui' not in config.sections():
 
 # data section
 # Overwrite data and trash path when it is set in .noterc.
-if 'path' in config['data']:
-    data = config.get('data', 'path')
-    data = Path(os.path.expanduser(data))
-trash_path = data / '.trash'
+if 'data_path' in config['data']:
+    data_path = config.get('data', 'data_path')
+    data_path = Path(os.path.expanduser(data_path))
+trash_path = data_path / '.trash'
 if 'trash_path' in config['data']:
     trash_path = config.get('data', 'trash_path')
     trash_path = Path(os.path.expanduser(trash_path))

@@ -72,7 +72,7 @@ pygments_theme
 Data section
 ------------
 
-path
+data_path
     Specifies the place where your stored notes live. ``~`` is expanded to your
     homedir. You can set this location e.g. to your Dropbox directory to ensure
     automatic syncing of your notes. This value defaults to ``~/.note``. If you
@@ -118,6 +118,6 @@ Example Noterc File
     locale = de_DE
 
     [data]
-    path = ~/Dropbox/.note/
+    data_path = ~/Dropbox/.note/
     extension = .rst
     ignore_extensions = [".pdf", ".odt"]
