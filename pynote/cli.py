@@ -152,6 +152,7 @@ def edit(ctx, key, title, tags):
             # Add saved tags to the renamed note.
             # This ensures correct dictionary keys.
             note.tags = tags
+            # REVIEW: Can we remove this?
             note.path.touch()
         else:
             echo_hint('No changes detected')
@@ -184,6 +185,7 @@ def new(title):
         exit(1)
     content = click.edit(note.content.decode(), editor=config.editor)
     note.content = content.encode() if content else b''
+    echo_hint("New note '{}' created!".format(note.title))
 
 
 @cli.command()
@@ -198,4 +200,6 @@ def delete(ctx, key):
     new_path = config.trash_path / note.title
     note.path.rename(new_path)
     note.update_path(new_path)
+    # REVIEW: Can we remove this?
     note.path.touch()
+    echo_hint("Note '{}' moved to trash!".format(note.title))
