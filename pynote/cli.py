@@ -39,6 +39,7 @@ class AliasedGroup(click.Group):
 @pass_ctx
 def cli(ctx, no_pager, no_header):
     ctx.data = load_notes()
+    ctx.trash = load_notes(config.trash_path)
     ctx.no_pager = no_pager
     ctx.no_header = no_header
 
@@ -203,3 +204,17 @@ def delete(ctx, key):
     # REVIEW: Can we remove this?
     note.path.touch()
     echo_hint("Note '{}' moved to trash!".format(note.title))
+
+
+@cli.command()
+@click.argument('key', type=int)
+@pass_ctx
+def restore(ctx, key):
+    """Restore a note from trash."""
+    note = get_note(ctx.trash, key)
+    new_path = config.data_path / note.title
+    note.path.rename(new_path)
+    note.update_path(new_path)
+    # REVIEW: Can we remove this?
+    note.path.touch()
+    echo_hint("Note '{}' restored!".format(note.title))
