@@ -12,3 +12,4 @@ doctrees
 man
 *.mo
 *.egg-info
+tests
