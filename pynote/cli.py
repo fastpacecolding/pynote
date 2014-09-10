@@ -199,7 +199,3 @@ def delete(ctx, key):
     note.path.rename(new_path)
     note.update_path(new_path)
     note.path.touch()
-
-
-if __name__ == '__main__':
-    cli()

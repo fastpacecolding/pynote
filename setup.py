@@ -15,8 +15,12 @@ setup(
     url='https://github.com/rumpelsepp/pynote',
     license=pynote.__license__,
     packages=['pynote'],
-    scripts=['note'],
     install_requires=['plaintable', 'babel', 'click'],
+    entry_points = {
+        'console_scripts': [
+            'note = pynote.cli:cli',
+        ],
+    },
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Environment :: Console',
