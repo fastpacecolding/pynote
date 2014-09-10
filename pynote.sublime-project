@@ -4,8 +4,14 @@
         {
             "path": ".",
             "follow_symlinks": true,
-            "folder_exclude_patterns": ["__pycache__", "*.egg-info",
-                                        "doctrees", "html"],
+            "folder_exclude_patterns": [
+                "__pycache__",
+                "*.egg-info",
+                "doctrees",
+                "html",
+                "man",
+                ".cache"
+            ],
             "file_exclude_patterns": ["MANIFEST"],
         }
     ],
