@@ -14,7 +14,7 @@ Consider adjusting the NOTE_PATH and EXTENSION variable to your needs.
 
 .. code-block:: bash
 
-    #!/usr/env/bash
+    #!/usr/bin/env bash
 
     NOTE_PATH="$HOME/.note"
     EXTENSION=".txt"
