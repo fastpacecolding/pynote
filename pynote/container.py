@@ -58,7 +58,12 @@ def filter_tags(data, tag_str):
 
 
 class Note:
-
+    """
+    Represents a note. A note object maps to a textfile
+    somewhere in the filesystem. The note's title is maps
+    to the filename and the updated attribute to the modification
+    time.
+    """
     tagfile = config.data_path / 'tags.json'
 
     def __init__(self, path):
@@ -137,13 +142,18 @@ class Note:
             return cls(path)
 
     def update_path(self, path):
-        # When self.path is updated the note object needs to
-        # be reinitialized. So let's wrap the constructor!
+        """
+        When self.path is updated the note object needs to
+        be reinitialized. So let's wrap the constructor!
+        """
         self.__init__(path)
 
     def format_header(self, colors=config.colors):
-        header = '{} @ {}, {} ago'.format(self.title, self.format_updated(),
-                                          self.format_age())
+        header = '{} @ {}, {} ago'.format(
+            self.title,
+            self.format_updated(),
+            self.format_age()
+        )
         header = click.style(header, bold=True) if colors else header
         if self.tags:
             header += '\n'
@@ -154,8 +164,11 @@ class Note:
         return format_timedelta(self.age, locale=config.locale)
 
     def format_updated(self):
-        return format_datetime(self.updated, format=config.dateformat,
-                               locale=config.locale)
+        return format_datetime(
+            self.updated,
+            format=config.dateformat,
+            locale=config.locale
+        )
 
     def _check_encrypted(self):
         # This is indicated by the first suffix: my-note.crypt.txt
