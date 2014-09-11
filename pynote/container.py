@@ -110,6 +110,10 @@ class Note:
         else:
             self.tagfile.touch()
             tags = []
+        # Check if there tags are valid, see #18.
+        for tag in value:
+            if ' ' in tag:
+                raise AttributeError('No spaces in tags allowed!')
         tags[self.title] = value
 
         with self.tagfile.open('w') as f:

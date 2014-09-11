@@ -166,7 +166,11 @@ def edit(ctx, key, title, tags):
         new_tags = click.edit(tag_str, editor=config.editor)
         if new_tags:
             new_tags = new_tags.strip().splitlines()
-            note.tags = new_tags[1:]  # strip comment
+            try:
+                note.tags = new_tags[1:]  # strip comment
+            except AttributeError:
+                echo_error('Tags with spaces are not allowed!')
+                exit(1)
         else:
             echo_hint('No changes detected')
     else:
