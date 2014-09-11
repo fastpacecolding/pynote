@@ -1,11 +1,6 @@
 Changelog
 =========
 
-Work in Progress
-----------------
-
-
-
 pynote X.X (XXXX-XX-XX)
 -----------------------
 
@@ -21,17 +16,11 @@ pynote X.X (XXXX-XX-XX)
 pynote 1.0 (XXXX-XX-XX)
 -----------------------
 
-.. note::
-
-    I switched pynote to https://pynote.readthedocs.org/ for hosting
-    documentation and I switched to github issues as well. There are no reasons
-    to maintain my own setup. Every issue ID below this entry is obsolete and
-    refer to my old redmine tracker.
-
-
 Overall Changes
 ^^^^^^^^^^^^^^^
 
+* Removed revision "control" for now. Some day pynote will use git to handle
+  revisions.
 * Added support for XDG Base Directory Specification.
 * Converted pygments to an optional dependency.
 * ``--no-header`` now is a global command line option.
@@ -70,12 +59,22 @@ Configuration Changes
 
 Checkout :doc:`configuration`!
 
-* **New option**: color
-* **New option**: reldates
-* **New option**: locale
-* **New option**: extensions
-* **New option**: ignore_extensions
+* **New value**: color
+* **New value**: reldates
+* **New value**: locale
+* **New value**: extensions
+* **New value**: ignore_extensions
+* **New value**: data_path
+* **New value**: trash_path
 * Refactored ``config.py`` to use default values and sections.
+
+
+.. note::
+
+    I switched pynote to https://pynote.readthedocs.org/ for hosting
+    documentation and I switched to github issues as well. There are no reasons
+    to maintain my own setup. Every issue ID below this entry is obsolete and
+    refers to my old redmine tracker.
 
 
 .. _`#1`: https://github.com/rumpelsepp/pynote/issues/1
