@@ -7,9 +7,6 @@ Reference Guide
       Pynote detects the matching command automatically.
     * Every command supports the ``-h, --help`` option.
 
-.. note::
-    This page has to be cleaned up for pynote 1.0
-
 
 note
 ----

@@ -4,10 +4,6 @@ Changelog
 pynote X.X (XXXX-XX-XX)
 -----------------------
 
-.. note::
-
-    This section here is used as a roadmap for future releases!
-
 * Fixed tests, switched to pytest and setup travis.
 * Git is used via git_wrapper_ to take care of revision control.
 * shell completion
