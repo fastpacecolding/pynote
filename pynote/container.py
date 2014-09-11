@@ -1,11 +1,10 @@
-import os.path
-import json
 from datetime import datetime
+import json
+import os.path
 import re
 import unicodedata
 import click
-from babel.dates import format_timedelta
-from babel.dates import format_datetime
+from babel.dates import format_timedelta, format_datetime
 from pynote import config
 from pynote.formatting import echo_error
 
