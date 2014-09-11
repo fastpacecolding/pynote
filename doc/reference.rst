@@ -2,8 +2,10 @@ Reference Guide
 ===============
 
 .. note::
-    Every command is to be used like ``$ note cmd``, e.g. ``$ note list``.
-    Every command supports the ``-h, --help`` option.
+    * Every command is to be used like ``$ note cmd``, e.g. ``$ note list``.
+    * Every command can be shortened like ``$ note list`` -> ``$ note li``.
+      Pynote detects the matching command automatically.
+    * Every command supports the ``-h, --help`` option.
 
 .. note::
     This page has to be cleaned up for pynote 1.0
@@ -22,6 +24,10 @@ This is the root command of pynote. It supports a few options as well.
 
     Supress the header.
 
+.. cmdoption:: --version
+
+    Show the version and exit.
+
 
 list
 ----
@@ -31,9 +37,10 @@ command if you pass nothing to ``$ note``. The columns are sorted by
 the updated time::
 
     $ note list
-    ID  Title   Age
-    --  ------  ---------
-    0   spam    3 seconds
+    ID  Title         Age
+    --  -----------   ---------
+    0   spam          3 seconds
+    1   lovely spam   1 day
 
 
 .. cmdoption:: --tags TAGS
@@ -44,6 +51,10 @@ the updated time::
 .. cmdoption:: -e, --extended
 
     Add a tags column to the table.
+
+.. cmdoption:: --trash
+
+    List the content of trash instead.
 
 
 show
@@ -70,11 +81,25 @@ to pass the numeric id of the note to show, e.g. ``$ note show 0``::
     code snippets into pynote. You have to pass the programming
     language, e.g. ``$ note show 5 -l python``.
 
+.. cmdoption:: -w, --wrap-text
+
+    Wrap output at 70 signs. This may be useful if you want to read
+    a badly formatted note on the terminal.
+
+
+all
+---
+
+Just prints out all notes.
+
 
 new
 ---
 
-Your editor (e.g. nano) opens and you can type in your content.
+Your configured editor (e.g. nano) opens and you can type in your content.
+You have to pass the title of the note like this::
+
+    $ note new "wonderful spam"
 
 
 edit
@@ -96,100 +121,12 @@ be updated. You choose between editing the content, title and tags.
 delete
 ------
 
-Move a note to trash.
-
-
-trash
------
-
-Prints out all delete notes in a table::
-
-    $ note trash
-    +----+--------+------------------+
-    | id | title  | deleted          |
-    +----+--------+------------------+
-    | 1  | spam   | 2013-12-09 13:05 |
-    | 0  | spam2  | 2013-12-09 13:04 |
-    +----+--------+------------------+
+Move a note to trash. The note will be moved to ``trash_path`` which
+can be configured explicitly and which defaults to ``data_path/.trash``.
 
 
 restore
 -------
 
 Restore a delete note from trash. You have to use the numeric id
-from ``$ note trash``.
-
-
-revisions
----------
-
-Shows all available revisions of a note as a table::
-
-    $ note revisions 8
-    There are 2 revisions of 'spam':
-
-    +----------+---------------+------------------+
-    | revision | title         | updated          |
-    +----------+---------------+------------------+
-    | 2        | spam          | 2014-01-12 13:04 |
-    | 1        | my silly spam | 2014-01-06 22:31 |
-    +----------+---------------+------------------+
-
-
-compare
--------
-
-Create a unified diff of two notes. Pass the numeric id of a note
-and the two revision numbers which you want to compare. This command
-supports colors::
-
-    $ note compare 1 2 1
-    --- my silly spam, revision: 1   2014-01-06 22:31
-    +++ spam, revision: 2   2014-01-12 13:04
-    @@ -1,7 +1,6 @@
-     Spam, Spam, Spam, lovely Spam
-     Wonderful Spam, Lovely Spam.
-    -Spam, Spam, Spam, magnificent Spam,
-     Superlative Spam.
-     Spam, Spam, Spam, wonderous Spam,
-    -Surgical Spam, splendiferous Spam.
-     Spam, Spam, Spam, Spaaam!
-    +This is a change!
-
-
-.. cmdoption:: -c, --color
-
-    Use colors!
-
-
-tags
-----
-
-View, delete or add tags. This command is quite new and maybe some features
-are missing. A tag is just an arbitrary string. A note can contain multiple
-tags. If no arguments are passed to this commands it prints out all tags
-which are used in the database::
-
-    $ note tags
-    The following tags exist:
-    foo
-    bar
-
-If a numeric id of a note is passed to this command it prints out the tags
-of this note::
-
-    $ note tags 1
-    Note 1, spam, is tagged with:
-    foo
-    bar
-
-For deleting and adding tags checkout out the accepted options!
-
-
-.. cmdoption:: -a ADD, --add ADD
-
-    Add one or more tags to a note. ``$ note tags 1 --add "foo"``
-
-.. cmdoption:: -d DELETE, --delete DELETE
-
-    Remove one or more tags from a note, ``$ note tags 1 --delete "foo"``
+from ``$ note list --trash``.

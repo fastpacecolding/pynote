@@ -39,6 +39,11 @@ Install pynote with::
 
     $ python setup.py install
 
+As mentioned before pynote is written in python 3. As I use the pathlib module
+there is **at least python 3.4 required**. Maybe there are backports of pathlib
+to python 3.3 or below but I have not tested them. If you did so please let me
+know.
+
 
 Quickstart
 ----------
@@ -50,9 +55,10 @@ Create a new note::
 List notes in a table::
 
     $ note list
-    ID  Title  Updated
-    --  -----  ---------
-    0   spam   3 seconds
+    ID  Title         Age
+    --  -----------   ---------
+    0   spam          3 seconds
+    1   lovely spam   1 day
 
 Read a note (use the numeric ID from the table)::
 
@@ -69,18 +75,20 @@ Read a note (use the numeric ID from the table)::
 
 Edit a note::
 
-    $ note edit 1
+    $ note edit 0
+    $ note edit --title 0
+    $ note edit --tags 0
 
 Move a note to trash::
 
-    $ note delete 1
+    $ note delete 0
 
 Show trash::
 
-    $ note trash
+    $ note list --trash
 
-Restore a note from trash::
+Restore a note from trash (remember to use the ID from trash)::
 
-    $ note restore 1
+    $ note restore 0
 
 For help just pass ``--help`` to any command!

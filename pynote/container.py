@@ -11,6 +11,12 @@ from pynote.formatting import echo_error
 
 
 def load_notes(path=config.data_path):
+    """
+    Scans the given path and returns a list of notes
+    which is sorted by the modification time. Any directory
+    and the tagfile is ignored. Die path argument has to be
+    an instance of pathlib.Path.
+    """
     if path.exists():
         data = [Note(f) for f in path.iterdir()
                 if f.is_file() and (f.suffix not in config.ignore_extensions
@@ -24,6 +30,7 @@ def load_notes(path=config.data_path):
 
 
 def get_note(data, key):
+    """A wrapper for getting a note out of a list of notes."""
     if key < len(data):
         note = data[key]
         return note
@@ -33,7 +40,14 @@ def get_note(data, key):
 
 
 def filter_tags(data, tag_str):
-    # Avoid duplicates
+    """
+    Filter out notes depending on given tagstring. The
+    tagstring is just a space sperated list of tags such
+    as "tag1 tag2 my_cool_tag". This function just returns
+    the notes whose tags match the tags in the tagstring.
+    It returns a tuple with the index and the note (i, note).
+    """
+    # Avoid duplicates!
     # http://stackoverflow.com/a/4230131/2587286
     seen = set()
     tag_list = tag_str.split()
@@ -125,7 +139,7 @@ class Note:
 
     def update_path(self, path):
         # When self.path is updated the note object needs to
-        # be reinitialized.  So let's wrap the constructor!
+        # be reinitialized. So let's wrap the constructor!
         self.__init__(path)
 
     def format_header(self, colors=config.colors):
