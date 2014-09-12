@@ -15,6 +15,7 @@ pynote 1.0 (XXXX-XX-XX)
 Overall Changes
 ^^^^^^^^^^^^^^^
 
+* Proper tag support.
 * Removed revision "control" for now. Some day pynote will use git to handle
   revisions.
 * Added support for XDG Base Directory Specification.
