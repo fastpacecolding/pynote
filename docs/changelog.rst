@@ -33,7 +33,6 @@ Overall Changes
 * Automatically pass the output through a pager when the output string is
   longer as the terminal height. This could be suppressed with ``--no-pager``.
 * Migrated the cl interface to the click_ library.
-* Prefix all new git tags with 'v' as this is the recommendation by github.
 * First read global config, then read local config. The local noterc overrides
   settings in the global one, see `#1`_
 * The editor value in your noterc now accepts command line arguments, see
