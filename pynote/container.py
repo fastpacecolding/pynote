@@ -123,9 +123,11 @@ class Note:
         if self.tagfile.exists():
             with self.tagfile.open('r') as f:
                 tags = json.load(f)
-            del tags[self.title]
-            with self.tagfile.open('w') as f:
-                json.dump(tags, f, indent=4)
+            # Check if there are any tags assigned, see #23.
+            if self.title in tags:
+                del tags[self.title]
+                with self.tagfile.open('w') as f:
+                    json.dump(tags, f, indent=4)
 
     @classmethod
     def create(cls, title, encrypted=False):
