@@ -9,7 +9,7 @@ pynote X.X (XXXX-XX-XX)
 * shell completion
 
 
-pynote 1.0 (XXXX-XX-XX)
+pynote 1.0 (2014-09-12)
 -----------------------
 
 Overall Changes
