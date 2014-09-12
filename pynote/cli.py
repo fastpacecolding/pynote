@@ -74,8 +74,11 @@ def list(ctx, trash, tags, extended):
             else:
                 header = ['ID', 'Title', 'Updated']
                 notes.append([i, note.title, note.format_updated()])
+    # Error handling
     if notes:
         echo(str(Table(notes, headline=header)))
+    elif not notes and trash:
+        echo_error('No notes in trash!')
     else:
         echo_error('No notes exists! Create new ones with "note new TITLE"!')
 
