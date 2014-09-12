@@ -19,7 +19,7 @@ from *.json files to managing plain text files. There are several advantages:
 You have to convert the json files to plain text files. I have created a gist_
 to do that. You can run the script after updating to pynote 1.0 or before; it
 does not matter. You only have to make sure that there is this section in your
-~/.noterc::
+~/.noterc if you use another location as ``~/.note``::
 
     [DEFAULT]
     data = path/to/my/notes
