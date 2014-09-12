@@ -225,3 +225,23 @@ def restore(ctx, key):
     note.update_path(new_path)
     note.path.touch()
     echo_hint("Note '{}' restored!".format(note.title))
+
+
+@cli.command()
+def conf():
+    """Show pynote's configuration (for debugging)."""
+    varlist = [
+        ['global_config', config.global_config],
+        ['local_config', config.local_config],
+        ['data_path', config.data_path],
+        ['trash_path', config.trash_path],
+        ['editor', config.editor],
+        ['colors', config.colors],
+        ['dateformat', config.dateformat],
+        ['reldates', config.reldates],
+        ['locale', config.locale],
+        ['extension', config.extension],
+        ['ignore_extensions', config.ignore_extensions],
+        ['pygments_theme', config.pygments_theme],
+    ]
+    echo(str(Table(varlist)))

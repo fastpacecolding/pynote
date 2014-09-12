@@ -15,6 +15,8 @@ pynote 1.0 (XXXX-XX-XX)
 Overall Changes
 ^^^^^^^^^^^^^^^
 
+* Added a ``conf`` command to show the whole configuration for debugging
+  reasons.
 * Proper tag support.
 * Removed revision "control" for now. Some day pynote will use git to handle
   revisions.

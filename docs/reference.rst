@@ -127,3 +127,23 @@ restore
 
 Restore a delete note from trash. You have to use the numeric id
 from ``$ note list --trash``.
+
+
+conf
+----
+
+Show all configuration values for debugging reasons::
+
+    $ note conf
+    global_config      /etc/noterc
+    local_config       /home/stefan/.noterc
+    data_path          /home/stefan/.note
+    trash_path         /home/stefan/.note/.trash
+    editor             vim
+    colors             False
+    dateformat         YYYY-MM-dd HH:mm
+    reldates           False
+    locale             en_US
+    extension
+    ignore_extensions  []
+    pygments_theme     default
