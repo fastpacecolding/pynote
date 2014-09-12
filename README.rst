@@ -48,9 +48,29 @@ know.
 Quickstart
 ----------
 
+For initialization just run any command and pynote will tell you what to do::
+
+    $ note new "spam"
+    Error: The directory /home/stefan/.note does not exist!
+    You can create it with "mkdir /home/stefan/.note".
+
+    $ mkdir /home/stefan/.note
+
+    $ note new "spam"
+    Error: The directory /home/stefan/.note/.trash does not exist!
+    You can create it with "mkdir /home/stefan/.note/.trash".
+
+    $ mkdir /home/stefan/.note/.trash
+
+    $ note new "spam"
+    Hint: New note 'spam' created!
+
+
 Create a new note::
 
     $ note new "spam"
+    Hint: New note 'spam' created!
+
 
 List notes in a table::
 
@@ -59,6 +79,7 @@ List notes in a table::
     --  -----------   ---------
     0   spam          3 seconds
     1   lovely spam   1 day
+
 
 Read a note (use the numeric ID from the table)::
 
@@ -73,22 +94,32 @@ Read a note (use the numeric ID from the table)::
     Surgical Spam, splendiferous Spam.
     Spam, Spam, Spam, Spaaam!
 
+
 Edit a note::
 
     $ note edit 0
     $ note edit --title 0
     $ note edit --tags 0
 
+
 Move a note to trash::
 
     $ note delete 0
+    Hint: Note 'spam' moved to trash!
+
 
 Show trash::
 
     $ note list --trash
+    ID  Title  Age
+    --  -----  ----------
+    0   spam   15 seconds
+
 
 Restore a note from trash (remember to use the ID from trash)::
 
     $ note restore 0
+    Hint: Note 'spam' restored!
+
 
 For help just pass ``--help`` to any command!
