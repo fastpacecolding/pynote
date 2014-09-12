@@ -201,14 +201,12 @@ def new(title):
 @pass_ctx
 def delete(ctx, key):
     """Move a note to trash."""
-    # FIXME: Don't loose tags when deleting a note.
     note = get_note(ctx.data, key)
     if not config.trash_path.exists():
         config.trash_path.mkdir()
     new_path = config.trash_path / note.title
     note.path.rename(new_path)
     note.update_path(new_path)
-    # REVIEW: Can we remove this?
     note.path.touch()
     echo_hint("Note '{}' moved to trash!".format(note.title))
 
@@ -222,6 +220,5 @@ def restore(ctx, key):
     new_path = config.data_path / note.title
     note.path.rename(new_path)
     note.update_path(new_path)
-    # REVIEW: Can we remove this?
     note.path.touch()
     echo_hint("Note '{}' restored!".format(note.title))
