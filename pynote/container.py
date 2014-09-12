@@ -22,9 +22,8 @@ def load_notes(path=config.data_path):
                 and f != Note.tagfile)]
         return sorted(data, key=lambda n: n.age)
     else:
-        echo_error('Your data directory does not exist!')
-        click.echo('Please create a data directory.')
-        click.echo('You can do this with "mkdir {}".'.format(config.data))
+        echo_error('The directory {} does not exist!'.format(path))
+        click.echo('You can create it with "mkdir {}".'.format(path))
         exit(1)
 
 
