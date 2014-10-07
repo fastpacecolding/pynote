@@ -44,12 +44,12 @@ def cli(ctx, no_pager, no_header):
     ctx.no_header = no_header
 
 
-@cli.command()
+@cli.command(name='list')
 @click.option('--trash', is_flag=True, help='Show trash.')
 @click.option('-t', '--tags', default=None, help='Filter appropriate tags.')
 @click.option('-e', '--extended', is_flag=True, help='Add a tags column.')
 @pass_ctx
-def list(ctx, trash, tags, extended):
+def list_(ctx, trash, tags, extended):
     """Print out a table with all notes."""
     notes = []
     # Choose between data and trash depending on --trash.
