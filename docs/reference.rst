@@ -99,6 +99,12 @@ You have to pass the title of the note like this::
     $ note new "wonderful spam"
 
 
+.. cmdoption:: -t TAGS, --tags TAGS
+
+    Add tags to recently created notes. When you want to assign several tags
+    use quotes! Example: note new spam -t "tag1 tag2"
+
+
 edit
 ----
 

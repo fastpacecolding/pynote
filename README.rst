@@ -63,13 +63,13 @@ For initialization just run any command and pynote will tell you what to do::
     $ mkdir /home/stefan/.note/.trash
 
     $ note new "spam"
-    Hint: New note 'spam' created!
+    Info: New note 'spam' created!
 
 
 Create a new note::
 
     $ note new "spam"
-    Hint: New note 'spam' created!
+    Info: New note 'spam' created!
 
 
 List notes in a table::
@@ -105,7 +105,7 @@ Edit a note::
 Move a note to trash::
 
     $ note delete 0
-    Hint: Note 'spam' moved to trash!
+    Info: Note 'spam' moved to trash!
 
 
 Show trash::
@@ -119,7 +119,7 @@ Show trash::
 Restore a note from trash (remember to use the ID from trash)::
 
     $ note restore 0
-    Hint: Note 'spam' restored!
+    Info: Note 'spam' restored!
 
 
 For help just pass ``--help`` to any command!

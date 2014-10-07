@@ -9,6 +9,13 @@ pynote X.X (XXXX-XX-XX)
 * shell completion
 
 
+pynote 1.1 (XXXX-XX-XX)
+-----------------------
+
+* Added a --tags argument to ``note new``. You'll be able to assign tags
+  to recently created notes.
+
+
 pynote 1.0 (2014-09-12)
 -----------------------
 
