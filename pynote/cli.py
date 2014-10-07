@@ -54,7 +54,7 @@ def list(ctx, trash, tags, extended):
     notes = []
     # Choose between data and trash depending on --trash.
     data = enumerate(ctx.data) if not trash else enumerate(ctx.trash)
-    data = filter_tags(ctx.data, tags) if tags else data
+    data = filter_tags(ctx.data, tags.split()) if tags else data
     for i, note in data:
         if config.reldates:
             if extended:
@@ -187,7 +187,8 @@ def edit(ctx, key, title, tags):
 
 @cli.command()
 @click.argument('title', type=str)
-def new(title):
+@click.option('-t', '--tags', default=None, help='Assign tags to new note.')
+def new(title, tags):
     """Create a new note."""
     try:
         note = Note.create(title)
@@ -197,6 +198,9 @@ def new(title):
     content = click.edit(note.content.decode(), editor=config.editor)
     note.content = content.encode() if content else b''
     echo_hint("New note '{}' created!".format(note.title))
+    if tags:
+        note.tags = tags.split()
+        echo_hint("Assigned tags: {}".format(', '.join(tags.split())))
 
 
 @cli.command()

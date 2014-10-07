@@ -37,18 +37,16 @@ def get_note(data, key):
         exit(1)
 
 
-def filter_tags(data, tag_str):
+def filter_tags(data, tag_list):
     """
-    Filter out notes depending on given tagstring. The
-    tagstring is just a space sperated list of tags such
-    as "tag1 tag2 my_cool_tag". This function just returns
-    the notes whose tags match the tags in the tagstring.
+    Filter out notes depending on given taglist. The
+    taglist is a python list. This function just returns
+    the notes whose tags match the tags in the taglist.
     It returns a tuple with the index and the note (i, note).
     """
     # Avoid duplicates!
     # http://stackoverflow.com/a/4230131/2587286
     seen = set()
-    tag_list = tag_str.split()
     for i, note in enumerate(data):
         for tag in tag_list:
             if tag in note.tags and note not in seen:
