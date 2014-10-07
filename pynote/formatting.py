@@ -19,9 +19,9 @@ def echo_error(text):
         click.echo(msg)
 
 
-def echo_hint(text):
-    """Add 'Hint: ' prefix and colorize output."""
-    msg = 'Hint: ' + text
+def echo_info(text):
+    """Add 'Info: ' prefix and colorize output."""
+    msg = 'Info: ' + text
     if config.colors:
         click.secho(msg, fg='yellow')
     else:

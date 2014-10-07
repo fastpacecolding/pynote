@@ -4,7 +4,7 @@ import click
 from plaintable import Table
 import pynote
 from pynote import config
-from pynote.formatting import echo, echo_hint, echo_error, highlight_
+from pynote.formatting import echo, echo_info, echo_error, highlight_
 from pynote.container import Note, load_notes, get_note, filter_tags
 
 
@@ -162,7 +162,7 @@ def edit(ctx, key, title, tags):
             # REVIEW: Can we remove this?
             note.path.touch()
         else:
-            echo_hint('No changes detected')
+            echo_info('No changes detected')
     elif tags:
         tag_str = '# Put each tag in one line! This line will be ignored.\n'
         tag_str += '\n'.join(note.tags)
@@ -175,14 +175,14 @@ def edit(ctx, key, title, tags):
                 echo_error('Tags with spaces are not allowed!')
                 exit(1)
         else:
-            echo_hint('No changes detected')
+            echo_info('No changes detected')
     else:
         new_content = click.edit(note.content.decode(), editor=config.editor,
                                  extension=config.extension)
         if new_content:
             note.content = new_content.encode()
         else:
-            echo_hint('No changes detected')
+            echo_info('No changes detected')
 
 
 @cli.command()
@@ -197,10 +197,10 @@ def new(title, tags):
         exit(1)
     content = click.edit(note.content.decode(), editor=config.editor)
     note.content = content.encode() if content else b''
-    echo_hint("New note '{}' created!".format(note.title))
+    echo_info("New note '{}' created!".format(note.title))
     if tags:
         note.tags = tags.split()
-        echo_hint("Assigned tags: {}".format(', '.join(tags.split())))
+        echo_info("Assigned tags: {}".format(', '.join(tags.split())))
 
 
 @cli.command()
@@ -215,7 +215,7 @@ def delete(ctx, key):
     note.path.rename(new_path)
     note.update_path(new_path)
     note.path.touch()
-    echo_hint("Note '{}' moved to trash!".format(note.title))
+    echo_info("Note '{}' moved to trash!".format(note.title))
 
 
 @cli.command()
@@ -228,7 +228,7 @@ def restore(ctx, key):
     note.path.rename(new_path)
     note.update_path(new_path)
     note.path.touch()
-    echo_hint("Note '{}' restored!".format(note.title))
+    echo_info("Note '{}' restored!".format(note.title))
 
 
 @cli.command()
