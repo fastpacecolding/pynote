@@ -8,8 +8,11 @@ Reference Guide
     * Every command supports the ``-h, --help`` option.
 
 
+Commands
+--------
+
 note
-----
+^^^^
 
 This is the root command of pynote. It supports a few options as well.
 
@@ -27,7 +30,7 @@ This is the root command of pynote. It supports a few options as well.
 
 
 list
-----
+^^^^
 
 This prints out a table with all stores notes. This is the default
 command if you pass nothing to ``$ note``. The columns are sorted by
@@ -55,7 +58,7 @@ the updated time::
 
 
 show
-----
+^^^^
 
 Shows a specific note including a header with some metadata. You have
 to pass the numeric id of the note to show, e.g. ``$ note show 0``::
@@ -85,13 +88,13 @@ to pass the numeric id of the note to show, e.g. ``$ note show 0``::
 
 
 all
----
+^^^
 
 Just prints out all notes.
 
 
 new
----
+^^^
 
 Your configured editor (e.g. nano) opens and you can type in your content.
 You have to pass the title of the note like this::
@@ -106,7 +109,7 @@ You have to pass the title of the note like this::
 
 
 edit
-----
+^^^^
 
 Your editor opens with the content of the note. After saving the note will
 be updated. You choose between editing the content, title and tags.
@@ -122,21 +125,21 @@ be updated. You choose between editing the content, title and tags.
 
 
 delete
-------
+^^^^^^
 
 Move a note to trash. The note will be moved to ``trash_path`` which
 can be configured explicitly and which defaults to ``data_path/.trash``.
 
 
 restore
--------
+^^^^^^^
 
 Restore a delete note from trash. You have to use the numeric id
 from ``$ note list --trash``.
 
 
 conf
-----
+^^^^
 
 Show all configuration values for debugging reasons::
 
