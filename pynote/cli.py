@@ -79,6 +79,8 @@ def list_(ctx, trash, tags, extended):
         echo(str(Table(notes, headline=header)))
     elif not notes and trash:
         echo_error('No notes in trash!')
+    elif not notes and tags:
+        echo_error('No note matches the given tags!')
     else:
         echo_error('No notes exists! Create new ones with "note new TITLE"!')
 
