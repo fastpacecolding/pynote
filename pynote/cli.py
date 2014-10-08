@@ -190,6 +190,9 @@ def edit(ctx, key, title, tags):
 @click.option('-t', '--tags', default=None, help='Assign tags to new note.')
 def new(title, tags):
     """Create a new note."""
+    if '/' in title:
+        echo_error('Slashes in the title are not allowed!')
+        exit(1)
     try:
         note = Note.create(title)
     except FileExistsError:
