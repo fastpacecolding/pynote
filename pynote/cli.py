@@ -82,7 +82,7 @@ def list_(ctx, trash, tags, extended):
     elif not notes and tags:
         echo_error('No note matches the given tags!')
     else:
-        echo_error('No notes exists! Create new ones with "note new TITLE"!')
+        echo_error('No notes exist! Create new ones with "note new TITLE"!')
 
 
 @cli.command()
