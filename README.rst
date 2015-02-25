@@ -2,15 +2,15 @@ pynote
 ======
 
 pynote is a project to manage your notes on the commandline. It is written in
-Python 3 and provides a very handy cmd-interface. You can browse the source
-code in cgit_ or in github_. If something does not behave as expected please
-file a bug in github, write an email_ or check out the `support thread`_ in the
-arch linux forums.
+Python 3 and provides a very handy cmd-interface. You can browse the source code
+on my private `gitlab instance`_ or in github_. If something does not behave as
+expected please file a bug in github, write an email_ or check out the `support
+thread`_ in the arch linux forums.
 
 Documentation is hosted on `Read the Docs`_.
 
-.. _`cgit`: http://cgit.sevenbyte.org/pynote/
-.. _`github`: https://github.com/statschner/pynote
+.. _`gitlab instance`: https://gitlab.sevenbyte.org/rumpelsepp/pynote
+.. _`github`: https://github.com/rumpelsepp/pynote
 .. _`email`: stefan@sevenbyte.org
 .. _`support thread`: https://bbs.archlinux.org/viewtopic.php?pid=1362268
 .. _`Read the Docs`: https://pynote.readthedocs.org
@@ -37,7 +37,7 @@ Clone the project with::
 
 Install pynote with::
 
-    $ python setup.py install
+    # python setup.py install
 
 As mentioned before pynote is written in python 3. As I use the pathlib module
 there is **at least python 3.4 required**. Maybe there are backports of pathlib
