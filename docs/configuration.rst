@@ -103,6 +103,14 @@ ignore_extension
 
     **Default**: ``[]``
 
+no_tempfile
+    Do not use a tempfile when editing notes. The note file will be edited
+    directly. This option may corrupt a note when there is an electricity
+    failure during editing. The advantage is that editor like vim could store
+    the last editing or view position.
+
+    **Default**: False
+
 
 Example Noterc File
 -------------------

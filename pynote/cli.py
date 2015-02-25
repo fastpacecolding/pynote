@@ -144,8 +144,9 @@ def all(ctx):
 @click.argument('key', type=int)
 @click.option('--title', is_flag=True, help='Edit the title instead.')
 @click.option('--tags', is_flag=True, help='Edit assigned tags instead.')
+@click.option('--no-tempfile', is_flag=True, help='Edit note file directly.')
 @pass_ctx
-def edit(ctx, key, title, tags):
+def edit(ctx, key, title, tags, no_tempfile):
     """Edit a specific note."""
     note = get_note(ctx.data, key)
     if title:
@@ -179,8 +180,19 @@ def edit(ctx, key, title, tags):
         else:
             echo_info('No changes detected')
     else:
-        new_content = click.edit(note.content.decode(), editor=config.editor,
-                                 extension=config.extension)
+        if config.no_tempfile or no_tempfile:
+            new_content = click.edit(
+                note.content.decode(),
+                editor=config.editor,
+                extension=config.extension,
+                filename=note.path
+            )
+        else:
+            new_content = click.edit(
+                note.content.decode(),
+                editor=config.editor,
+                extension=config.extension
+            )
         if new_content:
             note.content = new_content.encode()
         else:
@@ -251,6 +263,7 @@ def conf():
         ['locale', config.locale],
         ['extension', config.extension],
         ['ignore_extensions', config.ignore_extensions],
+        ['no_tempfile', config.no_tempfile],
         ['pygments_theme', config.pygments_theme],
     ]
     echo(str(Table(varlist)))

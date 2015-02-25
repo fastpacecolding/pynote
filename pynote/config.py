@@ -53,6 +53,7 @@ if 'trash_path' in config['data']:
 extension = config.get('data', 'extension', fallback='')
 ignore_extensions = config.get('data', 'ignore_extensions', fallback=[])
 ignore_extensions = json.loads(ignore_extensions) if ignore_extensions else []
+no_tempfile = config.get('data', 'no_tempfile', fallback=False)
 
 # user interface (ui) section
 editor = config.get('ui', 'editor', fallback=os.getenv('EDITOR', 'nano'))
