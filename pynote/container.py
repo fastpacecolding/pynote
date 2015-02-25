@@ -18,8 +18,8 @@ def load_notes(path=config.data_path):
     """
     if path.exists():
         data = [Note(f) for f in path.iterdir()
-                if f.is_file() and (f.suffix not in config.ignore_extensions
-                and f != Note.tagfile)]
+                if f.is_file() and (f.suffix not in
+                config.ignore_extensions and f != Note.tagfile)]
         return sorted(data, key=lambda n: n.age)
     else:
         echo_error('The directory {} does not exist!'.format(path))
