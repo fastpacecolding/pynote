@@ -5,7 +5,7 @@ pynote X.X (XXXX-XX-XX)
 -----------------------
 
 * Fixed tests, switched to pytest and setup travis.
-* Git is used via git_wrapper_ to take care of revision control.
+* Git is used to take care of revision control.
 * shell completion
 
 
@@ -85,7 +85,6 @@ Checkout :doc:`configuration`!
 .. _`#1`: https://github.com/rumpelsepp/pynote/issues/1
 .. _`#2`: https://github.com/rumpelsepp/pynote/issues/2
 .. _Gist: https://gist.githubusercontent.com/rumpelsepp/9b17cda631af5cdbb412/raw/7c3b950ffba4a4233f4123db4f96a2de48518fbe/note_migrate.py
-.. _git_wrapper: https://github.com/rumpelsepp/git_wrapper
 .. _plaintable: https://github.com/rumpelsepp/plaintable
 .. _babel: http://babel.pocoo.org/docs/api/dates/#date-and-time-formatting
 .. _click: http://click.pocoo.org/
