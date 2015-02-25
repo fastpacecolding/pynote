@@ -95,12 +95,12 @@ def show(ctx, key, lang, wrap_text):
     """Show a specific note."""
     note = get_note(ctx.data, key)
     if lang and config.colors:
-        content = highlight_(note.content.decode(), lang)
+        content = highlight_(note.content, lang)
     elif lang and config.colors is False:
         echo_error('Color support is not enabled!')
         exit(1)
     else:
-        content = note.content.decode()
+        content = note.content
 
     if ctx.no_header:
         output = content
@@ -126,16 +126,12 @@ def all(ctx):
         output += counter
         output += '\n\n'
 
-        if note.is_encrypted:
-            output += 'Encrypted note!'
-            output += '\n'
+        if ctx.no_header:
+            output += note.content
         else:
-            if ctx.no_header:
-                output += note.content.decode()
-            else:
-                output += note.format_header()
-                output += '\n\n'
-                output += note.content.decode()
+            output += note.format_header()
+            output += '\n\n'
+            output += note.content
 
     echo(output, ctx.no_pager)
 
@@ -182,19 +178,19 @@ def edit(ctx, key, title, tags, no_tempfile):
     else:
         if config.no_tempfile or no_tempfile:
             new_content = click.edit(
-                note.content.decode(),
+                note.content,
                 editor=config.editor,
                 extension=config.extension,
                 filename=note.path
             )
         else:
             new_content = click.edit(
-                note.content.decode(),
+                note.content,
                 editor=config.editor,
                 extension=config.extension
             )
         if new_content:
-            note.content = new_content.encode()
+            note.content = new_content
         else:
             echo_info('No changes detected')
 
@@ -212,8 +208,8 @@ def new(title, tags):
     except FileExistsError:
         echo_error('This note already exists!')
         exit(1)
-    content = click.edit(note.content.decode(), editor=config.editor)
-    note.content = content.encode() if content else b''
+    content = click.edit(note.content, editor=config.editor)
+    note.content = content if content else ''
     echo_info("New note '{}' created!".format(note.title))
     if tags:
         note.tags = tags.split()

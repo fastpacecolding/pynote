@@ -72,19 +72,18 @@ class Note:
             path.touch()
         self.updated = self._getmtime()
         self.age = self._calc_age()
-        self.is_encrypted = self._check_encrypted()
 
     def __repr__(self):
         return "{}('{}')".format(self.__class__.__name__, self.path)
 
     @property
     def content(self):
-        with self.path.open('br') as f:
+        with self.path.open('r') as f:
             return f.read()
 
     @content.setter
     def content(self, value):
-        with self.path.open('bw') as f:
+        with self.path.open('w') as f:
             return f.write(value)
 
     @property
@@ -129,12 +128,8 @@ class Note:
 
     @classmethod
     def create(cls, title, encrypted=False):
-        if config.extension and encrypted:
-            filename = title + '.crypt' + config.extension
-        elif config.extension and encrypted is False:
+        if config.extension:
             filename = title + config.extension
-        elif not config.extension and encrypted:
-            filename = title + '.crypt'
         else:
             filename = title
 
@@ -172,16 +167,6 @@ class Note:
             format=config.dateformat,
             locale=config.locale
         )
-
-    def _check_encrypted(self):
-        # This is indicated by the first suffix: my-note.crypt.txt
-        if self.path.suffixes:
-            if self.path.suffixes[0] == '.crypt':
-                return True
-            else:
-                return False
-        else:
-            return False
 
     def _getmtime(self):
         updated = os.path.getmtime(str(self.path))
