@@ -9,7 +9,7 @@ from . import config
 from .formatting import echo_error
 
 
-def load_notes(path=config.data_path):
+def load_notes(path=config.DATA_PATH):
     """
     Scans the given path and returns a list of notes
     which is sorted by the modification time. Any directory
@@ -19,7 +19,7 @@ def load_notes(path=config.data_path):
     if path.exists():
         data = [Note(f) for f in path.iterdir()
                 if f.is_file() and (f.suffix not in
-                config.ignore_extensions and f != Note.tagfile)]
+                config.IGNORE_EXTENSIONS and f != Note.tagfile)]
         return sorted(data, key=lambda n: n.age)
     else:
         echo_error('The directory {} does not exist!'.format(path))
@@ -61,7 +61,7 @@ class Note:
     to the filename and the updated attribute to the modification
     time.
     """
-    tagfile = config.data_path / 'tags.json'
+    tagfile = config.DATA_PATH / 'tags.json'
 
     def __init__(self, path):
         self.path = path
@@ -128,12 +128,12 @@ class Note:
 
     @classmethod
     def create(cls, title, encrypted=False):
-        if config.extension:
-            filename = title + config.extension
+        if config.EXTENSION:
+            filename = title + config.EXTENSION
         else:
             filename = title
 
-        path = config.data_path / filename
+        path = config.DATA_PATH / filename
         if path.exists():
             raise FileExistsError('Note already exists!')
         else:
@@ -146,7 +146,7 @@ class Note:
         """
         self.__init__(path)
 
-    def format_header(self, colors=config.colors):
+    def format_header(self, colors=config.COLORS):
         header = '{} @ {}, {} ago'.format(
             self.title,
             self.format_updated(),
@@ -159,13 +159,13 @@ class Note:
         return header
 
     def format_age(self):
-        return format_timedelta(self.age, locale=config.locale)
+        return format_timedelta(self.age, locale=config.LOCALE)
 
     def format_updated(self):
         return format_datetime(
             self.updated,
-            format=config.dateformat,
-            locale=config.locale
+            format=config.DATEFORMAT,
+            locale=config.LOCALE
         )
 
     def _getmtime(self):

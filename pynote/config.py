@@ -20,9 +20,9 @@ if list(BaseDirectory.load_data_paths('note')):
     _xdg_data = list(BaseDirectory.load_data_paths('note'))[0]
 
 if _xdg_data:
-    data_path = Path(_xdg_data)
+    DATA_PATH = Path(_xdg_data)
 else:
-    data_path = Path(os.path.expanduser('~/.note'))
+    DATA_PATH = Path(os.path.expanduser('~/.note'))
 
 # Initialize config parser object
 # Read global config first, overwrite with local config
@@ -38,21 +38,21 @@ if 'ui' not in config.sections():
 # data section
 # Overwrite data and trash path when it is set in .noterc.
 if 'data_path' in config['data']:
-    data_path = config.get('data', 'data_path')
-    data_path = Path(os.path.expanduser(data_path))
-trash_path = data_path / '.trash'
+    DATA_PATH = config.get('data', 'data_path')
+    DATA_PATH = Path(os.path.expanduser(DATA_PATH))
+TRASH_PATH = DATA_PATH / '.trash'
 if 'trash_path' in config['data']:
-    trash_path = config.get('data', 'trash_path')
-    trash_path = Path(os.path.expanduser(trash_path))
-extension = config.get('data', 'extension', fallback='')
-ignore_extensions = config.get('data', 'ignore_extensions', fallback=[])
-ignore_extensions = json.loads(ignore_extensions) if ignore_extensions else []
-no_tempfile = config.get('data', 'no_tempfile', fallback=False)
+    TRASH_PATH = config.get('data', 'trash_path')
+    TRASH_PATH = Path(os.path.expanduser(TRASH_PATH))
+EXTENSION = config.get('data', 'extension', fallback='')
+IGNORE_EXTENSIONS = config.get('data', 'ignore_extensions', fallback=[])
+IGNORE_EXTENSIONS = json.loads(IGNORE_EXTENSIONS) if IGNORE_EXTENSIONS else []
+NO_TEMPFILE = config.get('data', 'no_tempfile', fallback=False)
 
 # user interface (ui) section
-editor = config.get('ui', 'editor', fallback=os.getenv('EDITOR', 'nano'))
-colors = config.getboolean('ui', 'colors', fallback=False)
-dateformat = config.get('ui', 'dateformat', fallback='YYYY-MM-dd HH:mm')
-reldates = config.getboolean('ui', 'reldates', fallback=False)
-locale = config.get('ui', 'locale', fallback='en_US')
-pygments_theme = config.get('ui', 'pygments_theme', fallback='default')
+EDITOR = config.get('ui', 'editor', fallback=os.getenv('EDITOR', 'nano'))
+COLORS = config.getboolean('ui', 'colors', fallback=False)
+DATEFORMAT = config.get('ui', 'dateformat', fallback='YYYY-MM-dd HH:mm')
+RELDATES = config.getboolean('ui', 'reldates', fallback=False)
+LOCALE = config.get('ui', 'locale', fallback='en_US')
+PYGMENTS_THEME = config.get('ui', 'pygments_theme', fallback='default')

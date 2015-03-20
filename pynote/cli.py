@@ -38,7 +38,7 @@ class AliasedGroup(click.Group):
 @pass_ctx
 def cli(ctx, no_pager, no_header):
     ctx.data = load_notes()
-    ctx.trash = load_notes(config.trash_path)
+    ctx.trash = load_notes(config.TRASH_PATH)
     ctx.no_pager = no_pager
     ctx.no_header = no_header
 
@@ -55,7 +55,7 @@ def list_(ctx, trash, tags, extended):
     data = enumerate(ctx.data) if not trash else enumerate(ctx.trash)
     data = filter_tags(ctx.data, tags.split()) if tags else data
     for i, note in data:
-        if config.reldates:
+        if config.RELDATES:
             if extended:
                 header = ['ID', 'Title', 'Age', 'Tags']
                 notes.append(
@@ -93,9 +93,9 @@ def list_(ctx, trash, tags, extended):
 def show(ctx, key, lang, wrap_text):
     """Show a specific note."""
     note = get_note(ctx.data, key)
-    if lang and config.colors:
+    if lang and config.COLORS:
         content = highlight_(note.content, lang)
-    elif lang and config.colors is False:
+    elif lang and config.COLORS is False:
         echo_error('Color support is not enabled!')
         exit(1)
     else:
@@ -119,7 +119,7 @@ def all(ctx):
     output = ''
     for i, note in enumerate(ctx.data):
         counter = '-- note {} --'.format(i)
-        counter = click.style(counter, bold=True) if config.colors else counter
+        counter = click.style(counter, bold=True) if config.COLORS else counter
 
         output += '\n\n'
         output += counter
@@ -145,7 +145,7 @@ def edit(ctx, key, title, tags, no_tempfile):
     """Edit a specific note."""
     note = get_note(ctx.data, key)
     if title:
-        new_title = click.edit(note.title, editor=config.editor)
+        new_title = click.edit(note.title, editor=config.EDITOR)
         if new_title:
             # Delete old tags from tagsfile and save them in a variable.
             tags = note.tags
@@ -164,7 +164,7 @@ def edit(ctx, key, title, tags, no_tempfile):
     elif tags:
         tag_str = '# Put each tag in one line! This line will be ignored.\n'
         tag_str += '\n'.join(note.tags)
-        new_tags = click.edit(tag_str, editor=config.editor)
+        new_tags = click.edit(tag_str, editor=config.EDITOR)
         if new_tags:
             new_tags = new_tags.strip().splitlines()
             try:
@@ -175,18 +175,18 @@ def edit(ctx, key, title, tags, no_tempfile):
         else:
             echo_info('No changes detected')
     else:
-        if config.no_tempfile or no_tempfile:
+        if config.NO_TEMPFILE or no_tempfile:
             new_content = click.edit(
                 note.content,
-                editor=config.editor,
-                extension=config.extension,
+                editor=config.EDITOR,
+                extension=config.EXTENSION,
                 filename=note.path
             )
         else:
             new_content = click.edit(
                 note.content,
-                editor=config.editor,
-                extension=config.extension
+                editor=config.EDITOR,
+                extension=config.EXTENSION
             )
         if new_content:
             note.content = new_content
@@ -207,7 +207,7 @@ def new(title, tags):
     except FileExistsError:
         echo_error('This note already exists!')
         exit(1)
-    content = click.edit(note.content, editor=config.editor)
+    content = click.edit(note.content, editor=config.EDITOR)
     note.content = content if content else ''
     echo_info("New note '{}' created!".format(note.title))
     if tags:
@@ -221,9 +221,9 @@ def new(title, tags):
 def delete(ctx, key):
     """Move a note to trash."""
     note = get_note(ctx.data, key)
-    if not config.trash_path.exists():
-        config.trash_path.mkdir()
-    new_path = config.trash_path / note.title
+    if not config.TRASH_PATH.exists():
+        config.TRASH_PATH.mkdir()
+    new_path = config.TRASH_PATH / note.title
     note.path.rename(new_path)
     note.update_path(new_path)
     note.path.touch()
@@ -236,7 +236,7 @@ def delete(ctx, key):
 def restore(ctx, key):
     """Restore a note from trash."""
     note = get_note(ctx.trash, key)
-    new_path = config.data_path / note.title
+    new_path = config.DATA_PATH / note.title
     note.path.rename(new_path)
     note.update_path(new_path)
     note.path.touch()
@@ -247,18 +247,18 @@ def restore(ctx, key):
 def conf():
     """Show pynote's configuration (for debugging)."""
     varlist = [
-        ['global_config', config.global_config],
-        ['local_config', config.local_config],
-        ['data_path', config.data_path],
-        ['trash_path', config.trash_path],
-        ['editor', config.editor],
-        ['colors', config.colors],
-        ['dateformat', config.dateformat],
-        ['reldates', config.reldates],
-        ['locale', config.locale],
-        ['extension', config.extension],
-        ['ignore_extensions', config.ignore_extensions],
-        ['no_tempfile', config.no_tempfile],
-        ['pygments_theme', config.pygments_theme],
+        ['global_config', config.GLOBAL_CONFIG],
+        ['local_config', config.LOCAL_CONFIG],
+        ['data_path', config.DATA_PATH],
+        ['trash_path', config.TRASH_PATH],
+        ['editor', config.EDITOR],
+        ['colors', config.COLORS],
+        ['dateformat', config.DATEFORMAT],
+        ['reldates', config.RELDATES],
+        ['locale', config.LOCALE],
+        ['extension', config.EXTENSION],
+        ['ignore_extensions', config.IGNORE_EXTENSIONS],
+        ['no_tempfile', config.NO_TEMPFILE],
+        ['pygments_theme', config.PYGMENTS_THEME],
     ]
     echo(str(Table(varlist)))
