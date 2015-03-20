@@ -72,7 +72,7 @@ pygments_theme
 Data section
 ------------
 
-data_path
+path
     Specifies the place where your stored notes live. ``~`` is expanded to your
     homedir. You can set this location e.g. to your Dropbox directory to ensure
     automatic syncing of your notes. This value defaults to ``~/.note``. If you
@@ -80,13 +80,7 @@ data_path
     directory ``~/.local/share/note`` or set the environment variable
     XDG_DATA_HOME.
 
-    **Default**: ``$XDG_DATA_HOME/note``, ``~/.local/share/note``, ``~/.note``
-
-trash_path
-    Specifies the place where your deleted notes are moved. ``~`` is expanded
-    to your homedir.
-
-    **Default**: ``data_path/.trash``
+    **Defaults**: ``$XDG_DATA_HOME/note``, ``~/.local/share/note``, ``~/.note``
 
 extension
     Specifiy an extension which should be added to the filename of each note.
@@ -126,6 +120,6 @@ Example Noterc File
     locale = de_DE
 
     [data]
-    data_path = ~/Dropbox/.note/
+    path = ~/Dropbox/.note/
     extension = .rst
     ignore_extensions = [".pdf", ".odt"]

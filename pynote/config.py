@@ -35,21 +35,22 @@ if 'data' not in config.sections():
 if 'ui' not in config.sections():
     config.add_section('ui')
 
-# data section
+# [data] section
 # Overwrite data and trash path when it is set in .noterc.
+# DEPRECATED: Remove 'data_path' value in pynote 2.0!
 if 'data_path' in config['data']:
     DATA_PATH = config.get('data', 'data_path')
     DATA_PATH = Path(os.path.expanduser(DATA_PATH))
+if 'path' in config['data']:
+    DATA_PATH = config.get('data', 'pathpath')
+    DATA_PATH = Path(os.path.expanduser(DATA_PATH))
 TRASH_PATH = DATA_PATH / '.trash'
-if 'trash_path' in config['data']:
-    TRASH_PATH = config.get('data', 'trash_path')
-    TRASH_PATH = Path(os.path.expanduser(TRASH_PATH))
 EXTENSION = config.get('data', 'extension', fallback='')
 IGNORE_EXTENSIONS = config.get('data', 'ignore_extensions', fallback=[])
 IGNORE_EXTENSIONS = json.loads(IGNORE_EXTENSIONS) if IGNORE_EXTENSIONS else []
 NO_TEMPFILE = config.get('data', 'no_tempfile', fallback=False)
 
-# user interface (ui) section
+# [ui] section
 EDITOR = config.get('ui', 'editor', fallback=os.getenv('EDITOR', 'nano'))
 COLORS = config.getboolean('ui', 'colors', fallback=False)
 DATEFORMAT = config.get('ui', 'dateformat', fallback='YYYY-MM-dd HH:mm')
