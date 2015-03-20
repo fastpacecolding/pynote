@@ -2,31 +2,25 @@ import json
 import os
 import os.path
 import configparser
+from xdg import BaseDirectory
 from pathlib import Path
 
 
-# Set global and local config paths. Pynote supports XDG Base Directory
-# Specification. If the environment variable XDG_CONFIG_HOME is set choose
-# $XDG_CONFIG_HOME/note/noterc otherwise fall back to $HOME/.config/note/noterc
-# but only if this file exists. If this file is not present always fall back to
-# $HOME/.noterc.
-global_config = Path('/etc/noterc')
-if os.getenv('XDG_CONFIG_HOME'):
-    local_config = Path(os.getenv('XDG_CONFIG_HOME')) / 'note/noterc'
-elif Path(os.path.expanduser('~/.config/note/noterc')).exists():
-    local_config = Path(os.path.expanduser('~/.config/note/noterc'))
+global_config = Path('/etc//xdg/noterc')
+
+_xdg_first_config = BaseDirectory.load_first_config('note')
+if _xdg_first_config:
+    local_config = Path(_xdg_first_config) / 'noterc'
 else:
     local_config = Path(os.path.expanduser('~/.noterc'))
 
-# Set pynote's data path according to XDG Base Directory Specification. If
-# XDG_DATA_HOME is set choose $XDG_DATA_HOME/note otherwise fall back to
-# $HOME/.local/share/note but only if this directory exists. If it does not
-# exist fall back to $HOME/.note. This value can also be overwritten in the
-# global or local configfile.
-if os.getenv('XDG_DATA_HOME'):
-    data_path = Path(os.getenv('XDG_DATA_HOME')) / 'note'
-elif Path(os.path.expanduser('~/.local/share/note')).exists():
-    data_path = Path(os.path.expanduser('~/.local/share/note'))
+_xdg_data = None
+# Just take the first one: '$HOME/.local/share/note'
+if list(BaseDirectory.load_data_paths('note')):
+    _xdg_data = list(BaseDirectory.load_data_paths('note'))[0]
+
+if _xdg_data:
+    data_path = Path(_xdg_data)
 else:
     data_path = Path(os.path.expanduser('~/.note'))
 
