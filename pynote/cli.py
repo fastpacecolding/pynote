@@ -2,10 +2,9 @@ import textwrap
 from pathlib import Path
 import click
 from plaintable import Table
-import pynote
-from pynote import config
-from pynote.formatting import echo, echo_info, echo_error, highlight_
-from pynote.container import Note, load_notes, get_note, filter_tags
+from . import config, __version__
+from .formatting import echo, echo_info, echo_error, highlight_
+from .container import Note, load_notes, get_note, filter_tags
 
 
 class Context:
@@ -33,7 +32,7 @@ class AliasedGroup(click.Group):
 
 
 @click.command(cls=AliasedGroup)
-@click.version_option(version=pynote.__version__, prog_name='pynote')
+@click.version_option(version=__version__, prog_name='pynote')
 @click.option('--no-pager', is_flag=True, help='Supress paging long output.')
 @click.option('--no-header', is_flag=True, help='Supress header.')
 @pass_ctx

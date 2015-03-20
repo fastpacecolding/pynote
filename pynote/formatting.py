@@ -1,5 +1,5 @@
 import click
-from pynote import config
+from . import config
 
 
 def echo(text, no_pager=False):

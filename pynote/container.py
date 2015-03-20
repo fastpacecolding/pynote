@@ -5,8 +5,8 @@ import re
 import unicodedata
 import click
 from babel.dates import format_timedelta, format_datetime
-from pynote import config
-from pynote.formatting import echo_error
+from . import config
+from .formatting import echo_error
 
 
 def load_notes(path=config.data_path):
