@@ -1,33 +1,36 @@
 Reference Guide
 ===============
 
-.. note::
-    * Every command is to be used like ``$ note cmd``, e.g. ``$ note list``.
-    * Every command can be shortened like ``$ note list`` -> ``$ note li``.
-      Pynote detects the matching command automatically.
-    * Every command supports the ``-h, --help`` option.
-
-
-Commands
+Synopsis
 --------
 
-note
-^^^^
+::
 
-This is the root command of pynote. It supports a few options as well.
+    note [--no-pager] [--no-header] [--version] COMMAND [ARGS]...
+
+Description
+-----------
+
+pynote is a project to manage your notes on the commandline. It is written in
+Python 3 and provides a very handy cmd-interface.
+
+Options
+-------
 
 .. cmdoption:: --no-pager
 
-    Supress paging.
+    Supress paging globally.
 
 .. cmdoption:: --no-header
 
-    Supress the header.
+    Supress the note's header globally.
 
 .. cmdoption:: --version
 
     Show the version and exit.
 
+Commands
+--------
 
 list
 ^^^^
@@ -55,7 +58,6 @@ the updated time::
 .. cmdoption:: --trash
 
     List the content of trash instead.
-
 
 show
 ^^^^
@@ -86,12 +88,10 @@ to pass the numeric id of the note to show, e.g. ``$ note show 0``::
     Wrap output at 70 signs. This may be useful if you want to read
     a badly formatted note on the terminal.
 
-
 all
 ^^^
 
 Just prints out all notes.
-
 
 new
 ^^^
@@ -106,7 +106,6 @@ You have to pass the title of the note like this::
 
     Add tags to recently created notes. When you want to assign several tags
     use quotes! Example: note new spam -t "tag1 tag2"
-
 
 edit
 ^^^^
@@ -131,20 +130,17 @@ be updated. You choose between editing the content, title and tags.
     the last editing or view position. This option overwrites the value in
     ``~/.noterc``.
 
-
 delete
 ^^^^^^
 
 Move a note to trash. The note will be moved to ``trash_path`` which
 can be configured explicitly and which defaults to ``data_path/.trash``.
 
-
 restore
 ^^^^^^^
 
 Restore a delete note from trash. You have to use the numeric id
 from ``$ note list --trash``.
-
 
 conf
 ^^^^
