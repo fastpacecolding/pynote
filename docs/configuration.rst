@@ -4,13 +4,21 @@ Noterc
 Synopsis
 --------
 
+::
+
+    /etc/note/noterc, $XDG_CONFIG_HOME/note/noterc, $HOME/.config/note/noterc,
+    $HOME/.noterc
+
+Description
+-----------
+
 Pynote is configured with a local ressource file and a global one. The local
 ressource file can be used to overwrite values from the global one. Pynote
 supports the XDG Base Directory Specification. If the environment variable
 ``XDG_CONFIG_HOME`` is set pynote searches the local config file in
 ``$XDG_CONFIG_HOME/note/noterc``. If the variable is unset pynote looks into
 ``$HOME/.config/note/noterc`` otherwise the local config file defaults to
-``~/.noterc``.
+``$HOME/.noterc``.
 
 Each file is formatted as a line-separated list of ``KEY=VALUE`` pairs, blank
 lines, and lines starting with ``#``, are ignored. Pynote's configuration is
@@ -19,8 +27,6 @@ brackets, e.g. ``[ui]``. If you want to learn more about python's configparser
 check out the `official docs`_.
 
 .. _`official docs`: http://docs.python.org/3.4/library/configparser.html#quick-start
-
-
 
 User Interface Section
 ----------------------
@@ -68,7 +74,6 @@ pygments_theme
 .. _`babel docs`: http://babel.pocoo.org/docs/dates/#date-fields
 .. _`pygments webpage`: http://pygments.org/docs/styles/#getting-a-list-of-available-styles
 
-
 Data section
 ------------
 
@@ -104,7 +109,6 @@ no_tempfile
     the last editing or view position.
 
     **Default**: False
-
 
 Example Noterc File
 -------------------
