@@ -10,7 +10,16 @@ def echo(text, no_pager=False):
         click.echo(text)
 
 
-def echo_error(text):
+def info(text):
+    """Add 'Info: ' prefix and colorize output."""
+    msg = 'Info: ' + text
+    if config.COLORS:
+        click.secho(msg, fg='yellow')
+    else:
+        click.echo(msg)
+
+
+def error(text):
     """Add 'Error: ' prefix and colorize output."""
     msg = 'Error: ' + text
     if config.COLORS:
@@ -19,13 +28,10 @@ def echo_error(text):
         click.echo(msg)
 
 
-def echo_info(text):
-    """Add 'Info: ' prefix and colorize output."""
-    msg = 'Info: ' + text
-    if config.COLORS:
-        click.secho(msg, fg='yellow')
-    else:
-        click.echo(msg)
+def die(text):
+    """A shortcut for error(); die()."""
+    error(text)
+    exit(1)
 
 
 # NOTE: "highlight" conflicts with click
@@ -38,7 +44,7 @@ def highlight_(data, lang):
         from pygments.lexers import get_lexer_by_name
         from pygments.formatters import Terminal256Formatter
     except ImportError:
-        echo_error('Pygments is missing')
+        error('Pygments is missing')
         click.echo('Syntax highlighting is provided by pygments.')
         click.echo('Please install pygments (http://pygments.org)!')
         exit(1)
@@ -46,7 +52,7 @@ def highlight_(data, lang):
     try:
         lexer = get_lexer_by_name(lang)
     except ClassNotFound:
-        echo_error('Lexer not found!')
+        error('Lexer not found!')
         exit(1)
 
     try:
@@ -54,7 +60,7 @@ def highlight_(data, lang):
     except ClassNotFound:
         styles = get_all_styles()
         msg = 'Pygments theme {} not found!'.format(config.PYGMENTS_THEME)
-        echo_error(msg)
+        error(msg)
         click.echo("Please correct pygments_theme in your '~/.noterc'!")
         click.echo('Supported themes are:')
         click.echo()

@@ -3,7 +3,7 @@ from pathlib import Path
 import click
 from plaintable import Table
 from . import config, __version__
-from .utils import echo, echo_info, echo_error, highlight_
+from .utils import echo, info, die, highlight_
 from .container import Note, load_notes, get_note, filter_tags
 
 
@@ -77,11 +77,11 @@ def list_(ctx, trash, tags, extended):
     if notes:
         echo(str(Table(notes, headline=header)))
     elif not notes and trash:
-        echo_error('No notes in trash!')
+        die('No notes in trash!')
     elif not notes and tags:
-        echo_error('No note matches the given tags!')
+        die('No note matches the given tags!')
     else:
-        echo_error('No notes exist! Create new ones with "note new TITLE"!')
+        die('No notes exist! Create new ones with "note new TITLE"!')
 
 
 @cli.command()
@@ -96,8 +96,7 @@ def show(ctx, key, lang, wrap_text):
     if lang and config.COLORS:
         content = highlight_(note.content, lang)
     elif lang and config.COLORS is False:
-        echo_error('Color support is not enabled!')
-        exit(1)
+        die('Color support is not enabled!')
     else:
         content = note.content
 
@@ -160,7 +159,7 @@ def edit(ctx, key, title, tags, no_tempfile):
             # REVIEW: Can we remove this?
             note.path.touch()
         else:
-            echo_info('No changes detected')
+            info('No changes detected')
     elif tags:
         tag_str = '# Put each tag in one line! This line will be ignored.\n'
         tag_str += '\n'.join(note.tags)
@@ -170,10 +169,9 @@ def edit(ctx, key, title, tags, no_tempfile):
             try:
                 note.tags = new_tags[1:]  # strip comment
             except AttributeError:
-                echo_error('Tags with spaces are not allowed!')
-                exit(1)
+                die('Tags with spaces are not allowed!')
         else:
-            echo_info('No changes detected')
+            info('No changes detected')
     else:
         if config.NO_TEMPFILE or no_tempfile:
             new_content = click.edit(
@@ -191,7 +189,7 @@ def edit(ctx, key, title, tags, no_tempfile):
         if new_content:
             note.content = new_content
         else:
-            echo_info('No changes detected')
+            info('No changes detected')
 
 
 @cli.command()
@@ -200,19 +198,17 @@ def edit(ctx, key, title, tags, no_tempfile):
 def new(title, tags):
     """Create a new note."""
     if '/' in title:
-        echo_error('Slashes in the title are not allowed!')
-        exit(1)
+        die('Slashes in the title are not allowed!')
     try:
         note = Note.create(title)
     except FileExistsError:
-        echo_error('This note already exists!')
-        exit(1)
+        die('This note already exists!')
     content = click.edit(note.content, editor=config.EDITOR)
     note.content = content if content else ''
-    echo_info("New note '{}' created!".format(note.title))
+    info("New note '{}' created!".format(note.title))
     if tags:
         note.tags = tags.split()
-        echo_info("Assigned tags: {}".format(', '.join(tags.split())))
+        info("Assigned tags: {}".format(', '.join(tags.split())))
 
 
 @cli.command()
@@ -227,7 +223,7 @@ def delete(ctx, key):
     note.path.rename(new_path)
     note.update_path(new_path)
     note.path.touch()
-    echo_info("Note '{}' moved to trash!".format(note.title))
+    info("Note '{}' moved to trash!".format(note.title))
 
 
 @cli.command()
@@ -240,7 +236,7 @@ def restore(ctx, key):
     note.path.rename(new_path)
     note.update_path(new_path)
     note.path.touch()
-    echo_info("Note '{}' restored!".format(note.title))
+    info("Note '{}' restored!".format(note.title))
 
 
 @cli.command()

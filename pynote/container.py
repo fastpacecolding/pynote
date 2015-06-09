@@ -6,7 +6,7 @@ import unicodedata
 import click
 from babel.dates import format_timedelta, format_datetime
 from . import config
-from .utils import echo_error
+from .utils import error, die
 
 
 def load_notes(path=config.DATA_PATH):
@@ -22,7 +22,7 @@ def load_notes(path=config.DATA_PATH):
                 config.IGNORE_EXTENSIONS and f != Note.tagfile)]
         return sorted(data, key=lambda n: n.age)
     else:
-        echo_error('The directory {} does not exist!'.format(path))
+        error('The directory {} does not exist!'.format(path))
         click.echo('You can create it with "mkdir {}".'.format(path))
         exit(1)
 
@@ -33,8 +33,7 @@ def get_note(data, key):
         note = data[key]
         return note
     else:
-        echo_error('This note does not exist!')
-        exit(1)
+        die('This note does not exist!')
 
 
 def filter_tags(data, tag_list):
