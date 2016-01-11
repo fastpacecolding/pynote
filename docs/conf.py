@@ -45,7 +45,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'pynote'
-copyright = '(c) 2013-2015 Stefan Tatschner'
+copyright = '(c) 2013-2016 Stefan Tatschner'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
