@@ -37,10 +37,6 @@ if 'ui' not in config.sections():
 
 # [data] section
 # Overwrite data and trash path when it is set in .noterc.
-# DEPRECATED: Remove 'data_path' value in pynote 2.0!
-if 'data_path' in config['data']:
-    DATA_PATH = config.get('data', 'data_path')
-    DATA_PATH = Path(os.path.expanduser(DATA_PATH))
 if 'path' in config['data']:
     DATA_PATH = config.get('data', 'pathpath')
     DATA_PATH = Path(os.path.expanduser(DATA_PATH))
