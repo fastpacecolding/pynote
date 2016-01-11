@@ -6,7 +6,7 @@ from xdg import BaseDirectory
 from pathlib import Path
 
 
-global_config = Path('/etc//xdg/noterc')
+global_config = Path('/etc/xdg/noterc')
 
 _xdg_first_config = BaseDirectory.load_first_config('note')
 if _xdg_first_config:
