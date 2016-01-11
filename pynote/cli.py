@@ -3,7 +3,7 @@ from pathlib import Path
 import click
 from plaintable import Table
 from . import config, __version__
-from .utils import echo, info, die
+from .helpers import echo, info, die
 from .container import Note, load_notes, get_note
 
 

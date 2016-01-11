@@ -6,7 +6,7 @@ import unicodedata
 import click
 from babel.dates import format_timedelta, format_datetime
 from . import config
-from .utils import error, die
+from .helpers import error, die
 
 
 def load_notes(path=config.DATA_PATH):
