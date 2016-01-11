@@ -2,9 +2,8 @@ import textwrap
 from pathlib import Path
 import click
 from plaintable import Table
-from . import config, __version__
-from .helpers import echo, info, die
-from .container import Note, load_notes, get_note
+from . import Note, config, __version__
+from .helpers import echo, info, die, get_note, load_notes
 
 
 class Context:
