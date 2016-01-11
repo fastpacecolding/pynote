@@ -118,10 +118,6 @@ be updated. You choose between editing the content, title and tags.
 
     Edit the title instead of the content.
 
-.. cmdoption:: --tags
-
-    Edit attached tags. Every line in the editor indicates one tag.
-
 .. cmdoption:: --no-tempfile
 
     Do not use a tempfile when editing notes. The note file will be edited

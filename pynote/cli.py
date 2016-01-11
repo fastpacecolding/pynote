@@ -3,8 +3,8 @@ from pathlib import Path
 import click
 from plaintable import Table
 from . import config, __version__
-from .utils import echo, info, die, highlight_
-from .container import Note, load_notes, get_note, filter_tags
+from .utils import echo, info, die
+from .container import Note, load_notes, get_note
 
 
 class Context:
@@ -45,41 +45,24 @@ def cli(ctx, no_pager, no_header):
 
 @cli.command(name='list')
 @click.option('--trash', is_flag=True, help='Show trash.')
-@click.option('-t', '--tags', default=None, help='Filter appropriate tags.')
-@click.option('-e', '--extended', is_flag=True, help='Add a tags column.')
 @pass_ctx
-def list_(ctx, trash, tags, extended):
+def list_(ctx, trash):
     """Print out a table with all notes."""
     notes = []
     # Choose between data and trash depending on --trash.
     data = enumerate(ctx.data) if not trash else enumerate(ctx.trash)
-    data = filter_tags(ctx.data, tags.split()) if tags else data
     for i, note in data:
         if config.RELDATES:
-            if extended:
-                header = ['ID', 'Title', 'Age', 'Tags']
-                notes.append(
-                    [i, note.title, note.format_age(), ', '.join(note.tags)]
-                )
-            else:
-                header = ['ID', 'Title', 'Age']
-                notes.append([i, note.title, note.format_age()])
+            header = ['ID', 'Title', 'Age']
+            notes.append([i, note.title, note.format_age()])
         else:
-            if extended:
-                header = ['ID', 'Title', 'Updated', 'Tags']
-                notes.append(
-                    [i, note.title, note.format_age(), ', '.join(note.tags)]
-                )
-            else:
-                header = ['ID', 'Title', 'Updated']
-                notes.append([i, note.title, note.format_updated()])
+            header = ['ID', 'Title', 'Updated']
+            notes.append([i, note.title, note.format_updated()])
     # Error handling
     if notes:
         echo(str(Table(notes, headline=header)))
     elif not notes and trash:
         die('No notes in trash!')
-    elif not notes and tags:
-        die('No note matches the given tags!')
     else:
         die('No notes exist! Create new ones with "note new TITLE"!')
 
@@ -89,7 +72,7 @@ def list_(ctx, trash, tags, extended):
 @click.option('-w', '--wrap-text', is_flag=True,
               help="Wrap output text at 70 chars.")
 @pass_ctx
-def show(ctx, key, lang, wrap_text):
+def show(ctx, key, wrap_text):
     """Show a specific note."""
     note = get_note(ctx.data, key)
 
@@ -130,39 +113,20 @@ def all(ctx):
 @cli.command()
 @click.argument('key', type=int)
 @click.option('--title', is_flag=True, help='Edit the title instead.')
-@click.option('--tags', is_flag=True, help='Edit assigned tags instead.')
 @click.option('--no-tempfile', is_flag=True, help='Edit note file directly.')
 @pass_ctx
-def edit(ctx, key, title, tags, no_tempfile):
+def edit(ctx, key, title, no_tempfile):
     """Edit a specific note."""
     note = get_note(ctx.data, key)
     if title:
         new_title = click.edit(note.title, editor=config.EDITOR)
         if new_title:
-            # Delete old tags from tagsfile and save them in a variable.
-            tags = note.tags
-            del note.tags
             new_title = new_title.strip()
             new_path = note.path.parent / Path(new_title)
             note.path.rename(new_path)
             note.update_path(new_path)
-            # Add saved tags to the renamed note.
-            # This ensures correct dictionary keys.
-            note.tags = tags
             # REVIEW: Can we remove this?
             note.path.touch()
-        else:
-            info('No changes detected')
-    elif tags:
-        tag_str = '# Put each tag in one line! This line will be ignored.\n'
-        tag_str += '\n'.join(note.tags)
-        new_tags = click.edit(tag_str, editor=config.EDITOR)
-        if new_tags:
-            new_tags = new_tags.strip().splitlines()
-            try:
-                note.tags = new_tags[1:]  # strip comment
-            except AttributeError:
-                die('Tags with spaces are not allowed!')
         else:
             info('No changes detected')
     else:
@@ -187,8 +151,7 @@ def edit(ctx, key, title, tags, no_tempfile):
 
 @cli.command()
 @click.argument('title', type=str)
-@click.option('-t', '--tags', default=None, help='Assign tags to new note.')
-def new(title, tags):
+def new(title):
     """Create a new note."""
     if '/' in title:
         die('Slashes in the title are not allowed!')
@@ -199,9 +162,6 @@ def new(title, tags):
     content = click.edit(note.content, editor=config.EDITOR)
     note.content = content if content else ''
     info("New note '{}' created!".format(note.title))
-    if tags:
-        note.tags = tags.split()
-        info("Assigned tags: {}".format(', '.join(tags.split())))
 
 
 @cli.command()

@@ -18,8 +18,7 @@ def load_notes(path=config.DATA_PATH):
     """
     if path.exists():
         data = [Note(f) for f in path.iterdir()
-                if f.is_file() and (f.suffix not in
-                config.IGNORE_EXTENSIONS and f != Note.tagfile)]
+                if f.is_file() and f.suffix not in config.IGNORE_EXTENSIONS]
         return sorted(data, key=lambda n: n.age)
     else:
         error('The directory {} does not exist!'.format(path))
@@ -38,23 +37,6 @@ def get_note(data, key):
         die('This note does not exist!')
 
 
-def filter_tags(data, tag_list):
-    """
-    Filter out notes depending on given taglist. The
-    taglist is a python list. This function just returns
-    the notes whose tags match the tags in the taglist.
-    It returns a tuple with the index and the note (i, note).
-    """
-    # Avoid duplicates!
-    # http://stackoverflow.com/a/4230131/2587286
-    seen = set()
-    for i, note in enumerate(data):
-        for tag in tag_list:
-            if tag in note.tags and note not in seen:
-                yield (i, note)
-                seen.add(note)
-
-
 class Note:
     """
     Represents a note. A note object maps to a textfile
@@ -62,8 +44,6 @@ class Note:
     to the filename and the updated attribute to the modification
     time.
     """
-    tagfile = config.DATA_PATH / 'tags.json'
-
     def __init__(self, path):
         self.path = path
         self.title = path.stem
@@ -86,46 +66,6 @@ class Note:
     def content(self, value):
         with self.path.open('w') as f:
             return f.write(value)
-
-    @property
-    def tags(self):
-        if self.tagfile.exists():
-            with self.tagfile.open() as f:
-                tags = json.load(f)
-            if self.title in tags:
-                return tags[self.title]
-            else:
-                return []
-        else:
-            return []
-
-    @tags.setter
-    def tags(self, value):
-        if self.tagfile.exists():
-            with self.tagfile.open() as f:
-                tags = json.load(f)
-        else:
-            self.tagfile.touch()
-            tags = []
-        # Check if tags are valid, see #18.
-        for tag in value:
-            if ' ' in tag:
-                raise AttributeError('No spaces in tags allowed!')
-        tags[self.title] = value
-
-        with self.tagfile.open('w') as f:
-            json.dump(tags, f, indent=4)
-
-    @tags.deleter
-    def tags(self):
-        if self.tagfile.exists():
-            with self.tagfile.open('r') as f:
-                tags = json.load(f)
-            # Check if there are any tags assigned, see #23.
-            if self.title in tags:
-                del tags[self.title]
-                with self.tagfile.open('w') as f:
-                    json.dump(tags, f, indent=4)
 
     @classmethod
     def create(cls, title, encrypted=False):
@@ -153,11 +93,7 @@ class Note:
             self.format_updated(),
             self.format_age()
         )
-        header = click.style(header, bold=True) if colors else header
-        if self.tags:
-            header += '\n'
-            header += ' / '.join(self.tags)
-        return header
+        return click.style(header, bold=True) if colors else header
 
     def format_age(self):
         return format_timedelta(self.age, locale=config.LOCALE)
