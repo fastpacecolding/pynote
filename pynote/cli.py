@@ -38,19 +38,16 @@ class AliasedGroup(click.Group):
 @pass_ctx
 def cli(ctx, no_pager, no_header):
     ctx.data = load_notes()
-    ctx.trash = load_notes(config.TRASH_PATH)
     ctx.no_pager = no_pager
     ctx.no_header = no_header
 
 
 @cli.command(name='list')
-@click.option('--trash', is_flag=True, help='Show trash.')
 @pass_ctx
-def list_(ctx, trash):
+def list_(ctx):
     """Print out a table with all notes."""
     notes = []
-    # Choose between data and trash depending on --trash.
-    data = enumerate(ctx.data) if not trash else enumerate(ctx.trash)
+    data = enumerate(ctx.data)
     for i, note in data:
         if config.RELDATES:
             header = ['ID', 'Title', 'Age']
@@ -61,8 +58,6 @@ def list_(ctx, trash):
     # Error handling
     if notes:
         echo(str(Table(notes, headline=header)))
-    elif not notes and trash:
-        die('No notes in trash!')
     else:
         die('No notes exist! Create new ones with "note new TITLE"!')
 
@@ -167,21 +162,6 @@ def new(title):
 @cli.command()
 @click.argument('key', type=int)
 @pass_ctx
-def delete(ctx, key):
-    """Move a note to trash."""
-    note = get_note(ctx.data, key)
-    if not config.TRASH_PATH.exists():
-        config.TRASH_PATH.mkdir()
-    new_path = config.TRASH_PATH / note.title
-    note.path.rename(new_path)
-    note.update_path(new_path)
-    note.path.touch()
-    info("Note '{}' moved to trash!".format(note.title))
-
-
-@cli.command()
-@click.argument('key', type=int)
-@pass_ctx
 def restore(ctx, key):
     """Restore a note from trash."""
     note = get_note(ctx.trash, key)
@@ -199,7 +179,6 @@ def conf():
         ['global_config', config.GLOBAL_CONFIG],
         ['local_config', config.LOCAL_CONFIG],
         ['data_path', config.DATA_PATH],
-        ['trash_path', config.TRASH_PATH],
         ['editor', config.EDITOR],
         ['colors', config.COLORS],
         ['dateformat', config.DATEFORMAT],

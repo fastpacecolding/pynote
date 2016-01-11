@@ -44,7 +44,6 @@ if 'data_path' in config['data']:
 if 'path' in config['data']:
     DATA_PATH = config.get('data', 'pathpath')
     DATA_PATH = Path(os.path.expanduser(DATA_PATH))
-TRASH_PATH = DATA_PATH / '.trash'
 EXTENSION = config.get('data', 'extension', fallback='')
 IGNORE_EXTENSIONS = config.get('data', 'ignore_extensions', fallback=[])
 IGNORE_EXTENSIONS = json.loads(IGNORE_EXTENSIONS) if IGNORE_EXTENSIONS else []
