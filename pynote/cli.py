@@ -86,24 +86,17 @@ def list_(ctx, trash, tags, extended):
 
 @cli.command()
 @click.argument('key', type=int)
-@click.option('-l', '--lang', default=None)
 @click.option('-w', '--wrap-text', is_flag=True,
               help="Wrap output text at 70 chars.")
 @pass_ctx
 def show(ctx, key, lang, wrap_text):
     """Show a specific note."""
     note = get_note(ctx.data, key)
-    if lang and config.COLORS:
-        content = highlight_(note.content, lang)
-    elif lang and config.COLORS is False:
-        die('Color support is not enabled!')
-    else:
-        content = note.content
 
     if ctx.no_header:
-        output = content
+        output = note.content
     else:
-        output = note.format_header() + '\n\n' + content
+        output = note.format_header() + '\n\n' + note.content
 
     if wrap_text:
         output = textwrap.fill(output, replace_whitespace=False)
@@ -255,6 +248,5 @@ def conf():
         ['extension', config.EXTENSION],
         ['ignore_extensions', config.IGNORE_EXTENSIONS],
         ['no_tempfile', config.NO_TEMPFILE],
-        ['pygments_theme', config.PYGMENTS_THEME],
     ]
     echo(str(Table(varlist)))

@@ -65,14 +65,7 @@ editor
     the environment variable ``$EDITOR``. If ``$EDITOR`` is not set this
     value will fall back to ``'nano'``.
 
-pygments_theme
-    Choose the pygments theme for synthax highlighting things. You'll find
-    instructions to get all supported values on the `pygments webpage`_.
-
-    **Default**: default
-
 .. _`babel docs`: http://babel.pocoo.org/docs/dates/#date-fields
-.. _`pygments webpage`: http://pygments.org/docs/styles/#getting-a-list-of-available-styles
 
 Data section
 ------------
@@ -117,8 +110,6 @@ Example Noterc File
 
     [ui]
     editor = vim
-    pygments_theme = monokai
-    # Dateformat settings
     dateformat = medium
     reldates = yes
     locale = de_DE
