@@ -38,7 +38,7 @@ if 'ui' not in config.sections():
 # [data] section
 # Overwrite data and trash path when it is set in .noterc.
 if 'path' in config['data']:
-    DATA_PATH = config.get('data', 'pathpath')
+    DATA_PATH = config.get('data', 'path')
     DATA_PATH = Path(os.path.expanduser(DATA_PATH))
 EXTENSION = config.get('data', 'extension', fallback='')
 IGNORE_EXTENSIONS = config.get('data', 'ignore_extensions', fallback=[])
