@@ -1,0 +1,629 @@
+#!/usr/bin/env python3
+
+# The MIT License (MIT)
+#
+# Copyright (c) 2013-2016 Stefan Tatschner <rumpelsepp@sevenbyte.org>
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+# THE SOFTWARE.
+
+import argparse
+import configparser
+import functools
+import os
+import os.path
+import re
+import shlex
+import shutil
+import tempfile
+import unicodedata
+from pathlib import Path
+from subprocess import run, PIPE
+
+import arrow
+from plaintable import Table
+from xdg import BaseDirectory
+
+DEBUG = False
+__version__ = '1.0.0'
+
+#
+# Config Parsing
+#
+GLOBALCONF = Path('/etc/xdg/noterc')
+
+# TODO: Drop pyxdg! It is a mess...
+# These are generators; just pick the first item.
+# Generators raise a StopIteration when the end has been reached.
+try:
+    xdg_config = next(BaseDirectory.load_config_paths('note'))
+    LOCALCONF = Path(xdg_config, 'noterc')
+except StopIteration:
+    LOCALCONF = Path('~/.noterc').expanduser()
+try:
+    xdg_data = next(BaseDirectory.load_data_paths('note'))
+    DEFAULT_DATA_PATH = Path(xdg_data)
+except StopIteration:
+    DEFAULT_DATA_PATH = Path('~/.note').expanduser()
+
+# Initialize config parser object
+# Read global config first, overwrite with local config
+config = configparser.ConfigParser()
+config.read((GLOBALCONF.as_posix(), LOCALCONF.as_posix()))
+
+# [data] section
+# Overwrite data path when it is set in .noterc.
+# TODO: Rename these variables to sth like this:
+#       D_PATH, D_EXTENSION, UI_EDITOR, UI_RELDATES, ...
+DATA_PATH = config.get('data', 'path', fallback=DEFAULT_DATA_PATH)
+DATA_PATH = Path(DATA_PATH).expanduser()
+EXTENSION = config.get('data', 'extension', fallback='.txt')
+IGNORE_EXTENSIONS = config.get('data', 'ignore_extensions', fallback=[])
+if IGNORE_EXTENSIONS:
+    IGNORE_EXTENSIONS = IGNORE_EXTENSIONS.replace(' ', '').split(',')
+TMPFILE = config.get('data', 'tmpfile', fallback=False)
+SLUGIFY_PATHNAMES = config.get('data', 'slugify_pathnames', fallback=False)
+
+# [ui] section
+EDITOR = config.get('ui', 'editor', fallback=os.getenv('EDITOR', 'nano'))
+PAGER = config.get('ui', 'pager', fallback=os.getenv('PAGER', ''))
+DATEFORMAT = config.get('ui', 'dateformat', fallback='YYYY-MM-DD HH:mm')
+RELDATES = config.getboolean('ui', 'reldates', fallback=False)
+
+# [aliases] section
+ALIASES = dict(config['aliases']) if config.has_section('aliases') else {}
+# TODO: Provide a set of default aliases.
+# Prepopulate aliases dictionary
+cmds = (
+    'add',
+    'list',
+    'all',
+    'edit',
+    'show',
+    'delete',
+    'git',
+)
+for cmd in cmds:
+    if cmd in ALIASES:
+        ALIASES[cmd] = ALIASES[cmd].replace(' ', '').split(',')
+    else:
+        ALIASES[cmd] = ''
+
+# [git] section
+GITENABLED = config.getboolean('git', 'enabled', fallback=False)
+# Check if git is in $PATH and issue a warning if it's not there.
+if GITENABLED:
+    if shutil.which('git') is None:
+        import warnings
+        GITENABLED = False
+        warnings.warn('git is not available in $PATH')
+        warnings.warn('git support is disabled')
+GIT_SUPPRESS_OUTPUT = config.get('git', 'suppress_output', fallback=False)
+
+
+#
+# Data model
+#
+class Note:
+    """
+    Represents a note. A note object maps to a textfile
+    somewhere in the filesystem. The note's title maps
+    to the filename and the updated attribute to the
+    modification time.
+    """
+    def __init__(self, path):
+        self.path = path
+        self.title = path.stem
+        # If the file is not present create an empty one.
+        if not path.exists():
+            path.touch()
+        self.mtime = arrow.get(self.path.stat().st_mtime)
+        self.age = arrow.now() - self.mtime
+
+    @property
+    def content(self):
+        return self.path.read_text()
+
+    @content.setter
+    def content(self, value):
+        self.path.write_text(value)
+
+    # We need to reuse the slugify method, so the
+    # property calls the classmethod when needed.
+    @property
+    def slug(self):
+        return self.slugify(self.title)
+
+    @classmethod
+    def slugify(cls, string):
+        # stolen from Django: django/utils/text.py
+        res = unicodedata.normalize('NFKD', string)
+        res = res.encode('ascii', 'ignore').decode('ascii')
+        res = re.sub('[^\w\s-]', '', res).strip().lower()
+        return re.sub('[-\s]+', '-', res)
+
+    @property
+    def header(self):
+        header = '{} @ {}, {}'.format(
+            self.title,
+            self.mtime.format(DATEFORMAT),
+            self.mtime.humanize(),
+        )
+        return header
+
+    @classmethod
+    def create(cls, title, slugify=False):
+        if SLUGIFY_PATHNAMES or slugify:
+            title = cls.slugify(title)
+        if EXTENSION:
+            filename = title + EXTENSION
+        else:
+            filename = title
+
+        path = DATA_PATH.joinpath(filename)
+        if path.exists():
+            raise FileExistsError('Note already exists!')
+        else:
+            return cls(path)
+
+    def unlink(self):
+        self.path.unlink()
+        del self
+
+    def __repr__(self):
+        return "{}('{}')".format(self.__class__.__name__, self.path)
+
+
+#
+# Helpers
+#
+def echo(msg):
+    if PAGER:
+        if PAGER == 'less' and 'LESS' not in os.environ:
+            os.putenv('LESS', 'FRX')
+        msg = str(msg).encode()
+        run([PAGER], input=msg)
+    else:
+        print(msg)
+
+
+def debug(msg):
+    if DEBUG:
+        print('Debug: ' + msg)
+
+
+def error(msg):
+    print('Error: ' + msg)
+
+
+def die(msg):
+    error(msg)
+    exit(1)
+
+
+def icreate_datadir(path=DATA_PATH):
+    print('Path {} does not exist'.format(path))
+    print('Should I create it?')
+    if input('[y/N] ') == 'y':
+        path.mkdir()
+        print('Data directory {} created'.format(path))
+
+    if GITENABLED:
+        print('You have enabled git support.')
+        print('Should I Initialize the repository?')
+        if input('[y/N] ') == 'y':
+            os.chdir(DATA_PATH.as_posix())
+            run(['git', 'init'])
+
+
+def load_notes(path=DATA_PATH):
+    """
+    Scans the given path and returns a list of notes
+    which is sorted by the modification time. Any directory
+    is ignored. Die path argument has to be an instance of
+    pathlib.Path.
+    """
+    try:
+        data = [Note(f) for f in path.iterdir()
+                if f.is_file() and f.suffix not in IGNORE_EXTENSIONS]
+        return sorted(data, key=lambda n: n.age)
+    except FileNotFoundError:
+        icreate_datadir(path)
+
+
+def _get_note_by_id(ID):
+    notes = load_notes()
+    if ID < len(notes):
+        return notes[ID]
+    die('This note does not exist!')
+
+
+def _get_note_by_slug(slug):
+    notes = load_notes()
+    for note in notes:
+        if note.slug.startswith(slug):
+            return note
+    die('This note does not exist!')
+
+
+def get_note(key):
+    if key.isnumeric():
+        return _get_note_by_id(int(key, 0))
+    return _get_note_by_slug(key)
+
+
+def spawn_editor(path):
+    p = run([*shlex.split(EDITOR), path.as_posix()])
+    if p.returncode != 0:
+        die('Editor crashed')
+
+
+def spawn_editor_at_tmpfile(content, extension=EXTENSION):
+    with tempfile.NamedTemporaryFile(
+            mode='w+',
+            prefix='pynote-',
+            suffix=EXTENSION) as f:
+        debug('Generating tempfile "{}"'.format(f.name))
+        if content:
+            f.write(content)
+            f.flush()
+        p = run([*shlex.split(EDITOR), f.name])
+        if p.returncode == 0:
+            f.flush()
+            f.seek(0)
+            return f.read()
+        else:
+            die('Editor crashed')
+
+
+#
+# Decorators
+#
+def git(commitmsg):
+    def commit(func):
+        @functools.wraps(func)
+        def wrapper(*args, **kwargs):
+            if GIT_SUPPRESS_OUTPUT:
+                stdout = PIPE
+                stderr = PIPE
+            else:
+                stdout = None
+                stderr = None
+
+            ret = func(*args, **kwargs)
+
+            if GITENABLED:
+                debug('Looking for changes')
+                os.chdir(DATA_PATH.as_posix())
+                status = run([
+                    'git',
+                    'status',
+                    '--porcelain',
+                ], stdout=PIPE, stderr=PIPE)
+
+                if status.returncode == 0:
+                    if status.stdout:
+                        debug('Changes detected')
+                        debug('Running "git commit"')
+                        run(
+                            ['git', 'add', '.'],
+                            stdout=stdout,
+                            stderr=stderr,
+                        )
+                        run(
+                            ['git', 'commit', '-m', commitmsg],
+                            stdout=stdout,
+                            stderr=stderr,
+                        )
+                    else:
+                        debug('No changes detected')
+                else:
+                    die('Git failed; maybe you forgot "git init"?')
+            return ret
+        return wrapper
+    return commit
+
+
+#
+# Commands
+#
+def cmd_list(args):
+    """Print out a table with all notes."""
+    table = []
+    notes = load_notes()
+    if not notes:
+        die('No notes exist! Create new ones with "note add TITLE"!')
+
+    if args.no_header:
+        header = None
+    else:
+        header = ['ID', 'Title', 'Updated']
+
+    for i, note in enumerate(notes):
+        if RELDATES:
+            table.append([i, note.title, note.mtime.humanize()])
+        else:
+            table.append([i, note.title, note.mtime.format(DATEFORMAT)])
+
+    echo(Table(table, headline=header))
+
+
+def cmd_show(args):
+    """Show a specific note."""
+    note = get_note(args.ID)
+    if args.no_header:
+        out = note.content
+    else:
+        out = note.header + '\n\n' + note.content
+
+    if args.w:
+        import textwrap
+        out = textwrap.fill(out, replace_whitespace=False)
+
+    echo(out.strip())
+
+
+def cmd_all(args):
+    """Print out all notes in the data directory."""
+    out = ''
+    notes = load_notes()
+    if not notes:
+        die('No notes exist! Create new ones with "note add TITLE"!')
+
+    for i, note in enumerate(notes):
+        ctr = '-- note {} --'.format(i)
+        out += ctr
+        out += '\n\n'
+        if args.no_header:
+            out += note.content
+        else:
+            out += note.header
+            out += '\n\n'
+            out += note.content
+        out += '\n\n'
+
+    echo(out.strip())
+
+
+@git('Note changed')
+def cmd_edit(args):
+    """Edit a specific note."""
+    note = get_note(args.ID)
+    if args.title:
+        new_title = spawn_editor_at_tmpfile(note.title)
+        if new_title != note.title:
+            new_title = new_title.strip()
+            new_path = note.path.parent.joinpath(new_title)
+            note.path.rename(new_path)
+    else:
+        if TMPFILE or args.tmpfile:
+            note.content = spawn_editor_at_tmpfile(note.content)
+        else:
+            spawn_editor(note.path)
+
+
+@git('Note added')
+def cmd_add(args):
+    """Create a new note."""
+    if '/' in args.title:
+        die('Slashes in the title are not allowed!')
+    try:
+        note = Note.create(args.title, slugify=args.slugify)
+    except FileExistsError:
+        die('This note already exists!')
+    except FileNotFoundError:
+        icreate_datadir()
+        exit(0)
+    if TMPFILE or args.tmpfile:
+        note.content = spawn_editor_at_tmpfile()
+    else:
+        # Edits the file in place.
+        spawn_editor(note.path)
+
+
+@git('Note deleted')
+def cmd_delete(args):
+    """Delete an existing note."""
+    note = get_note(args.ID)
+    note.unlink()
+
+
+def cmd_conf(args):
+    """Show pynote's configuration (for debugging)."""
+    varlist = [
+        ['globalconf', GLOBALCONF],
+        ['localconf', LOCALCONF],
+        ['data_path', DATA_PATH],
+        ['aliases', ALIASES],
+        ['editor', EDITOR],
+        ['dateformat', DATEFORMAT],
+        ['reldates', RELDATES],
+        ['extension', EXTENSION],
+        ['ignore_extensions', IGNORE_EXTENSIONS],
+        ['tmpfile', TMPFILE],
+        ['gitenabled', GITENABLED],
+        ['git_suppress_output', GIT_SUPPRESS_OUTPUT],
+    ]
+    print(Table(varlist))
+
+
+def cmd_git(args):
+    os.chdir(DATA_PATH.as_posix())
+    cmd = shlex.split(args.cmd)
+    run(['git', *cmd])
+
+
+#
+# CLI and main entry point
+#
+def parse_args():
+    # Global parser
+    parser = argparse.ArgumentParser(add_help=False)
+    # Workaround to capitalize the first letter in the help message.
+    parser.add_argument(
+        '-h', '--help',
+        action='help',
+        help='Show this help message and exit',
+    )
+    parser.add_argument(
+        '--no-pager',
+        action='store_true',
+        help='Do not use a pager',
+    )
+    parser.add_argument(
+        '--no-header',
+        action='store_true',
+        help='Suppress header',
+    )
+    parser.add_argument(
+        '--tmpfile',
+        action='store_true',
+        help='Use a tmpfile when spawning EDITOR',
+    )
+    parser.add_argument(
+        '--version',
+        action='version',
+        version='pynote {}'.format(__version__),
+        help='Show version string',
+    )
+    parser.add_argument(
+        '--debug',
+        action='store_true',
+        help='Show additional debug information',
+    )
+
+    # Subcommands
+    subparsers = parser.add_subparsers()
+    # note list
+    parser_list = subparsers.add_parser(
+        'list',
+        aliases=ALIASES['list'],
+        help='List available notes',
+    )
+    parser_list.set_defaults(func=cmd_list)
+
+    # note show
+    parser_show = subparsers.add_parser(
+        'show',
+        aliases=ALIASES['show'],
+        help='Show a particular note',
+    )
+    parser_show.add_argument(
+        'ID',
+        help='Note\'s ID or slug',
+    )
+    parser_show.add_argument(
+        '-w',
+        metavar='chars',
+        help='Wrap output text',
+    )
+    parser_show.set_defaults(func=cmd_show)
+
+    # note edit
+    parser_delete = subparsers.add_parser(
+        'edit',
+        aliases=ALIASES['edit'],
+        help='Edit a note',
+    )
+    parser_delete.add_argument(
+        'ID',
+        help='Note\'s ID or slug',
+    )
+    parser_delete.add_argument(
+        '-t',
+        '--title',
+        action='store_true',
+        help='Change the title instead',
+    )
+    parser_delete.set_defaults(func=cmd_edit)
+
+    # note delete
+    parser_delete = subparsers.add_parser(
+        'delete',
+        aliases=ALIASES['delete'],
+        help='Delete a note',
+    )
+    parser_delete.add_argument(
+        'ID',
+        help='Note\'s ID or slug',
+    )
+    parser_delete.set_defaults(func=cmd_delete)
+
+    # note all
+    parser_all = subparsers.add_parser(
+        'all',
+        aliases=ALIASES['all'],
+        help='Show all notes',
+    )
+    parser_all.set_defaults(func=cmd_all)
+
+    # note add
+    parser_add = subparsers.add_parser(
+        'add',
+        aliases=ALIASES['add'],
+        help='Add a new note',
+    )
+    parser_add.add_argument(
+        '-s',
+        '--slugify',
+        action='store_true',
+        help='Slugify the title',
+    )
+    parser_add.add_argument(
+        'title',
+        help='Title of the new note',
+    )
+    parser_add.set_defaults(func=cmd_add)
+
+    # note conf
+    parser_conf = subparsers.add_parser(
+        'conf',
+        help='Show current configuration',
+    )
+    parser_conf.set_defaults(func=cmd_conf)
+
+    # note git
+    if GITENABLED:
+        parser_git = subparsers.add_parser(
+            'git',
+            aliases=ALIASES['git'],
+            help='Interact with git',
+        )
+        parser_git.add_argument(
+            'cmd',
+            help='Git command to execute',
+        )
+        parser_git.set_defaults(func=cmd_git)
+    return parser.parse_args()
+
+
+def main():
+    args = parse_args()
+    if args.debug:
+        global DEBUG
+        DEBUG = True
+        print(args)
+    if hasattr(args, 'func'):
+        args.func(args)
+    else:
+        # Use "note list" as default.
+        cmd_list(args)
+
+
+if __name__ == '__main__':
+    main()
