@@ -1,11 +1,4 @@
-.cache
-*~
-*.sublime-workspace
-__pycache__
 dist
 MANIFEST
-*.pyc
-pynote-export
-*.mo
 *.egg-info
-tests
+*.html
