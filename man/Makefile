@@ -1,0 +1,48 @@
+# Copyright (c) 2015-2016 Stefan Tatschner
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+# THE SOFTWARE.
+
+ASCIIDOC            = asciidoctor
+ASCIIDOC_MAN        = asciidoctor
+ASCIIDOC_MAN_FLAGS  = -d manpage -b manpage
+ASCIIDOC_HTML_FLAGS =
+
+MAN1_ADOCS = $(wildcard *.1.adoc)
+MAN5_ADOCS = $(wildcard *.5.adoc)
+DOC_MAN1   = $(patsubst %.adoc,%,$(MAN1_ADOCS))
+DOC_MAN5   = $(patsubst %.adoc,%,$(MAN5_ADOCS))
+MAN_ADOC   = $(MAN1_ADOCS) $(MAN5_ADOCS)
+DOC_HTML   = $(patsubst %.adoc,%.html,$(MAN_ADOC))
+
+all: html man
+
+html: $(DOC_HTML)
+
+man: man1 man5
+man1: $(DOC_MAN1)
+man5: $(DOC_MAN5)
+
+%.1 : %.1.adoc
+	$(ASCIIDOC_MAN) $(ASCIIDOC_MAN_FLAGS) $<
+
+%.5 : %.5.adoc
+	$(ASCIIDOC_MAN) $(ASCIIDOC_MAN_FLAGS) $<
+
+%.html : %.adoc
+	$(ASCIIDOC) $(ASCIIDOC_HTML_FLAGS) $<

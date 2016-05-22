@@ -1,0 +1,112 @@
+= noterc(5)
+:doctype:    manpage
+:man source: pynote
+
+== Name
+
+noterc - runtime configuration for pynote
+
+== Synopsis
+
+----
+/etc/xdg/noterc 
+$XDG_CONFIG_HOME/note/noterc
+$HOME/.config/note/noterc
+----
+
+== Description
+
+Pynote is configured with a local ressource file and a global one. The local
+ressource file can be used to overwrite values from the global one. Pynote
+uses the XDG Base Directory Specification. If the environment variable
+`XDG_CONFIG_HOME` is set, pynote searches the local config file in
+`$XDG_CONFIG_HOME/note/noterc`. If the variable is unset pynote looks into
+`$HOME/.config/note/noterc`.
+
+Each file is formatted as a line-separated list of `KEY=VALUE` pairs, blank
+lines, and lines starting with `#`, are ignored. 
+
+== Sections
+
+Pynote's configuration is devided into several sections. A section starts with
+the section name in square brackets, e.g. `[ui]`. If you want to learn more
+about python's configparser check out the official python documentation.
+
+=== `[ui]`
+
+dateformat [default: `YYYY-MM-dd HH:mm`]::
+    Set the default dateformat for all dates shown in pynote. A list with all
+    available config values can be obtained from the arrow documentation:
+    https://github.com/crsmithdev/arrow/blob/master/docs/index.rst#tokens
+
+reldates [default: `no`]::
+    Use relative dates in your notes table. 
+
+editor [default: `${EDITOR:-vi}`]::
+    The command line editor which is used to create and edit notes.
+    You can pass additional arguments to the editor as well, e.g.
+    `nvim -c "set ft=asciidoc"`. If it is not present pynote will take
+    the environment variable `$EDITOR``. If `$EDITOR` is not set, this
+    value will fall back to `'vi'`.
+
+pager [default: `less`]::
+    TODO
+
+=== `[data]` 
+
+path [default: `$HOME/.local/share/note`]::
+    Specifies the place where your stored notes live. `~` is expanded to your
+    homedir. You can set this location e.g. to your Dropbox directory to ensure
+    automatic syncing of your notes. This value defaults to
+    `$XDG_DATA_HOME/note`, which falls back to `$HOME/.local/share/note`.
+
+extension [default: `.txt`]::
+    Specifiy an extension which should be added to the filename of each note.
+    This might be useful for using markup languages (such as rst, asciidoc,
+    markdown...) and synthax highlighting in your editor. You have to include
+    the dot.
+
+ignore_extensions [default: `''`]::
+    Ignore files in the notes folder with a specific extension, e.g. `.pdf`.
+    It may be useful if you store other files, such as pdfs, in your notes
+    directory. This configuration value must be a comma separated string.
+
+tmpfile [default: `no`]::
+    Use a tmpfile when editing notes. The note file will not be edited
+    directly. After finished editing the tmpfile is copied to the note's
+    location.
+
+slugify_titles [default: `no`]::
+    TODO
+
+=== `[aliases]`
+
+TODO
+
+=== `[git]` 
+
+enabled [default: `no`]::
+    TODO
+
+suppress_output [default: `no`]::
+    TODO
+
+== Example File
+
+----
+[ui]
+editor = nvim -c "set ft=asciidoc"
+reldates = yes
+
+[data]
+path = ~/Sync/Notes
+extension = .txt
+slugify_titles = no
+ignore_extensions = .pdf, .odt
+
+[aliases]
+add = a, new, n
+list = l
+edit = e
+show = s
+----

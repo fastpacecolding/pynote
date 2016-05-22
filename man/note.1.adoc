@@ -1,0 +1,115 @@
+= note(1)
+:doctype:    manpage
+:man source: pynote
+
+== Name
+
+note - manage notes on the commandline
+
+== Synopsis
+
+----
+note [-h] [--no-pager] [--no-header] [--tmpfile] [--version] [--debug]
+     {list,show,edit,delete,all,add,conf,git} ...
+----
+
+== Description
+
+pynote is a project to manage your notes on the commandline. It is written in
+Python 3.5 and provides a very handy cmd-interface.
+
+== Options
+
+`--no-pager`::
+    Supress paging globally.
+
+`--no-header`::
+    Supress the note's header globally.
+
+`--tmpfile`::
+    TODO
+
+`--version`::
+    Show the version and exit.
+
+`--debug`::
+    TODO
+
+== Commands
+
+=== list
+
+This prints out a table with all stores notes. This is the default command if
+you pass nothing to `note`. The columns are sorted by the updated time:
+
+----
+$ note list
+ID  Title         Age
+--  -----------   ---------
+0   spam          3 seconds
+1   lovely spam   1 day
+----
+
+=== show
+
+Shows a specific note including a header with some metadata. You have
+to pass the numeric id of the note to show, e.g. `$ note show 0`:
+
+----
+$ note show 0
+spam @ 2014-05-31 17:19, 48 seconds ago
+
+Spam, Spam, Spam, lovely Spam
+Wonderful Spam, Lovely Spam.
+Spam, Spam, Spam, magnificent Spam,
+Superlative Spam.
+Spam, Spam, Spam, wonderous Spam,
+Surgical Spam, splendiferous Spam.
+Spam, Spam, Spam, Spaaam!
+----
+
+`-w`:: 
+`--wrap-text`::
+    Wrap output at 70 signs. This may be useful if you want to read
+    a badly formatted note on the terminal.
+
+=== all
+
+Just prints out all notes.
+
+=== add
+
+Your configured editor (e.g. `nvim`) opens and you can type in your content.
+You have to pass the title of the note like this:
+
+----
+$ note add "wonderful spam"
+----
+
+=== edit
+
+TODO
+
+=== delete
+
+TODO
+
+=== conf
+
+Show all configuration values for debugging reasons:
+
+----
+$ note conf
+global_config      /etc/noterc
+local_config       /home/stefan/.noterc
+data_path          /home/stefan/.note
+trash_path         /home/stefan/.note/.trash
+editor             vim
+colors             False
+dateformat         YYYY-MM-dd HH:mm
+reldates           False
+locale             en_US
+extension
+ignore_extensions  []
+pygments_theme     default
+----
