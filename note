@@ -394,7 +394,7 @@ def cmd_all(args):
         else:
             out += note.header
             out += '\n\n'
-            out += note.content
+            out += note.content.strip()
         out += '\n\n'
 
     echo(out.strip())
