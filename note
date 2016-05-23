@@ -33,7 +33,7 @@ import shutil
 import tempfile
 import unicodedata
 from pathlib import Path
-from subprocess import run, PIPE
+from subprocess import run, DEVNULL
 
 import arrow
 from plaintable import Table
@@ -299,8 +299,8 @@ def git(commitmsg):
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
             if GIT_SUPPRESS_OUTPUT:
-                stdout = PIPE
-                stderr = PIPE
+                stdout = DEVNULL
+                stderr = DEVNULL
             else:
                 stdout = None
                 stderr = None
