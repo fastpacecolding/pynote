@@ -113,3 +113,17 @@ extension
 ignore_extensions  []
 pygments_theme     default
 ----
+
+== Environment Variables
+
+EDITOR::
+    TODO
+
+PAGER::
+    TODO
+
+XDG_CONFIG_HOME::
+    TODO
+
+XDG_DATA_HOME::
+    TODO
