@@ -159,11 +159,17 @@ class Note:
 
     @property
     def header(self):
-        header = '{} @ {}, {}'.format(
-            self.title,
-            self.mtime.format(DATEFORMAT),
-            self.mtime.humanize(),
-        )
+        if RELDATES:
+            header = '{} @ {}, {}'.format(
+                self.title,
+                self.mtime.format(DATEFORMAT),
+                self.mtime.humanize(),
+            )
+        else:
+            header = '{} @ {}'.format(
+                self.title,
+                self.mtime.format(DATEFORMAT),
+            )
         return header
 
     @classmethod
