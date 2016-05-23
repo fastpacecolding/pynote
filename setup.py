@@ -35,7 +35,7 @@ setup(
     author_email='rumpelsepp@sevenbyte.org',
     url='https://github.com/rumpelsepp/pynote',
     license='MIT',
-    install_requires=['plaintable', 'arrow', 'pyxdg'],
+    install_requires=['plaintable', 'arrow'],
     scripts=['note'],
     classifiers=[
         'Development Status :: 5 - Production/Stable',

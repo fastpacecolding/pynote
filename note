@@ -37,7 +37,6 @@ from subprocess import run, PIPE
 
 import arrow
 from plaintable import Table
-from xdg import BaseDirectory
 
 DEBUG = False
 __version__ = '1.0.0'
@@ -47,19 +46,20 @@ __version__ = '1.0.0'
 #
 GLOBALCONF = Path('/etc/xdg/noterc')
 
-# TODO: Drop pyxdg! It is a mess...
-# These are generators; just pick the first item.
-# Generators raise a StopIteration when the end has been reached.
-try:
-    xdg_config = next(BaseDirectory.load_config_paths('note'))
-    LOCALCONF = Path(xdg_config, 'noterc')
-except StopIteration:
-    LOCALCONF = Path('~/.noterc').expanduser()
-try:
-    xdg_data = next(BaseDirectory.load_data_paths('note'))
-    DEFAULT_DATA_PATH = Path(xdg_data)
-except StopIteration:
-    DEFAULT_DATA_PATH = Path('~/.note').expanduser()
+# Partial implemantation of XDG Base Directory specification
+_xdg_config_home = os.getenv('XDG_CONFIG_HOME', '')
+if _xdg_config_home:
+    _xdg_config_home = Path(_xdg_config_home)
+else:
+    _xdg_config_home = Path('~/.config/note').expanduser()
+LOCALCONF = _xdg_config_home.joinpath('noterc')
+
+_xdg_data_home = os.getenv('XDG_DATA_HOME', '')
+if _xdg_data_home:
+    _xdg_data_home = Path(_xdg_data_home)
+else:
+    _xdg_data_home = Path('~/.local/share').expanduser()
+DEFAULT_DATA_PATH = _xdg_data_home.joinpath('note')
 
 # Initialize config parser object
 # Read global config first, overwrite with local config
