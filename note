@@ -220,7 +220,7 @@ def icreate_datadir(path=DATA_PATH):
     print('Path {} does not exist'.format(path))
     print('Should I create it?')
     if input('[y/N] ') == 'y':
-        path.mkdir()
+        path.mkdir(parents=True)
         print('Data directory {} created'.format(path))
 
     if GITENABLED:
