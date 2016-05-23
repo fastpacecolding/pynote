@@ -618,6 +618,9 @@ def main():
         global DEBUG
         DEBUG = True
         print(args)
+    if args.no_pager:
+        global PAGER
+        PAGER = None
     if hasattr(args, 'func'):
         args.func(args)
     else:
