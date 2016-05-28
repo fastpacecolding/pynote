@@ -33,7 +33,7 @@ import shutil
 import tempfile
 import unicodedata
 from pathlib import Path
-from subprocess import run, DEVNULL
+from subprocess import run, PIPE, DEVNULL
 
 import arrow
 from tabulate import tabulate
