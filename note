@@ -93,7 +93,7 @@ cmds = (
     'all',
     'edit',
     'show',
-    'delete',
+    'rm',
     'git',
 )
 for cmd in cmds:
@@ -442,7 +442,7 @@ def cmd_add(args):
 
 
 @git('Note deleted')
-def cmd_delete(args):
+def cmd_rm(args):
     """Delete an existing note."""
     note = get_note(args.ID)
     note.unlink()
@@ -564,15 +564,15 @@ def parse_args():
 
     # note delete
     parser_delete = subparsers.add_parser(
-        'delete',
-        aliases=ALIASES['delete'],
-        help='Delete a note',
+        'rm',
+        aliases=ALIASES['rm'],
+        help='Remove a note',
     )
     parser_delete.add_argument(
         'ID',
         help='Note\'s ID or slug',
     )
-    parser_delete.set_defaults(func=cmd_delete)
+    parser_delete.set_defaults(func=cmd_rm)
 
     # note all
     parser_all = subparsers.add_parser(
