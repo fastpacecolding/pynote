@@ -68,22 +68,20 @@ config.read((GLOBALCONF.as_posix(), LOCALCONF.as_posix()))
 
 # [data] section
 # Overwrite data path when it is set in .noterc.
-# TODO: Rename these variables to sth like this:
-#       D_PATH, D_EXTENSION, UI_EDITOR, UI_RELDATES, ...
-DATA_PATH = config.get('data', 'path', fallback=DEFAULT_DATA_PATH)
-DATA_PATH = Path(DATA_PATH).expanduser()
-EXTENSION = config.get('data', 'extension', fallback='.txt')
-IGNORE_EXTENSIONS = config.get('data', 'ignore_extensions', fallback=[])
-if IGNORE_EXTENSIONS:
-    IGNORE_EXTENSIONS = IGNORE_EXTENSIONS.replace(' ', '').split(',')
-TMPFILE = config.get('data', 'tmpfile', fallback=False)
-SLUGIFY_PATHNAMES = config.get('data', 'slugify_pathnames', fallback=False)
+D_PATH = config.get('data', 'path', fallback=DEFAULT_DATA_PATH)
+D_PATH = Path(D_PATH).expanduser()
+D_EXTENSION = config.get('data', 'extension', fallback='.txt')
+D_IGNORE_EXTENSIONS = config.get('data', 'ignore_extensions', fallback=[])
+if D_IGNORE_EXTENSIONS:
+    D_IGNORE_EXTENSIONS = D_IGNORE_EXTENSIONS.replace(' ', '').split(',')
+D_TMPFILE = config.get('data', 'tmpfile', fallback=False)
+D_SLUGIFY_PATHNAMES = config.get('data', 'slugify_pathnames', fallback=False)
 
 # [ui] section
-EDITOR = config.get('ui', 'editor', fallback=os.getenv('EDITOR', 'nano'))
-PAGER = config.get('ui', 'pager', fallback=os.getenv('PAGER', ''))
-DATEFORMAT = config.get('ui', 'dateformat', fallback='YYYY-MM-DD HH:mm')
-RELDATES = config.getboolean('ui', 'reldates', fallback=False)
+UI_EDITOR = config.get('ui', 'editor', fallback=os.getenv('EDITOR', 'nano'))
+UI_PAGER = config.get('ui', 'pager', fallback=os.getenv('PAGER', ''))
+UI_DATEFORMAT = config.get('ui', 'dateformat', fallback='YYYY-MM-DD HH:mm')
+UI_RELDATES = config.getboolean('ui', 'reldates', fallback=False)
 
 # [aliases] section
 ALIASES = dict(config['aliases']) if config.has_section('aliases') else {}
@@ -105,12 +103,12 @@ for cmd in cmds:
         ALIASES[cmd] = ''
 
 # [git] section
-GITENABLED = config.getboolean('git', 'enabled', fallback=False)
+GIT_ENABLED = config.getboolean('git', 'enabled', fallback=False)
 # Check if git is in $PATH and issue a warning if it's not there.
-if GITENABLED:
+if GIT_ENABLED:
     if shutil.which('git') is None:
         import warnings
-        GITENABLED = False
+        GIT_ENABLED = False
         warnings.warn('git is not available in $PATH')
         warnings.warn('git support is disabled')
 GIT_SUPPRESS_OUTPUT = config.get('git', 'suppress_output', fallback=False)
@@ -159,29 +157,29 @@ class Note:
 
     @property
     def header(self):
-        if RELDATES:
+        if UI_RELDATES:
             header = '{} @ {}, {}'.format(
                 self.title,
-                self.mtime.format(DATEFORMAT),
+                self.mtime.format(UI_DATEFORMAT),
                 self.mtime.humanize(),
             )
         else:
             header = '{} @ {}'.format(
                 self.title,
-                self.mtime.format(DATEFORMAT),
+                self.mtime.format(UI_DATEFORMAT),
             )
         return header
 
     @classmethod
     def create(cls, title, slugify=False):
-        if SLUGIFY_PATHNAMES or slugify:
+        if D_SLUGIFY_PATHNAMES or slugify:
             title = cls.slugify(title)
-        if EXTENSION:
-            filename = title + EXTENSION
+        if D_EXTENSION:
+            filename = title + D_EXTENSION
         else:
             filename = title
 
-        path = DATA_PATH.joinpath(filename)
+        path = D_PATH.joinpath(filename)
         if path.exists():
             raise FileExistsError('Note already exists!')
         else:
@@ -199,11 +197,11 @@ class Note:
 # Helpers
 #
 def echo(msg):
-    if PAGER:
-        if PAGER == 'less' and 'LESS' not in os.environ:
+    if UI_PAGER:
+        if UI_PAGER == 'less' and 'LESS' not in os.environ:
             os.putenv('LESS', 'FRX')
         msg = str(msg).encode()
-        run([PAGER], input=msg)
+        run([UI_PAGER], input=msg)
     else:
         print(msg)
 
@@ -222,22 +220,22 @@ def die(msg):
     exit(1)
 
 
-def icreate_datadir(path=DATA_PATH):
+def icreate_datadir(path=D_PATH):
     print('Path {} does not exist'.format(path))
     print('Should I create it?')
     if input('[y/N] ') == 'y':
         path.mkdir(parents=True)
         print('Data directory {} created'.format(path))
 
-    if GITENABLED:
+    if GIT_ENABLED:
         print('You have enabled git support.')
         print('Should I Initialize the repository?')
         if input('[y/N] ') == 'y':
-            os.chdir(DATA_PATH.as_posix())
+            os.chdir(D_PATH.as_posix())
             run(['git', 'init'])
 
 
-def load_notes(path=DATA_PATH):
+def load_notes(path=D_PATH):
     """
     Scans the given path and returns a list of notes
     which is sorted by the modification time. Any directory
@@ -246,7 +244,7 @@ def load_notes(path=DATA_PATH):
     """
     try:
         data = [Note(f) for f in path.iterdir()
-                if f.is_file() and f.suffix not in IGNORE_EXTENSIONS]
+                if f.is_file() and f.suffix not in D_IGNORE_EXTENSIONS]
         return sorted(data, key=lambda n: n.age)
     except FileNotFoundError:
         icreate_datadir(path)
@@ -274,21 +272,21 @@ def get_note(key):
 
 
 def spawn_editor(path):
-    p = run([*shlex.split(EDITOR), path.as_posix()])
+    p = run([*shlex.split(UI_EDITOR), path.as_posix()])
     if p.returncode != 0:
         die('Editor crashed')
 
 
-def spawn_editor_at_tmpfile(content, extension=EXTENSION):
+def spawn_editor_at_tmpfile(content, extension=D_EXTENSION):
     with tempfile.NamedTemporaryFile(
             mode='w+',
             prefix='pynote-',
-            suffix=EXTENSION) as f:
+            suffix=D_EXTENSION) as f:
         debug('Generating tempfile "{}"'.format(f.name))
         if content:
             f.write(content)
             f.flush()
-        p = run([*shlex.split(EDITOR), f.name])
+        p = run([*shlex.split(UI_EDITOR), f.name])
         if p.returncode == 0:
             f.flush()
             f.seek(0)
@@ -313,9 +311,9 @@ def git(commitmsg):
 
             ret = func(*args, **kwargs)
 
-            if GITENABLED:
+            if GIT_ENABLED:
                 debug('Looking for changes')
-                os.chdir(DATA_PATH.as_posix())
+                os.chdir(D_PATH.as_posix())
                 status = run([
                     'git',
                     'status',
@@ -361,10 +359,10 @@ def cmd_list(args):
         header = ('ID', 'Title', 'Updated')
 
     for i, note in enumerate(notes):
-        if RELDATES:
+        if UI_RELDATES:
             mtime = note.mtime.humanize()
         else:
-            mtime = note.mtime.format(DATEFORMAT)
+            mtime = note.mtime.format(UI_DATEFORMAT)
         table.append([i, note.title, mtime])
 
     echo(tabulate(table, header))
@@ -418,7 +416,7 @@ def cmd_edit(args):
             new_path = note.path.parent.joinpath(new_title)
             note.path.rename(new_path)
     else:
-        if TMPFILE or args.tmpfile:
+        if D_TMPFILE or args.tmpfile:
             note.content = spawn_editor_at_tmpfile(note.content)
         else:
             spawn_editor(note.path)
@@ -436,7 +434,7 @@ def cmd_add(args):
     except FileNotFoundError:
         icreate_datadir()
         exit(0)
-    if TMPFILE or args.tmpfile:
+    if D_TMPFILE or args.tmpfile:
         note.content = spawn_editor_at_tmpfile()
     else:
         # Edits the file in place.
@@ -455,22 +453,22 @@ def cmd_conf(args):
     varlist = [
         ['globalconf', GLOBALCONF],
         ['localconf', LOCALCONF],
-        ['data_path', DATA_PATH],
+        ['data.path', D_PATH],
+        ['data.extension', D_EXTENSION],
+        ['data.ignore_extensions', D_IGNORE_EXTENSIONS],
+        ['data.tmpfile', D_TMPFILE],
+        ['ui.editor', UI_EDITOR],
+        ['ui.dateformat', UI_DATEFORMAT],
+        ['ui.reldates', UI_RELDATES],
         ['aliases', ALIASES],
-        ['editor', EDITOR],
-        ['dateformat', DATEFORMAT],
-        ['reldates', RELDATES],
-        ['extension', EXTENSION],
-        ['ignore_extensions', IGNORE_EXTENSIONS],
-        ['tmpfile', TMPFILE],
-        ['gitenabled', GITENABLED],
-        ['git_suppress_output', GIT_SUPPRESS_OUTPUT],
+        ['git.enabled', GIT_ENABLED],
+        ['git.suppress_output', GIT_SUPPRESS_OUTPUT],
     ]
     echo(tabulate(varlist))
 
 
 def cmd_git(args):
-    os.chdir(DATA_PATH.as_posix())
+    os.chdir(D_PATH.as_posix())
     cmd = shlex.split(args.cmd)
     run(['git', *cmd])
 
@@ -605,7 +603,7 @@ def parse_args():
     parser_conf.set_defaults(func=cmd_conf)
 
     # note git
-    if GITENABLED:
+    if GIT_ENABLED:
         parser_git = subparsers.add_parser(
             'git',
             aliases=ALIASES['git'],
@@ -626,8 +624,8 @@ def main():
         DEBUG = True
         print(args)
     if args.no_pager:
-        global PAGER
-        PAGER = None
+        global UI_PAGER
+        UI_PAGER = None
     if hasattr(args, 'func'):
         args.func(args)
     else:
