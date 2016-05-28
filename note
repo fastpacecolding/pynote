@@ -358,13 +358,14 @@ def cmd_list(args):
     if args.no_header:
         header = None
     else:
-        header = ['ID', 'Title', 'Updated']
+        header = ('ID', 'Title', 'Updated')
 
     for i, note in enumerate(notes):
         if RELDATES:
-            table.append([i, note.title, note.mtime.humanize()])
+            mtime = note.mtime.humanize()
         else:
-            table.append([i, note.title, note.mtime.format(DATEFORMAT)])
+            mtime = note.mtime.format(DATEFORMAT)
+        table.append([i, note.title, mtime])
 
     echo(tabulate(table, header))
 
