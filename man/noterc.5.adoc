@@ -52,6 +52,26 @@ editor [default: `${EDITOR:-vi}`]::
 pager [default: `less`]::
     TODO
 
+style [default: `simple`]::
+    There is more than one way to format a table in plain text. These styles
+    are provided by the `tabulate` library. Supported table formats are:
+
+    * `plain`
+    * `simple`
+    * `grid`
+    * `fancy_grid`
+    * `pipe`
+    * `orgtbl`
+    * `jira`
+    * `psql`
+    * `rst`
+    * `mediawiki`
+    * `moinmoin`
+    * `html`
+    * `latex`
+    * `latex_booktabs`
+    * `textile`
+
 === `[data]` 
 
 path [default: `$HOME/.local/share/note`]::
