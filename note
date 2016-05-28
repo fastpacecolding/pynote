@@ -363,7 +363,7 @@ def cmd_list(args):
             mtime = note.mtime.humanize()
         else:
             mtime = note.mtime.format(UI_DATEFORMAT)
-        table.append([i, note.title, mtime])
+        table.append((i, note.title, mtime))
 
     echo(tabulate(table, header, tablefmt=UI_STYLE))
 
