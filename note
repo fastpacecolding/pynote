@@ -82,6 +82,7 @@ UI_EDITOR = config.get('ui', 'editor', fallback=os.getenv('EDITOR', 'nano'))
 UI_PAGER = config.get('ui', 'pager', fallback=os.getenv('PAGER', ''))
 UI_DATEFORMAT = config.get('ui', 'dateformat', fallback='YYYY-MM-DD HH:mm')
 UI_RELDATES = config.getboolean('ui', 'reldates', fallback=False)
+UI_STYLE = config.getboolean('ui', 'style', fallback='simple')
 
 # [aliases] section
 ALIASES = dict(config['aliases']) if config.has_section('aliases') else {}
@@ -365,7 +366,7 @@ def cmd_list(args):
             mtime = note.mtime.format(UI_DATEFORMAT)
         table.append([i, note.title, mtime])
 
-    echo(tabulate(table, header))
+    echo(tabulate(table, header, tablefmt=UI_STYLE))
 
 
 def cmd_show(args):
@@ -460,11 +461,12 @@ def cmd_conf(args):
         ['ui.editor', UI_EDITOR],
         ['ui.dateformat', UI_DATEFORMAT],
         ['ui.reldates', UI_RELDATES],
+        ['ui.style', UI_STYLE],
         ['aliases', ALIASES],
         ['git.enabled', GIT_ENABLED],
         ['git.suppress_output', GIT_SUPPRESS_OUTPUT],
     ]
-    echo(tabulate(varlist))
+    echo(tabulate(varlist, tablefmt=UI_STYLE))
 
 
 def cmd_git(args):
@@ -499,6 +501,10 @@ def parse_args():
         '--tmpfile',
         action='store_true',
         help='Use a tmpfile when spawning EDITOR',
+    )
+    parser.add_argument(
+        '--style',
+        help='Set tabulate style',
     )
     parser.add_argument(
         '--version',
@@ -626,6 +632,9 @@ def main():
     if args.no_pager:
         global UI_PAGER
         UI_PAGER = None
+    if args.style:
+        global UI_STYLE
+        UI_STYLE = args.style
     if hasattr(args, 'func'):
         args.func(args)
     else:
