@@ -86,7 +86,6 @@ UI_STYLE = config.get('ui', 'style', fallback='simple')
 
 # [aliases] section
 ALIASES = dict(config['aliases']) if config.has_section('aliases') else {}
-# TODO: Provide a set of default aliases.
 # Prepopulate aliases dictionary
 cmds = (
     'add',
