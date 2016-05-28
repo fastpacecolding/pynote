@@ -36,7 +36,7 @@ from pathlib import Path
 from subprocess import run, DEVNULL
 
 import arrow
-from plaintable import Table
+from tabulate import tabulate
 
 DEBUG = False
 __version__ = '1.0.0'
@@ -366,7 +366,7 @@ def cmd_list(args):
         else:
             table.append([i, note.title, note.mtime.format(DATEFORMAT)])
 
-    echo(Table(table, headline=header))
+    echo(tabulate(table, header))
 
 
 def cmd_show(args):
@@ -465,7 +465,7 @@ def cmd_conf(args):
         ['gitenabled', GITENABLED],
         ['git_suppress_output', GIT_SUPPRESS_OUTPUT],
     ]
-    print(Table(varlist))
+    echo(tabulate(varlist))
 
 
 def cmd_git(args):
