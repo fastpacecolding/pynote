@@ -20,9 +20,8 @@ distros package manager (currently it is only in Fedora):
 If you plan to do some development for pynote, please make sure that these 
 libraries are available:
 
-* https://github.com/rumpelsepp/plaintable[plaintable]
 * https://github.com/crsmithdev/arrow[arrow]
-* https://github.com/takluyver/pyxdg[pyxdg]
+* https://bitbucket.org/astanin/python-tabulate[tabulate]
 
 == Quickstart
 
