@@ -74,15 +74,15 @@ D_EXTENSION = config.get('data', 'extension', fallback='.txt')
 D_IGNORE_EXTENSIONS = config.get('data', 'ignore_extensions', fallback=[])
 if D_IGNORE_EXTENSIONS:
     D_IGNORE_EXTENSIONS = D_IGNORE_EXTENSIONS.replace(' ', '').split(',')
-D_TMPFILE = config.get('data', 'tmpfile', fallback=False)
-D_SLUGIFY_PATHNAMES = config.get('data', 'slugify_pathnames', fallback=False)
+D_TMPFILE = config.getboolean('data', 'tmpfile', fallback=False)
+D_SLUGIFY = config.getboolean('data', 'slugify', fallback=False)
 
 # [ui] section
 UI_EDITOR = config.get('ui', 'editor', fallback=os.getenv('EDITOR', 'nano'))
 UI_PAGER = config.get('ui', 'pager', fallback=os.getenv('PAGER', ''))
 UI_DATEFORMAT = config.get('ui', 'dateformat', fallback='YYYY-MM-DD HH:mm')
 UI_RELDATES = config.getboolean('ui', 'reldates', fallback=False)
-UI_STYLE = config.getboolean('ui', 'style', fallback='simple')
+UI_STYLE = config.get('ui', 'style', fallback='simple')
 
 # [aliases] section
 ALIASES = dict(config['aliases']) if config.has_section('aliases') else {}
