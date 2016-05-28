@@ -286,13 +286,14 @@ def spawn_editor_at_tmpfile(content, extension=D_EXTENSION):
         if content:
             f.write(content)
             f.flush()
+
         p = run([*shlex.split(UI_EDITOR), f.name])
-        if p.returncode == 0:
-            f.flush()
-            f.seek(0)
-            return f.read()
-        else:
+        if p.returncode != 0:
             die('Editor crashed')
+
+        f.flush()
+        f.seek(0)
+        return f.read()
 
 
 #
@@ -320,24 +321,24 @@ def git(commitmsg):
                     '--porcelain',
                 ], stdout=PIPE, stderr=PIPE)
 
-                if status.returncode == 0:
-                    if status.stdout:
-                        debug('Changes detected')
-                        debug('Running "git commit"')
-                        run(
-                            ['git', 'add', '.'],
-                            stdout=stdout,
-                            stderr=stderr,
-                        )
-                        run(
-                            ['git', 'commit', '-m', commitmsg],
-                            stdout=stdout,
-                            stderr=stderr,
-                        )
-                    else:
-                        debug('No changes detected')
-                else:
+                if status.returncode != 0:
                     die('Git failed; maybe you forgot "git init"?')
+
+                if status.stdout:
+                    debug('Changes detected')
+                    debug('Running "git commit"')
+                    run(
+                        ['git', 'add', '.'],
+                        stdout=stdout,
+                        stderr=stderr,
+                    )
+                    run(
+                        ['git', 'commit', '-m', commitmsg],
+                        stdout=stdout,
+                        stderr=stderr,
+                    )
+                else:
+                    debug('No changes detected')
             return ret
         return wrapper
     return commit
