@@ -172,7 +172,7 @@ class Note:
 
     @classmethod
     def create(cls, title, slugify=False):
-        if D_SLUGIFY_PATHNAMES or slugify:
+        if D_SLUGIFY or slugify:
             title = cls.slugify(title)
         if D_EXTENSION:
             filename = title + D_EXTENSION
