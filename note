@@ -87,15 +87,7 @@ UI_STYLE = config.get('ui', 'style', fallback='simple')
 # [aliases] section
 ALIASES = dict(config['aliases']) if config.has_section('aliases') else {}
 # Prepopulate aliases dictionary
-cmds = (
-    'add',
-    'list',
-    'all',
-    'edit',
-    'show',
-    'rm',
-    'git',
-)
+cmds = ('add', 'list', 'all', 'edit', 'show', 'rm', 'git')
 for cmd in cmds:
     if cmd in ALIASES:
         ALIASES[cmd] = ALIASES[cmd].replace(' ', '').split(',')
