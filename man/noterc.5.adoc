@@ -130,3 +130,5 @@ list = l
 edit = e
 show = s
 ----
+
+include::footer.adoc[]

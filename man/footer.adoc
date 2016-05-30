@@ -1,0 +1,12 @@
+== Bugs
+
+Bugs? You must be kidding; there are no bugs in this software. But if we
+happen to be wrong, file a bug at Github: 
+https://github.com/rumpelsepp/pynote.
+
+== Author
+
+Current maintainer: Stefan Tatschner <rumpelsepp@sevenbyte.org>
+
+For additional contributors, use `git shortlog -sne` on the pynote.git
+repository.

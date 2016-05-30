@@ -29,6 +29,7 @@ DOC_MAN1   = $(patsubst %.adoc,%,$(MAN1_ADOCS))
 DOC_MAN5   = $(patsubst %.adoc,%,$(MAN5_ADOCS))
 MAN_ADOC   = $(MAN1_ADOCS) $(MAN5_ADOCS)
 DOC_HTML   = $(patsubst %.adoc,%.html,$(MAN_ADOC))
+INCLUDES   = footer.adoc
 
 all: html man
 
@@ -38,11 +39,11 @@ man: man1 man5
 man1: $(DOC_MAN1)
 man5: $(DOC_MAN5)
 
-%.1 : %.1.adoc
+%.1 : %.1.adoc $(INCLUDES)
 	$(ASCIIDOC_MAN) $(ASCIIDOC_MAN_FLAGS) $<
 
-%.5 : %.5.adoc
+%.5 : %.5.adoc $(INCLUDES)
 	$(ASCIIDOC_MAN) $(ASCIIDOC_MAN_FLAGS) $<
 
-%.html : %.adoc
+%.html : %.adoc $(INCLUDES)
 	$(ASCIIDOC) $(ASCIIDOC_HTML_FLAGS) $<
