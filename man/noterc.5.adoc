@@ -9,7 +9,7 @@ noterc - runtime configuration for pynote
 == Synopsis
 
 ----
-/etc/xdg/noterc 
+/etc/xdg/noterc
 $XDG_CONFIG_HOME/note/noterc
 $HOME/.config/note/noterc
 ----
@@ -24,55 +24,15 @@ the XDG Base Directory Specification. If the environment variable
 `$HOME/.config/note/noterc`.
 
 Each file is formatted as a line-separated list of `KEY=VALUE` pairs, blank
-lines, and lines starting with `#`, are ignored. 
+lines, and lines starting with `#`, are ignored.
 
 == Sections
 
 Pynote's configuration is devided into several sections. A section starts with
-the section name in square brackets, e.g. `[ui]`. More information about 
+the section name in square brackets, e.g. `[ui]`. More information about
 python's configparser can be found in the official python documentation.
 
-=== `[ui]`
-
-dateformat [default: `YYYY-MM-dd HH:mm`]::
-    Sets the default dateformat for all dates shown in pynote. A list with all
-    available config values can be obtained from the arrow documentation:
-    https://github.com/crsmithdev/arrow/blob/master/docs/index.rst#tokens
-
-reldates [default: `no`]::
-    Use relative dates in, for instance `note list` and `note show`.
-
-editor [default: `${EDITOR:-vi}`]::
-    The command line editor which is used to create and edit notes.  Additional
-    arguments can be passed to the editor as well, e.g.  `nvim -c "set
-    ft=asciidoc"`. If it is not present pynote will take the value of the
-    environment variable `$EDITOR``. If `$EDITOR` is not set, this value will
-    fall back to `'vi'`.
-
-pager [default: `less`]::
-    TODO
-
-style [default: `simple`]::
-    There is more than one way to format a table in plain text. These styles
-    are provided by the `tabulate` library. Supported table formats are:
-
-    * `plain`
-    * `simple`
-    * `grid`
-    * `fancy_grid`
-    * `pipe`
-    * `orgtbl`
-    * `jira`
-    * `psql`
-    * `rst`
-    * `mediawiki`
-    * `moinmoin`
-    * `html`
-    * `latex`
-    * `latex_booktabs`
-    * `textile`
-
-=== `[data]` 
+=== [data]
 
 path [default: `$HOME/.local/share/note`]::
     Specifies the place where stored notes live. `~` is expanded to the homedir
@@ -96,39 +56,103 @@ tmpfile [default: `no`]::
     directly. After successfully finished editing the tmpfile is copied to the
     note's location.
 
-slugify_titles [default: `no`]::
-    TODO
+slugify [default: `no`]::
+    This option enables slugified filenames and thus slugified titles. Slugify
+    normalizes UTF-8 strings, removes any whitespace characters and replaces
+    them with dashes.
 
-=== `[aliases]`
+=== [ui]
 
-TODO
+dateformat [default: `YYYY-MM-dd HH:mm`]::
+    Sets the default dateformat for all dates shown in pynote. A list with all
+    available config values can be obtained from the arrow documentation:
+    https://github.com/crsmithdev/arrow/blob/master/docs/index.rst#tokens
 
-=== `[git]` 
+reldates [default: `no`]::
+    Use relative dates in, for instance `note list` and `note show`. Internally
+    the library `arrow` is used to generate reldates.
+
+editor [default: `${EDITOR:-vi}`]::
+    The command line editor which is used to create and edit notes.  Additional
+    arguments can be passed to the editor as well, e.g.  `nvim -c "set
+    ft=asciidoc"`. If it is not present pynote will take the value of the
+    environment variable `$EDITOR``. If `$EDITOR` is not set, this value will
+    fall back to `'vi'`.
+
+pager [default: `${PAGER:-less}`]::
+    Configure the pager used by `note(1)`. If this value is not set, it reads the
+    environmen variable `PAGER`; otherwise it defaults to `less`. If the chosen
+    pager is `less` and the environment variable `LESS` is not set, `note(1)`
+    sets it to `FRX`; this behaviour has been prodly stolen from `git`.
+
+style [default: `simple`]::
+    There is more than one way to format a table in plain text. These styles
+    are provided by the `tabulate` library. Supported table formats are:
+
+    * `plain`
+    * `simple`
+    * `grid`
+    * `fancy_grid`
+    * `pipe`
+    * `orgtbl`
+    * `jira`
+    * `psql`
+    * `rst`
+    * `mediawiki`
+    * `moinmoin`
+    * `html`
+    * `latex`
+    * `latex_booktabs`
+    * `textile`
+
+=== [aliases]
+
+Each subcommand of `note(1)` can be aliased with a configurable string. In this
+section an alias can be assigned to a command like this:
+
+    command = alias
+
+Multiple aliases are allowed by assigning a comma separated list:
+
+    command = alias1, alias2
+
+A real world example can be found in the "Example File" section below.
+
+=== [git]
 
 enabled [default: `no`]::
-    TODO
+    Enables git support. Every time a note is changed, a `git commit` is filed.
+    This enables merging and syncing notes effectively with git. Please note,
+    that `data.path` must point to a git repository and git must be properly
+    configured in the first place. A git repository can created with `note(1)`
+    as well using: `note "git init"`
 
 suppress_output [default: `no`]::
-    TODO
+    The output of git is not suppressed by default. Some people may find this
+    annoying. Setting this option to `yes` redirects any output of git to
+    `/dev/null`.
 
 == Example File
 
 ----
-[ui]
-editor = nvim -c "set ft=asciidoc"
-reldates = yes
-
 [data]
 path = ~/Sync/Notes
 extension = .txt
-slugify_titles = no
+slugify = no
 ignore_extensions = .pdf, .odt
+
+[ui]
+editor = nvim -c "set ft=asciidoc"
+reldates = yes
 
 [aliases]
 add = a, new, n
 list = l
 edit = e
 show = s
+
+[git]
+enabled = yes
 ----
 
 include::footer.adoc[]
