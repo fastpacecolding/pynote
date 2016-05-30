@@ -450,6 +450,7 @@ def cmd_conf(args):
         ['data.extension', D_EXTENSION],
         ['data.ignore_extensions', D_IGNORE_EXTENSIONS],
         ['data.tmpfile', D_TMPFILE],
+        ['data.slugify', D_SLUGIFY],
         ['ui.editor', UI_EDITOR],
         ['ui.dateformat', UI_DATEFORMAT],
         ['ui.reldates', UI_RELDATES],
