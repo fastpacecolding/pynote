@@ -15,6 +15,10 @@ distros package manager (currently it is only in Fedora):
 
     $ pip install [--user] pynote
 
+On Arch Linux `pacaur` can be used to obatain the AUR package:
+
+    $ pacaur -S pynote
+
 == Requirements
 
 If you plan to do some development for pynote, please make sure that these 
@@ -23,20 +27,22 @@ libraries are available:
 * https://github.com/crsmithdev/arrow[arrow]
 * https://bitbucket.org/astanin/python-tabulate[tabulate]
 
+The minimum required python version is 3.5. Python 2 is not supported.
+
 == Quickstart
 
 For initialization just run any command and pynote will tell you what to do:
 
 ----
 $ note add "spam"
-Path /home/stefan/.note does not exist
+Path /home/stefan/.local/share/note does not exist
 Should I create it?
 [y/N] y
-Data directory /home/stefan/.note created
+Data directory /home/stefan/.local/share/note created
 You have enabled git support.
 Should I Initialize the repository?
 [y/N] y
-Initialized empty Git repository in /home/stefan/.note/.git/
+Initialized empty Git repository in /home/stefan/.local/share/note/.git/
 
 $ note add "spam"
 [master (root-commit) fd90645] Note added
@@ -101,4 +107,5 @@ index 0000000..b586074
 +spam
 ----
 
-For help just pass `--help` to any command!
+For help just pass `-h` or `--help` to any command, or try `man 1 note` 
+and `man 5 noterc`.

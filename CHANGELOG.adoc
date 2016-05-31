@@ -2,22 +2,32 @@
 
 == pynote 2.0.0 (2016-XX-XX)
 
-* Complete rewrite of pynote. Everything has been merged into one Python file.
-* Drop babel and replace it with https://arrow.readthedocs.io/en/latest/[`arrow`]. 
+* Complete rewrite of pynote. Everything has been restructured and merged into
+  one Python file. Pynote 2.0 will be a new starting point, since I don't want
+  to maintain the mess any more that I have created two years ago.
+* Drop babel and replace it with https://arrow.readthedocs.io/en/latest/[`arrow`].
   There is a 70 to 80 percent speedup when using reldates!
-* Drop click; the click library is a mess. The decorator based CLI generation
-  transforms the code into an unreadable mess and I am no longer interested
-  in reading through kilometers of spaghetti. The CLI generation has been 
-  switched back to stdlib `argparse`.
-* Discard sphinx and provide asciidoctor generated manpages instead.
+* Drop `click`; the `click` library is a mess. The decorator based CLI generation
+  transforms the code into an unreadable, gigantic mess and I am no longer
+  interested in reading through kilometers of spaghetti. The CLI generation has
+  been switched back to stdlib `argparse`.
+* Drop `plaintable` in favour of `tabulate` for generating tables. This library
+  enables a few more styles out of the box.
+* Discard sphinx and provide `asciidoctor` generated manpages instead. The legacy
+  implementation `asciidoc` should work as well, though it is not tested.
 * Dropped tags support; the json based concept was a broken. I am willing
-  to reimplement tags, aber I have to come up with a better solution first.
-* Dropped pygments; there is now `c(1)`. One could pipe the output to `c`.
-* Aliases Support. Aliases for subcommands can be configured with `noterc(5)`.
+  to reimplement tags, but I have to come up with a better solution first.
+* Dropped pygments; there is now `c(1)`. One could pipe the output into `c(1)`
+  in order to utilize syntax highlighting.
+* Aliases Support. Aliases for subcommands can now be configured in `noterc(5)`.
 * Git Support! Git support can be enabled; once a note has been changed by
   `note(1)` it is automatically commited to git.
 * There is some refactoring and cleanup in `noterc(5)`, check the manpage and
   adjust it appropriately. It is not that large... :)
+* Since the documentation is now written in the `asciidoc` markup language, the
+  documentation now readable on github as well. Prerendered HTML files with
+  `asciidoctor(1)` are available at https://docs.sevenbyte.org/pynote. It is
+  updated by a cron job once an hour.
 
 == pynote 1.1 (never released)
 
@@ -31,7 +41,7 @@
 * Added a `conf` command to show the whole configuration for debugging
   reasons.
 * Proper tag support.
-* Removed revision `control` for now. Some day pynote will use git to handle
+* Removed "revision control" for now. Some day pynote will use git to handle
   revisions.
 * Added support for XDG Base Directory Specification.
 * Converted pygments to an optional dependency.
@@ -116,7 +126,7 @@ New features
 
 - pygments support, see #301.
 
-  - `note show --lang`: Read notes with synthax highlighting. Find a list of
+  - `note show --lang`: Read notes with syntax highlighting. Find a list of
     supported lexers on the pygments project page!
   - `note compare --no-color`: Unified diffs are colored by default. Suppress
     colors with `--no-color`.
