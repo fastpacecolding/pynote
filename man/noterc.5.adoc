@@ -43,7 +43,7 @@ path [default: `$HOME/.local/share/note`]::
 extension [default: `.txt`]::
     Specifies an extension that will be added to the filename of each note.
     This might be useful for using markup languages (such as rst, asciidoc,
-    markdown...) and synthax highlighting in your editor. The dot has to be
+    markdown...) and syntax highlighting in your editor. The dot has to be
     included.
 
 ignore_extensions [default: `''`]::
@@ -81,7 +81,7 @@ editor [default: `${EDITOR:-vi}`]::
 
 pager [default: `${PAGER:-less}`]::
     Configure the pager used by `note(1)`. If this value is not set, it reads the
-    environmen variable `PAGER`; otherwise it defaults to `less`. If the chosen
+    environment variable `PAGER`; otherwise it defaults to `less`. If the chosen
     pager is `less` and the environment variable `LESS` is not set, `note(1)`
     sets it to `FRX`; this behaviour has been prodly stolen from `git`.
 
@@ -154,5 +154,9 @@ show = s
 [git]
 enabled = yes
 ----
+
+== See Also
+
+`note(1)`
 
 include::footer.adoc[]

@@ -16,47 +16,62 @@ note [-h] [--no-pager] [--no-header] [--tmpfile] [--version] [--debug]
 == Description
 
 pynote is a project to manage your notes on the commandline. It is written in
-Python 3.5 and provides a very handy cmd-interface.
+Python 3.5 and provides a very handy cmd-interface. Notes are managed as plain
+text files, which are interfaced with (configurable) standard tools, for instance
+`vi`, `vim`, `nvim` or `nano`. `note` provides an interface to these textfiles,
+that means they can be listed as a table, or they can be read or removed easily.
+Optionally, it is possible to enable git support enabling synchronization across
+several machines easily.
 
 == Options
 
 `--no-pager`::
-    Supress paging globally.
+    Do not write any output to a pager, such as `less`
 
 `--no-header`::
-    Supress the note's header globally.
+    Do not show the note's header
 
 `--tmpfile`::
-    TODO
+    Do not edit notes in place
+
+`--style` STYLE::
+    Explicitely set the table style
 
 `--version`::
-    Show the version and exit.
+    Show the version and exit
 
 `--debug`::
-    TODO
+    Show additional debug information
 
 == Commands
 
 === list
 
 This prints out a table with all stores notes. This is the default command if
-you pass nothing to `note`. The columns are sorted by the updated time:
+you pass nothing to `note`. The columns are sorted by the mtime of the unterlying
+files:
 
 ----
 $ note list
-ID  Title         Age
---  -----------   ---------
-0   spam          3 seconds
-1   lovely spam   1 day
+ID  Title         Updated
+--  -----------   ------------
+0   spam          seconds ago
+1   lovely spam   1 day ago
 ----
+
+`list` is the default subcommand, thus it can be omitted.
 
 === show
 
-Shows a specific note including a header with some metadata. You have
-to pass the numeric id of the note to show, e.g. `$ note show 0`:
+Shows a specific note including a header with some metadata. The numeric
+ID has to be passed to `show`, e.g. `$ note show 0`. It is also possible
+to use a slugified string:
 
 ----
 $ note show 0
+...
+
+$ note show spam
 spam @ 2014-05-31 17:19, 48 seconds ago
 
 Spam, Spam, Spam, lovely Spam
@@ -68,10 +83,9 @@ Surgical Spam, splendiferous Spam.
 Spam, Spam, Spam, Spaaam!
 ----
 
-`-w`:: 
-`--wrap-text`::
-    Wrap output at 70 signs. This may be useful if you want to read
-    a badly formatted note on the terminal.
+`-w` CHARS::
+    Wrap output at CHARS characters. This may be useful for reading a badly
+    formatted note on the terminal.
 
 === all
 
@@ -79,8 +93,8 @@ Just prints out all notes.
 
 === add
 
-Your configured editor (e.g. `nvim`) opens and you can type in your content.
-You have to pass the title of the note like this:
+The configured editor (e.g. `nvim`) opens and the content of choice can be
+inserted. The title of the note has to be specified for `add`:
 
 ----
 $ note add "wonderful spam"
@@ -88,11 +102,13 @@ $ note add "wonderful spam"
 
 === edit
 
-TODO
+Edit a given note. Similar to `show` the numeric or the slugified title has to
+be suplied. The configured editor is spawned with the content of the note of 
+choice.
 
-=== delete
+=== rm
 
-TODO
+Removes a note.
 
 === conf
 
@@ -100,32 +116,42 @@ Show all configuration values for debugging reasons:
 
 ----
 $ note conf
-global_config      /etc/noterc
-local_config       /home/stefan/.noterc
-data_path          /home/stefan/.note
-trash_path         /home/stefan/.note/.trash
-editor             vim
-colors             False
-dateformat         YYYY-MM-dd HH:mm
-reldates           False
-locale             en_US
-extension
-ignore_extensions  []
-pygments_theme     default
+----------------------  -------------------------------------------------------------------------------------
+globalconf              /etc/xdg/noterc
+localconf               /home/stefan/.config/note/noterc
+data.path               /home/stefan/Documents/Notes
+data.extension          .txt
+data.ignore_extensions  []
+data.tmpfile            False
+data.slugify            False
+ui.editor               nvim
+ui.dateformat           YYYY-MM-DD HH:mm
+ui.reldates             True
+ui.style                simple
+aliases                 {'all': '', 'git': '', 'edit': '', 'list': ['l'], 'add': '', 'show': ['s'], 'rm': ''}
+git.enabled             True
+git.suppress_output     False
+----------------------  -------------------------------------------------------------------------------------
 ----
 
 == Environment Variables
 
 EDITOR::
-    TODO
+    Specifies the editor that `note(1)` uses. This value can be overwritten in `noterc(5)`.
 
 PAGER::
-    TODO
+    Long content needs to be paged. This variable sets the pager to which `note(1)` writes
+    its output. It can be overwritten in `noterc(5)`; if both are not set, the default value
+    is `less`.
 
 XDG_CONFIG_HOME::
-    TODO
+    Used to determine the path of `noterc(5)`.
 
 XDG_DATA_HOME::
-    TODO
+    Used to determine the `data.path`.
+
+== See Also
+
+`noterc(5)`
 
 include::footer.adoc[]
