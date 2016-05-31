@@ -1,4 +1,5 @@
-dist
-MANIFEST
-*.egg-info
+/dist
+/build
+/MANIFEST
+/*.egg-info
 *.html
