@@ -22,7 +22,7 @@ def find_version(*file_paths):
     raise RuntimeError('Unable to find version string.')
 
 
-with open('README.rst') as f:
+with open('README.adoc') as f:
     long_description = f.read()
 
 
