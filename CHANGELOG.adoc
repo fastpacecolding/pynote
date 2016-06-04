@@ -1,6 +1,6 @@
 = CHANGELOG
 
-== pynote 2.0.0 (2016-XX-XX)
+== pynote 2.0.0 (2016-05-31)
 
 * Complete rewrite of pynote. Everything has been restructured and merged into
   one Python file. Pynote 2.0 will be a new starting point, since I don't want
