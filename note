@@ -71,7 +71,7 @@ config.read((GLOBALCONF.as_posix(), LOCALCONF.as_posix()))
 D_PATH = config.get('data', 'path', fallback=DEFAULT_DATA_PATH)
 D_PATH = Path(D_PATH).expanduser()
 D_EXTENSION = config.get('data', 'extension', fallback='.txt')
-D_IGNORE_EXTENSIONS = config.get('data', 'ignore_extensions', fallback=[])
+D_IGNORE= config.get('data', 'ignore', fallback='GIT')
 if D_IGNORE_EXTENSIONS != 'GIT':
     D_IGNORE_EXTENSIONS = D_IGNORE_EXTENSIONS.replace(' ', '').split(',')
 D_TMPFILE = config.getboolean('data', 'tmpfile', fallback=False)
