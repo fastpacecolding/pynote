@@ -307,7 +307,7 @@ def spawn_editor_at_tmpfile(content, extension=D_EXTENSION):
 #
 # Decorators
 #
-def git(commitmsg):
+def git(operation):
     def commit(func):
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
@@ -323,18 +323,39 @@ def git(commitmsg):
             if GIT_ENABLED:
                 debug('Looking for changes')
                 os.chdir(D_PATH.as_posix())
-                status = run([
+                p = run([
                     'git',
                     'status',
                     '--porcelain',
                 ], stdout=PIPE, stderr=PIPE)
 
-                if status.returncode != 0:
+                if p.returncode != 0:
                     die('Git failed; maybe you forgot "git init"?')
 
-                if status.stdout:
+                if p.stdout:
                     debug('Changes detected')
                     debug('Running "git commit"')
+
+                    stdout_git = p.stdout.decode().splitlines()
+                    # TODO: Maybe parse the operation out of git-status.
+                    regex = re.compile(r'^\s*[ARMD]\s([\w\.\-]+)$')
+                    files = []
+                    for line in stdout_git:
+                        match = regex.match(line)
+                        if match:
+                            files.append(match.group(1))
+
+                    if len(files) == 1:
+                        commitmsg = 'note "{}" {}'.format(
+                            files[0],
+                            operation,
+                        )
+                    elif len(files) != 1:
+                        commitmsg = '{} notes {}'.format(
+                            len(files),
+                            operation,
+                        )
+
                     run(
                         ['git', 'add', '.'],
                         stdout=stdout,
@@ -414,7 +435,7 @@ def cmd_all(args):
     echo(out.strip())
 
 
-@git('Note changed')
+@git('changed')
 def cmd_edit(args):
     """Edit a specific note."""
     note = get_note(args.ID)
@@ -431,7 +452,7 @@ def cmd_edit(args):
             spawn_editor(note.path)
 
 
-@git('Note added')
+@git('added')
 def cmd_add(args):
     """Create a new note."""
     if '/' in args.title:
@@ -450,7 +471,7 @@ def cmd_add(args):
         spawn_editor(note.path)
 
 
-@git('Note deleted')
+@git('deleted')
 def cmd_rm(args):
     """Delete an existing note."""
     note = get_note(args.ID)
