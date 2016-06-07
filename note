@@ -87,7 +87,7 @@ UI_STYLE = config.get('ui', 'style', fallback='simple')
 # [aliases] section
 ALIASES = dict(config['aliases']) if config.has_section('aliases') else {}
 # Prepopulate aliases dictionary
-cmds = ('add', 'list', 'all', 'edit', 'show', 'rm', 'git')
+cmds = ('add', 'list', 'all', 'edit', 'show', 'rm', 'grep', 'git')
 for cmd in cmds:
     if cmd in ALIASES:
         ALIASES[cmd] = ALIASES[cmd].replace(' ', '').split(',')
@@ -104,6 +104,10 @@ if GIT_ENABLED:
         warnings.warn('git is not available in $PATH')
         warnings.warn('git support is disabled')
 GIT_SUPPRESS_OUTPUT = config.get('git', 'suppress_output', fallback=False)
+
+# [grep] section
+GREP_BACKEND = config.get('grep', 'backend', fallback='grep')
+GREP_FLAGS = config.get('grep', 'flags', fallback='')
 
 
 #
@@ -441,6 +445,19 @@ def cmd_rm(args):
     note.unlink()
 
 
+def cmd_grep(args):
+    """Search for pattern in notes."""
+    os.chdir(D_PATH.as_posix())
+    # Provide fallback flags for 'grep'
+    if GREP_BACKEND == 'grep' and GREP_FLAGS == '':
+        flags = '-r'
+    else:
+        flags = GREP_FLAGS
+    pattern = shlex.split(args.pattern)
+    flags = shlex.split(flags)
+    run([GREP_BACKEND, *flags, *pattern])
+
+
 def cmd_conf(args):
     """Show pynote's configuration (for debugging)."""
     varlist = [
@@ -458,6 +475,8 @@ def cmd_conf(args):
         ['aliases', ALIASES],
         ['git.enabled', GIT_ENABLED],
         ['git.suppress_output', GIT_SUPPRESS_OUTPUT],
+        ['grep.backend', GREP_BACKEND],
+        ['grep.flags', GREP_FLAGS],
     ]
     echo(tabulate(varlist, tablefmt=UI_STYLE))
 
@@ -593,6 +612,18 @@ def parse_args():
         help='Title of the new note',
     )
     parser_add.set_defaults(func=cmd_add)
+
+    # note grep
+    parser_grep = subparsers.add_parser(
+        'grep',
+        aliases=ALIASES['grep'],
+        help='Look for patterns in notes',
+    )
+    parser_grep.add_argument(
+        'pattern',
+        help='Pattern to look for',
+    )
+    parser_grep.set_defaults(func=cmd_grep)
 
     # note conf
     parser_conf = subparsers.add_parser(
