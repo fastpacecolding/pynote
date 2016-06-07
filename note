@@ -32,6 +32,7 @@ import shlex
 import shutil
 import tempfile
 import unicodedata
+import warnings
 from pathlib import Path
 from subprocess import run, PIPE, DEVNULL
 
@@ -66,14 +67,28 @@ DEFAULT_DATA_PATH = _xdg_data_home.joinpath('note')
 config = configparser.ConfigParser()
 config.read((GLOBALCONF.as_posix(), LOCALCONF.as_posix()))
 
+# [git] section
+# Has to be before [data], since it is referenced by D_IGNORE below.
+GIT_ENABLED = config.getboolean('git', 'enabled', fallback=True)
+# Check if git is in $PATH and issue a warning if it's not there.
+if GIT_ENABLED:
+    if shutil.which('git') is None:
+        GIT_ENABLED = False
+        warnings.warn('git is not available in $PATH')
+        warnings.warn('git support is disabled')
+GIT_SUPPRESS_OUTPUT = config.get('git', 'suppress_output', fallback=False)
+
 # [data] section
 # Overwrite data path when it is set in .noterc.
 D_PATH = config.get('data', 'path', fallback=DEFAULT_DATA_PATH)
 D_PATH = Path(D_PATH).expanduser()
 D_EXTENSION = config.get('data', 'extension', fallback='.txt')
 D_IGNORE= config.get('data', 'ignore', fallback='GIT')
-if D_IGNORE_EXTENSIONS != 'GIT':
-    D_IGNORE_EXTENSIONS = D_IGNORE_EXTENSIONS.replace(' ', '').split(',')
+if D_IGNORE == 'GIT' and not GIT_ENABLED:
+    D_IGNORE = False
+    warnings.warn('git is disabled; git ls-files not available')
+if D_IGNORE != 'GIT':
+    D_IGNORE = D_IGNORE.replace(' ', '').split(',')
 D_TMPFILE = config.getboolean('data', 'tmpfile', fallback=False)
 D_SLUGIFY = config.getboolean('data', 'slugify', fallback=False)
 
@@ -87,23 +102,12 @@ UI_STYLE = config.get('ui', 'style', fallback='simple')
 # [aliases] section
 ALIASES = dict(config['aliases']) if config.has_section('aliases') else {}
 # Prepopulate aliases dictionary
-cmds = ('add', 'list', 'all', 'edit', 'show', 'rm', 'grep', 'git')
+cmds = ('add', 'list', 'all', 'edit', 'show', 'rm', 'grep', 'find', 'git')
 for cmd in cmds:
     if cmd in ALIASES:
         ALIASES[cmd] = ALIASES[cmd].replace(' ', '').split(',')
     else:
         ALIASES[cmd] = ''
-
-# [git] section
-GIT_ENABLED = config.getboolean('git', 'enabled', fallback=False)
-# Check if git is in $PATH and issue a warning if it's not there.
-if GIT_ENABLED:
-    if shutil.which('git') is None:
-        import warnings
-        GIT_ENABLED = False
-        warnings.warn('git is not available in $PATH')
-        warnings.warn('git support is disabled')
-GIT_SUPPRESS_OUTPUT = config.get('git', 'suppress_output', fallback=False)
 
 # [grep] section
 GREP_BACKEND = config.get('grep', 'backend', fallback='grep')
@@ -250,7 +254,7 @@ def load_notes(path=D_PATH):
     else:
         try:
             data = [Note(f) for f in path.iterdir()
-                    if f.is_file() and f.suffix not in D_IGNORE_EXTENSIONS]
+                    if f.is_file() and f.suffix not in D_IGNORE]
         except FileNotFoundError:
             icreate_datadir(path)
             exit(0)
