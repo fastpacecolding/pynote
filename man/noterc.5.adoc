@@ -132,6 +132,17 @@ suppress_output [default: `no`]::
     annoying. Setting this option to `yes` redirects any output of git to
     `/dev/null`.
 
+=== [grep]
+
+backend [default: `grep`]::
+    Backend that will be used in `note grep`. Sane backends are: `git-grep`, 
+    `ag`, `pt`. The default is `grep`.
+
+flags [default: `-r`; for backend `grep`, `''` otherwise]::
+    Flags, that are passed to `grep.backend`. If both, `grep.backend` and 
+    `grep.flags` are unset, this value defaults to `-f`. Otherwise it is
+    an empty string.
+
 == Example File
 
 ----

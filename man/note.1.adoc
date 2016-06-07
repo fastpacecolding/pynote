@@ -108,7 +108,12 @@ choice.
 
 === rm
 
-Removes a note.
+removes a note.
+
+=== grep
+
+Serch all notes containing a particular pattern. The used backend us configurable 
+with `notec(5)`.
 
 === conf
 
@@ -116,7 +121,6 @@ Show all configuration values for debugging reasons:
 
 ----
 $ note conf
-----------------------  -------------------------------------------------------------------------------------
 globalconf              /etc/xdg/noterc
 localconf               /home/stefan/.config/note/noterc
 data.path               /home/stefan/Documents/Notes
@@ -131,7 +135,6 @@ ui.style                simple
 aliases                 {'all': '', 'git': '', 'edit': '', 'list': ['l'], 'add': '', 'show': ['s'], 'rm': ''}
 git.enabled             True
 git.suppress_output     False
-----------------------  -------------------------------------------------------------------------------------
 ----
 
 == Environment Variables
