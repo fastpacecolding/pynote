@@ -72,7 +72,7 @@ D_PATH = config.get('data', 'path', fallback=DEFAULT_DATA_PATH)
 D_PATH = Path(D_PATH).expanduser()
 D_EXTENSION = config.get('data', 'extension', fallback='.txt')
 D_IGNORE_EXTENSIONS = config.get('data', 'ignore_extensions', fallback=[])
-if D_IGNORE_EXTENSIONS:
+if D_IGNORE_EXTENSIONS != 'GIT':
     D_IGNORE_EXTENSIONS = D_IGNORE_EXTENSIONS.replace(' ', '').split(',')
 D_TMPFILE = config.getboolean('data', 'tmpfile', fallback=False)
 D_SLUGIFY = config.getboolean('data', 'slugify', fallback=False)
@@ -121,11 +121,11 @@ class Note:
     modification time.
     """
     def __init__(self, path):
-        self.path = path
-        self.title = path.stem
+        self.path = path if isinstance(path, Path) else Path(path)
+        self.title = self.path.stem
         # If the file is not present create an empty one.
-        if not path.exists():
-            path.touch()
+        if not self.path.exists():
+            self.path.touch()
         self.mtime = arrow.get(self.path.stat().st_mtime)
         self.age = arrow.now() - self.mtime
 
@@ -238,12 +238,24 @@ def load_notes(path=D_PATH):
     is ignored. Die path argument has to be an instance of
     pathlib.Path.
     """
-    try:
-        data = [Note(f) for f in path.iterdir()
-                if f.is_file() and f.suffix not in D_IGNORE_EXTENSIONS]
-        return sorted(data, key=lambda n: n.age)
-    except FileNotFoundError:
-        icreate_datadir(path)
+    if D_IGNORE_EXTENSIONS == 'GIT' and GIT_ENABLED:
+        os.chdir(D_PATH.as_posix())
+        p = run(['git', 'ls-files'], stdout=PIPE, stderr=PIPE)
+        if p.returncode != 0:
+            print('Is {} present?'.format(D_PATH.as_posix()))
+            print('Is it a git repository?')
+            die('git ls-files error')
+        files = p.stdout.decode().splitlines()
+        data = map(lambda f: Note(f), files)
+    else:
+        try:
+            data = [Note(f) for f in path.iterdir()
+                    if f.is_file() and f.suffix not in D_IGNORE_EXTENSIONS]
+        except FileNotFoundError:
+            icreate_datadir(path)
+            exit(0)
+
+    return sorted(data, key=lambda n: n.age)
 
 
 def _get_note_by_id(ID):
