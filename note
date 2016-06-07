@@ -242,7 +242,7 @@ def load_notes(path=D_PATH):
     is ignored. Die path argument has to be an instance of
     pathlib.Path.
     """
-    if D_IGNORE_EXTENSIONS == 'GIT' and GIT_ENABLED:
+    if D_IGNORE == 'GIT':
         os.chdir(D_PATH.as_posix())
         p = run(['git', 'ls-files'], stdout=PIPE, stderr=PIPE)
         if p.returncode != 0:
