@@ -112,8 +112,19 @@ removes a note.
 
 === grep
 
-Serch all notes containing a particular pattern. The used backend us configurable 
+Search all notes containing a particular pattern. The used backend us configurable 
 with `notec(5)`.
+
+=== filter
+
+Filter the available notes with an fnmatch pattern:
+
+----
+$ note filter "private*"
+----
+
+WARNING: The IDs shown in the table are currently wrong. Please access the notes 
+with the slug instead!
 
 === conf
 
