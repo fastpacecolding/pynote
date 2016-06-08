@@ -46,7 +46,7 @@ extension [default: `.txt`]::
     markdown...) and syntax highlighting in your editor. The dot has to be
     included.
 
-ignore_extensions [default: `GIT`]::
+ignore [default: `GIT`]::
     Ignore files in the notes folder with a specific extension, e.g. `.pdf`.
     It may be useful if other files are stored in the datadir, such as pdfs.
     This configuration value must be a comma separated string. Since pynote
@@ -72,7 +72,7 @@ dateformat [default: `YYYY-MM-dd HH:mm`]::
     available config values can be obtained from the arrow documentation:
     https://github.com/crsmithdev/arrow/blob/master/docs/index.rst#tokens
 
-reldates [default: `no`]::
+reldates [default: `yes`]::
     Use relative dates in, for instance `note list` and `note show`. Internally
     the library `arrow` is used to generate reldates.
 
@@ -124,7 +124,7 @@ A real world example can be found in the "Example File" section below.
 
 === [git]
 
-enabled [default: `no`]::
+enabled [default: `yes`]::
     Enables git support. Every time a note is changed, a `git commit` is filed.
     This enables merging and syncing notes effectively with git. Please note,
     that `data.path` must point to a git repository and git must be properly
@@ -159,6 +159,7 @@ ignore_extensions = .pdf, .odt
 [ui]
 editor = nvim -c "set ft=asciidoc"
 reldates = yes
+style = psql
 
 [aliases]
 add = a, new, n
@@ -168,6 +169,10 @@ show = s
 
 [git]
 enabled = yes
+
+[grep]
+backend = ag
+flags = -C
 ----
 
 == See Also
