@@ -46,10 +46,14 @@ extension [default: `.txt`]::
     markdown...) and syntax highlighting in your editor. The dot has to be
     included.
 
-ignore_extensions [default: `''`]::
+ignore_extensions [default: `GIT`]::
     Ignore files in the notes folder with a specific extension, e.g. `.pdf`.
     It may be useful if other files are stored in the datadir, such as pdfs.
-    This configuration value must be a comma separated string.
+    This configuration value must be a comma separated string. Since pynote
+    2.1.0 there is the special value `GIT` available, which is the new default.
+    `GIT` means that `git ls-files` is used, to populate the note table. The
+    benefit of this approach is, that the `.gitignore` file can be used to
+    define ignore patterns in `data.path`.
 
 tmpfile [default: `no`]::
     Use a tmpfile when editing notes. The note file will not be edited
