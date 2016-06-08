@@ -1,5 +1,25 @@
 = CHANGELOG
 
+== pynote 2.1.0 (2016-XX-XX)
+
+This is a feature release that brings two new commands --- `grep` and `find`.
+The configuration has been changed slightly; there are minor breaking changes
+but nothing really serious. Please change your `noterc(5)` accordingly in the
+case you are affected.
+
+* The configuration value `data.ignore_extensions` changed to a less verbose
+  `data.ignore`.
+* New defaults for some configuration values: `ui.reldates=yes`, `git.enabled=yes`, 
+  `data.ignore=GIT`.
+* Support for `git ls-files`. When `data.ignore` is set to `GIT` pynote uses
+  `git ls-files` to generate the notes table; A potentially existing 
+  `.gitignore` file is respected.
+* New command `grep`. It can be used to search pattern in the notes. A 
+  configurable backend is used for grepping; the default is `grep -r`.
+  Fancy and cool backends are: `ag`, `ack`, `pt`, `git-grep`
+* New command `filter`. Can be used to filter the notes table using 
+  `fnmatch` patterns, for instance `note filter "private*"`.
+
 == pynote 2.0.0 (2016-05-31)
 
 * Complete rewrite of pynote. Everything has been restructured and merged into
