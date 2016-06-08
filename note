@@ -24,6 +24,7 @@
 
 import argparse
 import configparser
+import fnmatch
 import functools
 import os
 import os.path
@@ -102,7 +103,7 @@ UI_STYLE = config.get('ui', 'style', fallback='simple')
 # [aliases] section
 ALIASES = dict(config['aliases']) if config.has_section('aliases') else {}
 # Prepopulate aliases dictionary
-cmds = ('add', 'list', 'all', 'edit', 'show', 'rm', 'grep', 'find', 'git')
+cmds = ('add', 'list', 'all', 'edit', 'show', 'rm', 'grep', 'filter', 'git')
 for cmd in cmds:
     if cmd in ALIASES:
         ALIASES[cmd] = ALIASES[cmd].replace(' ', '').split(',')
@@ -235,7 +236,7 @@ def icreate_datadir(path=D_PATH):
             run(['git', 'init'])
 
 
-def load_notes(path=D_PATH):
+def load_notes(path=D_PATH, pattern=None):
     """
     Scans the given path and returns a list of notes
     which is sorted by the modification time. Any directory
@@ -250,15 +251,17 @@ def load_notes(path=D_PATH):
             print('Is it a git repository?')
             die('git ls-files error')
         files = p.stdout.decode().splitlines()
-        data = map(lambda f: Note(f), files)
     else:
         try:
-            data = [Note(f) for f in path.iterdir()
-                    if f.is_file() and f.suffix not in D_IGNORE]
+            files = [f for f in path.iterdir() if f.is_file()
+                     and f.suffix not in D_IGNORE]
         except FileNotFoundError:
             icreate_datadir(path)
             exit(0)
 
+    if pattern:
+        files = fnmatch.filter(files, pattern)
+    data = map(lambda f: Note(f), files)
     return sorted(data, key=lambda n: n.age)
 
 
@@ -383,9 +386,12 @@ def git(operation):
 def cmd_list(args):
     """Print out a table with all notes."""
     table = []
-    notes = load_notes()
+    if hasattr(args, 'pattern'):
+        notes = load_notes(pattern=args.pattern)
+    else:
+        notes = load_notes()
     if not notes:
-        die('No notes exist! Create new ones with "note add TITLE"!')
+        exit(1)
 
     if args.no_header:
         header = None
@@ -661,6 +667,18 @@ def parse_args():
         help='Pattern to look for',
     )
     parser_grep.set_defaults(func=cmd_grep)
+
+    # note filter
+    parser_filter = subparsers.add_parser(
+        'filter',
+        aliases=ALIASES['filter'],
+        help='Filter notes that match a pattern',
+    )
+    parser_filter.add_argument(
+        'pattern',
+        help='Pattern which is used for the filter',
+    )
+    parser_filter.set_defaults(func=cmd_list)
 
     # note conf
     parser_conf = subparsers.add_parser(
