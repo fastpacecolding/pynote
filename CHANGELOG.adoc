@@ -19,6 +19,7 @@ case you are affected.
   Fancy and cool backends are: `ag`, `ack`, `pt`, `git-grep`
 * New command `filter`. Can be used to filter the notes table using 
   `fnmatch` patterns, for instance `note filter "private*"`.
+* Improve automatically generated commit messages for git.
 
 == pynote 2.0.0 (2016-05-31)
 
