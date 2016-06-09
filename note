@@ -314,70 +314,88 @@ def spawn_editor_at_tmpfile(content, extension=D_EXTENSION):
 #
 # Decorators
 #
-def git(operation):
-    def commit(func):
-        @functools.wraps(func)
-        def wrapper(*args, **kwargs):
-            if GIT_SUPPRESS_OUTPUT:
-                stdout = DEVNULL
-                stderr = DEVNULL
-            else:
-                stdout = None
-                stderr = None
+def git_commit(func):
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        if GIT_SUPPRESS_OUTPUT:
+            stdout = DEVNULL
+            stderr = DEVNULL
+        else:
+            stdout = None
+            stderr = None
 
-            ret = func(*args, **kwargs)
+        ret = func(*args, **kwargs)
 
-            if GIT_ENABLED:
-                debug('Looking for changes')
-                os.chdir(D_PATH.as_posix())
+        if GIT_ENABLED:
+            debug('Looking for changes')
+            os.chdir(D_PATH.as_posix())
+            p = run([
+                'git',
+                'status',
+                '--porcelain',
+            ], stdout=PIPE, stderr=PIPE)
+
+            if p.returncode != 0:
+                die('Git failed; maybe you forgot "git init"?')
+
+            if p.stdout:
+                debug('Changes detected')
+                debug('Running "git add"')
+
+                run(
+                    ['git', 'add', '.'],
+                    stdout=stdout,
+                    stderr=stderr,
+                )
+
                 p = run([
                     'git',
                     'status',
                     '--porcelain',
                 ], stdout=PIPE, stderr=PIPE)
 
-                if p.returncode != 0:
-                    die('Git failed; maybe you forgot "git init"?')
+                stdout_git = p.stdout.decode().splitlines()
+                regex_mod = re.compile(r'^\s*[MR]\s*(?P<filename>.*)$')
+                regex_add = re.compile(r'^\s*A\s*(?P<filename>.*)$')
+                regex_del = re.compile(r'^\s*D\s*(?P<filename>.*)$')
+                status = {'mod': 0, 'add': 0, 'del': 0, 'filename': ''}
 
-                if p.stdout:
-                    debug('Changes detected')
-                    debug('Running "git commit"')
+                for line in stdout_git:
+                    match_mod = regex_mod.match(line)
+                    match_add = regex_add.match(line)
+                    match_del = regex_del.match(line)
 
-                    stdout_git = p.stdout.decode().splitlines()
-                    # TODO: Maybe parse the operation out of git-status.
-                    regex = re.compile(r'^\s*[ARMD]\s([\w\.\-]+)$')
-                    files = []
-                    for line in stdout_git:
-                        match = regex.match(line)
-                        if match:
-                            files.append(match.group(1))
+                    if match_mod:
+                        status['mod'] += 1
+                    elif match_add:
+                        status['add'] += 1
+                    elif match_del:
+                        status['del'] += 1
 
-                    if len(files) == 1:
-                        commitmsg = 'note "{}" {}'.format(
-                            files[0],
-                            operation,
-                        )
-                    elif len(files) != 1:
-                        commitmsg = '{} notes {}'.format(
-                            len(files),
-                            operation,
-                        )
-
-                    run(
-                        ['git', 'add', '.'],
-                        stdout=stdout,
-                        stderr=stderr,
-                    )
-                    run(
-                        ['git', 'commit', '-m', commitmsg],
-                        stdout=stdout,
-                        stderr=stderr,
-                    )
+                if status['mod'] == 1:
+                    status['filename'] = match_mod.group('filename')
+                    commitmsg = '[note] "{filename}" modified'
+                elif status['add'] == 1:
+                    status['filename'] = match_add.group('filename')
+                    commitmsg = '[note] "{filename}" added'
+                elif status['del'] == 1:
+                    status['filename'] = match_del.group('filename')
+                    commitmsg = '[note] "{filename}" removed'
                 else:
-                    debug('No changes detected')
-            return ret
-        return wrapper
-    return commit
+                    commitmsg = '[note] {mod} modified, {add} added, {del} deleted'
+
+                commitmsg = commitmsg.format(**status)
+
+                debug('Running "git commit"')
+                run(
+                    ['git', 'commit', '-m', commitmsg],
+                    stdout=stdout,
+                    stderr=stderr,
+                )
+            else:
+                debug('No changes detected')
+        return ret
+    return wrapper
 
 
 #
@@ -445,7 +463,7 @@ def cmd_all(args):
     echo(out.strip())
 
 
-@git('changed')
+@git_commit
 def cmd_edit(args):
     """Edit a specific note."""
     note = get_note(args.ID)
@@ -462,7 +480,7 @@ def cmd_edit(args):
             spawn_editor(note.path)
 
 
-@git('added')
+@git_commit
 def cmd_add(args):
     """Create a new note."""
     if '/' in args.title:
@@ -481,7 +499,7 @@ def cmd_add(args):
         spawn_editor(note.path)
 
 
-@git('deleted')
+@git_commit
 def cmd_rm(args):
     """Delete an existing note."""
     note = get_note(args.ID)
