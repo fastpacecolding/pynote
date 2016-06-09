@@ -32,6 +32,7 @@ import re
 import shlex
 import shutil
 import tempfile
+import textwrap
 import unicodedata
 import warnings
 from pathlib import Path
@@ -428,15 +429,25 @@ def cmd_list(args):
 
 def cmd_show(args):
     """Show a specific note."""
-    note = get_note(args.ID)
-    if args.no_header:
-        out = note.content
-    else:
-        out = note.header + '\n\n' + note.content
+    out = ''
+    cols = os.get_terminal_size().columns
+    IDs = args.ID.split(',')
+    for ID in IDs:
+        note = get_note(ID)
+        if args.no_header:
+            out += note.content
+        else:
+            out += note.header + '\n\n' + note.content
 
-    if args.w:
-        import textwrap
-        out = textwrap.fill(out, replace_whitespace=False)
+        if args.w:
+            out += textwrap.fill(out, replace_whitespace=False)
+
+        if len(IDs) > 1:
+            out += '\n'
+            out += '-' * cols
+        # Add some space between the concatenated notes.
+        # If it is the last note, it gets stripped away.
+        out += '\n\n'
 
     echo(out.strip())
 
@@ -466,18 +477,20 @@ def cmd_all(args):
 @git_commit
 def cmd_edit(args):
     """Edit a specific note."""
-    note = get_note(args.ID)
-    if args.title:
-        new_title = spawn_editor_at_tmpfile(note.title)
-        if new_title != note.title:
-            new_title = new_title.strip()
-            new_path = note.path.parent.joinpath(new_title)
-            note.path.rename(new_path)
-    else:
-        if D_TMPFILE or args.tmpfile:
-            note.content = spawn_editor_at_tmpfile(note.content)
+    IDs = args.ID.split(',')
+    for ID in IDs:
+        note = get_note(ID)
+        if args.title:
+            new_title = spawn_editor_at_tmpfile(note.title)
+            if new_title != note.title:
+                new_title = new_title.strip()
+                new_path = note.path.parent.joinpath(new_title)
+                note.path.rename(new_path)
         else:
-            spawn_editor(note.path)
+            if D_TMPFILE or args.tmpfile:
+                note.content = spawn_editor_at_tmpfile(note.content)
+            else:
+                spawn_editor(note.path)
 
 
 @git_commit
@@ -502,8 +515,10 @@ def cmd_add(args):
 @git_commit
 def cmd_rm(args):
     """Delete an existing note."""
-    note = get_note(args.ID)
-    note.unlink()
+    IDs = args.ID.split(',')
+    for ID in IDs:
+        note = get_note(ID)
+        note.unlink()
 
 
 def cmd_grep(args):
