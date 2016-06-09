@@ -508,7 +508,7 @@ def cmd_conf(args):
         ['localconf', LOCALCONF],
         ['data.path', D_PATH],
         ['data.extension', D_EXTENSION],
-        ['data.ignore_extensions', D_IGNORE_EXTENSIONS],
+        ['data.ignore_extensions', D_IGNORE],
         ['data.tmpfile', D_TMPFILE],
         ['data.slugify', D_SLUGIFY],
         ['ui.editor', UI_EDITOR],
