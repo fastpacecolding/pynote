@@ -430,7 +430,6 @@ def cmd_list(args):
 def cmd_show(args):
     """Show a specific note."""
     out = ''
-    cols = os.get_terminal_size().columns
     for ID in args.ID:
         note = get_note(ID)
         if args.no_header:
@@ -442,8 +441,9 @@ def cmd_show(args):
             out += textwrap.fill(out, replace_whitespace=False)
 
         if len(args.ID) > 1:
+            max_len = len(max(out.splitlines(), key=len))
             out += '\n'
-            out += '-' * cols
+            out += '-' * max_len
         # Add some space between the concatenated notes.
         # If it is the last note, it gets stripped away.
         out += '\n\n'
