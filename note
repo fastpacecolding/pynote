@@ -440,6 +440,7 @@ def cmd_show(args):
 
         if len(args.ID) > 1:
             max_len = len(max(out.splitlines(), key=len))
+            out = out.strip()
             out += '\n'
             out += '-' * max_len
         # Add some space between the concatenated notes.
