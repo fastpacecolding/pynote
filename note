@@ -431,8 +431,7 @@ def cmd_show(args):
     """Show a specific note."""
     out = ''
     cols = os.get_terminal_size().columns
-    IDs = args.ID.split(',')
-    for ID in IDs:
+    for ID in args.ID:
         note = get_note(ID)
         if args.no_header:
             out += note.content
@@ -442,7 +441,7 @@ def cmd_show(args):
         if args.w:
             out += textwrap.fill(out, replace_whitespace=False)
 
-        if len(IDs) > 1:
+        if len(args.ID) > 1:
             out += '\n'
             out += '-' * cols
         # Add some space between the concatenated notes.
@@ -477,8 +476,7 @@ def cmd_all(args):
 @git_commit
 def cmd_edit(args):
     """Edit a specific note."""
-    IDs = args.ID.split(',')
-    for ID in IDs:
+    for ID in args.ID:
         note = get_note(ID)
         if args.title:
             new_title = spawn_editor_at_tmpfile(note.title)
@@ -515,8 +513,7 @@ def cmd_add(args):
 @git_commit
 def cmd_rm(args):
     """Delete an existing note."""
-    IDs = args.ID.split(',')
-    for ID in IDs:
+    for ID in args.ID:
         note = get_note(ID)
         note.unlink()
 
@@ -624,6 +621,7 @@ def parse_args():
     )
     parser_show.add_argument(
         'ID',
+        nargs='+',
         help='Note\'s ID or slug',
     )
     parser_show.add_argument(
@@ -641,6 +639,7 @@ def parse_args():
     )
     parser_delete.add_argument(
         'ID',
+        nargs='+',
         help='Note\'s ID or slug',
     )
     parser_delete.add_argument(
@@ -659,6 +658,7 @@ def parse_args():
     )
     parser_delete.add_argument(
         'ID',
+        nargs='+',
         help='Note\'s ID or slug',
     )
     parser_delete.set_defaults(func=cmd_rm)
