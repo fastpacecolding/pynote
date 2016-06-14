@@ -237,7 +237,7 @@ def icreate_datadir(path=D_PATH):
             run(['git', 'init'])
 
 
-def load_notes(path=D_PATH, pattern=None):
+def load_notes(path=D_PATH):
     """
     Scans the given path and returns a list of notes
     which is sorted by the modification time. Any directory
@@ -260,8 +260,6 @@ def load_notes(path=D_PATH, pattern=None):
             icreate_datadir(path)
             exit(0)
 
-    if pattern:
-        files = fnmatch.filter(files, pattern)
     data = map(lambda f: Note(f), files)
     return sorted(data, key=lambda n: n.age)
 
@@ -405,10 +403,7 @@ def git_commit(func):
 def cmd_list(args):
     """Print out a table with all notes."""
     table = []
-    if hasattr(args, 'pattern'):
-        notes = load_notes(pattern=args.pattern)
-    else:
-        notes = load_notes()
+    notes = load_notes()
     if not notes:
         exit(1)
 
@@ -418,6 +413,9 @@ def cmd_list(args):
         header = ('ID', 'Title', 'Updated')
 
     for i, note in enumerate(notes):
+        if hasattr(args, 'pattern'):
+            if not fnmatch.fnmatch(note.title, args.pattern):
+                continue
         if UI_RELDATES:
             mtime = note.mtime.humanize()
         else:
