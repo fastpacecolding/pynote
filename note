@@ -114,6 +114,10 @@ for cmd in cmds:
 # [grep] section
 GREP_BACKEND = config.get('grep', 'backend', fallback='grep')
 GREP_FLAGS = config.get('grep', 'flags', fallback='')
+# Provide fallback flags for 'grep'
+if GREP_BACKEND == 'grep' and not GREP_FLAGS:
+    GREP_FLAGS = '-r -C 3'
+GREP_FLAGS = shlex.split(GREP_FLAGS)
 
 
 #
@@ -520,14 +524,8 @@ def cmd_rm(args):
 def cmd_grep(args):
     """Search for pattern in notes."""
     os.chdir(D_PATH.as_posix())
-    # Provide fallback flags for 'grep'
-    if GREP_BACKEND == 'grep' and GREP_FLAGS == '':
-        flags = '-r'
-    else:
-        flags = GREP_FLAGS
     pattern = shlex.split(args.pattern)
-    flags = shlex.split(flags)
-    run([GREP_BACKEND, *flags, *pattern])
+    run([GREP_BACKEND, *GREP_FLAGS, *pattern])
 
 
 def cmd_conf(args):
