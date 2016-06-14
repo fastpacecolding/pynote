@@ -2,7 +2,7 @@
 
 == pynote 2.1.0 (2016-XX-XX)
 
-This is a feature release that brings two new commands --- `grep` and `find`.
+This is a feature release that brings two new commands -- `grep` and `find`.
 The configuration has been changed slightly; there are minor breaking changes
 but nothing really serious. Please change your `noterc(5)` accordingly in the
 case you are affected.
@@ -20,6 +20,8 @@ case you are affected.
 * New command `filter`. Can be used to filter the notes table using 
   `fnmatch` patterns, for instance `note filter "private*"`.
 * Improve automatically generated commit messages for git.
+* Subcommands `show`, `edit` and `rm` can read multiple, space separated IDs now,
+  for instance: `note show 1 2 3`.
 
 == pynote 2.0.0 (2016-05-31)
 
