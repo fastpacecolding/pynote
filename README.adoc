@@ -107,5 +107,20 @@ index 0000000..b586074
 +spam
 ----
 
+Search all notes (several backends supported, `ag -C` is used here):
+
+----
+$ note grep spam
+spam.txt
+1:Spam, Spam, Spam, lovely Spam
+2:Wonderful Spam, Lovely Spam.
+3:Spam, Spam, Spam, magnificent Spam,
+4:Superlative Spam.
+5:Spam, Spam, Spam, wonderous Spam,
+6:Surgical Spam, splendiferous Spam.
+7:Spam, Spam, Spam, Spaaam!
+8-
+----
+
 For help just pass `-h` or `--help` to any command, or try `man 1 note` 
 and `man 5 noterc`.
