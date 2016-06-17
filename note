@@ -42,7 +42,7 @@ import arrow
 from tabulate import tabulate
 
 DEBUG = False
-__version__ = '2.1.0'
+__version__ = '2.1.1'
 
 #
 # Config Parsing
