@@ -1,5 +1,11 @@
 = CHANGELOG
 
+== pynote 2.1.1 (2016-06-17)
+
+This is a small bugfix release, which fixes a problem when using `note rm` with
+more than one argument. Previously wrong notes were delete, since the list has
+been processed again.
+
 == pynote 2.1.0 (2016-06-14)
 
 This is a feature release that brings two new commands -- `grep` and `find`.
@@ -9,15 +15,15 @@ case you are affected.
 
 * The configuration value `data.ignore_extensions` changed to a less verbose
   `data.ignore`.
-* New defaults for some configuration values: `ui.reldates=yes`, `git.enabled=yes`, 
+* New defaults for some configuration values: `ui.reldates=yes`, `git.enabled=yes`,
   `data.ignore=GIT`.
 * Support for `git ls-files`. When `data.ignore` is set to `GIT` pynote uses
-  `git ls-files` to generate the notes table; A potentially existing 
+  `git ls-files` to generate the notes table; A potentially existing
   `.gitignore` file is respected.
-* New command `grep`. It can be used to search pattern in the notes. A 
+* New command `grep`. It can be used to search pattern in the notes. A
   configurable backend is used for grepping; the default is `grep -r`.
   Fancy and cool backends are: `ag`, `ack`, `pt`, `git-grep`
-* New command `filter`. Can be used to filter the notes table using 
+* New command `filter`. Can be used to filter the notes table using
   `fnmatch` patterns, for instance `note filter "private*"`.
 * Improve automatically generated commit messages for git.
 * Subcommands `show`, `edit` and `rm` can read multiple, space separated IDs now,
