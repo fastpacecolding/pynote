@@ -516,9 +516,9 @@ def cmd_add(args):
 @git_commit
 def cmd_rm(args):
     """Delete an existing note."""
-    for ID in args.ID:
-        note = get_note(ID)
-        note.unlink()
+    queue = [get_note(ID) for ID in args.ID]
+    for n in queue:
+        n.unlink()
 
 
 def cmd_grep(args):
